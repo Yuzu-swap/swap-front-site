@@ -1,0 +1,86 @@
+html,body{
+	width: 100%;
+}
+.s-url-warning{
+	display: none;
+}
+
+.s-mobile { width: 100%; }
+.s-mobile#root{ min-width: 100%; }
+
+.s-mobile .s-header-links{ 
+	display: block;
+	position: absolute;
+	right:10px;
+	top:10px;
+	width:2rem;
+	background-color: #ED4962;
+	border:1px solid #dedede;
+	padding:4px 10px;
+	border-radius: 8px;
+}
+.s-mobile .s-header-links::before{
+	content: "≡";
+	color:#fff;
+}
+.s-mobile .s-header-links a{
+	display:  none;
+	text-align: right;
+	line-height: 2;
+}
+.s-mobile .s-header-links:hover{ 
+	width:9rem;
+	padding: 10px;
+}
+.s-mobile .s-header-links:hover::before{
+	display: none;
+}
+.s-mobile .s-header-links:hover a {
+	display: block;
+}
+
+
+.s-mobile #page-homepage{ width: 100%; }
+.s-mobile .s-body-wrapper{ width: 100%;  }
+.s-mobile .s-app-wrapper{ width: 100%; position: relative;background-color: #f5f5f5; }
+.s-mobile .s-banner-wrapper{ width: 100%; }
+.s-mobile .s-header-links{  justify-content: flex-start; }
+.s-mobile .s-banner{ font-size: 1.5rem; }
+.s-mobile .s-banner-button-boardroom{ font-size: 1rem; width:90%; }
+
+.s-mobile #page-boardroom{ width:100%; }
+.s-mobile .s-trading-list{ width:100%; }
+.s-mobile .s-boardroom-item{ width:100%; }
+
+.s-mobile #page-tradingMining{ width:100%; }
+.s-mobile #page-tradingMining .s-trading-list{ width:100%; }
+.s-mobile .s-trading-item{ width:100%; }
+.s-mobile .s-tradingmining-text{ font-size: 1.2rem; }
+.s-mobile .s-tradingmining-banner{ margin-left:2rem; }
+
+
+.s-mobile .s-boardroom-selected{ width:100%; }
+.s-mobile .s-boardroom-account,
+.s-mobile .s-boardroom-lp-wrapper,
+.s-mobile .s-boardroom-stake{ width:95%; }
+
+.s-mobile .s-liquidity-title{ font-size: 1.5rem; }
+.s-mobile .s-pledge-item{  }
+.s-mobile .s-pledge-item-title,
+.s-mobile .s-pledge-item-numbers{
+	display: inline-block;
+	width:49%;
+	vertical-align: top;
+}
+.s-mobile .s-pledge-item-title span,
+.s-mobile .s-pledge-item-numbers span{
+	display: block;
+	width:100%;
+}
+.s-mobile .s-pledge-item-title span{
+	line-height: 1.7;
+}
+.s-mobile .s-pledge-item-numbers span{
+	text-align: right;
+}
+
