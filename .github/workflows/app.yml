@@ -37,7 +37,7 @@ jobs:
         docker build    -f Dockerfile.yuzuswap -t yuzu-front ./
 
     - name: Login to docker registry
-      run:  docker login hkccr.ccs.tencentyun.com --username=${{secrets.TENCENT_DOCKER_REGISTERY_USER}} --password  ${{secrets.TENCENT_DOCKER_REGISTERY_PASSWORD}} 
+      run:  docker login yuzuswap.tencentcloudcr.com --username=${{secrets.TENCENT_DOCKER_REGISTERY_USER}} --password  ${{secrets.TENCENT_DOCKER_REGISTERY_PASSWORD}} 
 
     - name: Push to docker registry
       run: |
