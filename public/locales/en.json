@@ -6,7 +6,7 @@
   "installMetamask": "Please visit us after installing Metamask on Chrome or Brave.",
   "disconnected": "Disconnected",
   "swap": "Swap",
-  "homepage": "Home Page",
+  "homepage": "Home",
   "boardroom": "Liquidity Mining",
   "tradingmining": "Trade Mining",
   "swapAnyway": "Swap Anyway",
@@ -102,7 +102,7 @@
   "homepageHalvingCountdown": "Countdown to Halving",
   "notice": "Announcement",
   "more": "More",
-  "auditOrgName": "Audition Report by",
+  "auditOrgName": "Audit Report By",
   "partnerName": "Partners",
   "confirmSwap": "Swap",
   "maxSell": "Max",
@@ -174,5 +174,7 @@
   "haveadd": "Added",
   "haveremove" : "Removed",
   "inputamount" : "Please input amount",
-  "warn": "Warning"
+  "warn": "Warning",
+  "bridge": "Bridge",
+  "zap": "ZAP"
 }

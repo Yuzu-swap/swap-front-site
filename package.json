@@ -6,6 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "CI= GENERATE_SOURCEMAP=false react-scripts build",
+    "deploy": "ssh root@119.28.186.224 mkdir -p /data/oasis-test-yuzuswap-dev && scp  -r ./build/* root@119.28.186.224:/data/oasis-test-yuzuswap-dev/",
     "test": "react-scripts test --env=jsdom",
     "release": "yarn build && yarn deploy",
     "eject": "react-scripts eject",
@@ -26,9 +27,9 @@
     "@apollo/react-components": "^3.1.5",
     "@apollo/react-hooks": "^3.1.5",
     "@ethersproject/experimental": "^5.0.1",
-    "@liuxingfeiyu/default-token-list": "1.0.9",
-    "@liuxingfeiyu/zoo-core": "1.0.5",
-    "@liuxingfeiyu/zoo-sdk": "1.0.56",
+    "@liuxingfeiyu/default-token-list": "1.0.15",
+    "@liuxingfeiyu/zoo-core": "1.0.9",
+    "@liuxingfeiyu/zoo-sdk": "1.0.69",
     "@popperjs/core": "^2.4.4",
     "@reach/dialog": "^0.10.3",
     "@reach/portal": "^0.10.3",
@@ -143,6 +144,8 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@sentry/react": "^6.15.0",
+    "@sentry/tracing": "^6.15.0",
     "decimal.js": "^10.2.1"
   }
 }

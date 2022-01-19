@@ -29,7 +29,7 @@ html,body{
 	line-height: 2;
 }
 .s-mobile .s-header-links:hover{ 
-	width:9rem;
+	width: fit-content;
 	padding: 10px;
 }
 .s-mobile .s-header-links:hover::before{
@@ -51,25 +51,30 @@ html,body{
 .s-mobile #page-boardroom{ width:100%; }
 .s-mobile .s-trading-list{ width:100%; }
 .s-mobile .s-boardroom-item{ width:100%; }
+.s-mobile .s-doubleget-item{ width:100%;}
 
 .s-mobile #page-tradingMining{ width:100%; }
 .s-mobile #page-tradingMining .s-trading-list{ width:100%; }
 .s-mobile .s-trading-item{ width:100%; }
 .s-mobile .s-tradingmining-text{ font-size: 1.2rem; }
-.s-mobile .s-tradingmining-banner{ margin-left:2rem; }
+.s-mobile .s-tradingmining-banner{ margin-left: 0.5rem; }
 
 
 .s-mobile .s-boardroom-selected{ width:100%; }
 .s-mobile .s-boardroom-account,
 .s-mobile .s-boardroom-lp-wrapper,
-.s-mobile .s-boardroom-stake{ width:95%; }
+.s-mobile .s-boardroom-stake{ width:95%; margin: 1rem 0 ;}
 
 .s-mobile .s-liquidity-title{ font-size: 1.5rem; }
 .s-mobile .s-pledge-item{  }
-.s-mobile .s-pledge-item-title,
+.s-mobile .s-pledge-item-title{
+	display: inline-block;
+	width:40%;
+	vertical-align: top;
+}
 .s-mobile .s-pledge-item-numbers{
 	display: inline-block;
-	width:49%;
+	width:58%;
 	vertical-align: top;
 }
 .s-mobile .s-pledge-item-title span,
@@ -78,9 +83,18 @@ html,body{
 	width:100%;
 }
 .s-mobile .s-pledge-item-title span{
-	line-height: 1.7;
+	line-height: 2.3;
 }
 .s-mobile .s-pledge-item-numbers span{
 	text-align: right;
 }
 
+.s-mobile .s-zap-body{
+	width: 100%;
+}
+
+.s-mobile .s-zap-img{
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+}

@@ -44,6 +44,8 @@ import Airdrop from './Introduce/airdrop'
 import Coming from './Introduce/coming'
 import NewIntroHead from './HeaderBanner/newIntrohead'
 import NewIntroBody from './Introduce/newIntrobody'
+import { Bridge } from './Bridge'
+
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
 
@@ -58,6 +60,7 @@ import Tools from './Tools'
 import Saave from './Saave'
 
 import ComingSoonModal from '../components/ComingSoonModal'
+import { Zap } from './Zap'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -80,7 +83,7 @@ const BodyWrapper = styled.div`
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
     padding: 16px;
-    padding-top: 1rem;
+    padding-top: 0rem;
   `};
 
   z-index: 1;
@@ -134,7 +137,7 @@ export default function App() {
               {/* <Route exact strict path="/vote" component={Vote} /> */}
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
               <Route exact path="/add" component={AddLiquidity} />
-              <Route exact path="/liquiditymining/select/:pid" component={BoardroomSelect} />
+              <Route exact path="/liquiditymining/select/:pid/extselect/:extpid" component={BoardroomSelect} />
               <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
               <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
               <Route exact path="/create" component={AddLiquidity} />
@@ -151,10 +154,13 @@ export default function App() {
               <Route exact strict path="/liquiditymining" component={ LiquidityMining } />
               <Route exact strict path="/singlecurrency" component={ SingleCurrency } />
               <Route exact path="/singlecurrency/select/:pid" component={SingleCurrencySelect} />
+              <Route exact path="/bridge" component={Bridge} />
+              <Route exact path="/zap" component={Zap} />
               <Route exact path="/intro" component={Intro} />
               <Route exact path="/airdrop" component={Airdrop} />
               <Route exact path="/coming" component={Coming}/>
               <Route exact path="/introhome" component={NewIntroBody}/>
+              
               <Route component={Homepage} />
             </Switch>
           </Web3ReactManager>

@@ -82,7 +82,7 @@ export function useMyAllPendingZoo(address?: string): TokenAmount{
 export function  useMyAllSwapMiningPoolList() :[TradePool[],any]{
   const [parkList,setParkList] = useState<any[]>([])
   const [poolIds,setPoolIds] = useState<number[]>([])
-  const [statics,setStatics] = useState({poolSwapVolumeList:{},withdrawedAmount:{},totalSwapVolume:0})
+  const [statics,setStatics] = useState({poolSwapVolumeList:{},withdrawedAmount:{},totalSwapVolume:0,currentVolumes:[]})
 
   const { account, chainId } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
@@ -100,7 +100,7 @@ export function  useMyAllSwapMiningPoolList() :[TradePool[],any]{
         // tododo, 待处理 fix
          setPoolIds(poolIds)
          setParkList(zooParkList.data)
-         setStatics({poolSwapVolumeList:zooParkList.statics.poolSwapVolumeList ,withdrawedAmount: zooParkList.statics.withdrawedAmount,totalSwapVolume: zooParkList.statics.totalSwapVolume})
+         setStatics({poolSwapVolumeList:zooParkList.statics.poolSwapVolumeList ,withdrawedAmount: zooParkList.statics.withdrawedAmount,totalSwapVolume: zooParkList.statics.totalSwapVolume,currentVolumes:zooParkList.statics.currentVolumes})
       }
     }
     const timer = setTimeout(queryFunc, 1000)
@@ -116,7 +116,7 @@ export function  useMyAllSwapMiningPoolList() :[TradePool[],any]{
         token1: new Token((chainId?? DefaultChainId),park.token1Addr,park.token1Decimals,park.token1Symbol,park.token1),
         isToken0Archor : park.token0 == park.archorToken ,
         totalLp : JSBI.BigInt(park.totalLp),
-        accZooPerShare: park.accZooPerShare,
+        accZooPerShare: park.accYuzuPerShare,
         rewardEffect : park.rewardEffect,
         lastRewardBlock : park.lastRewardBlock,
         rewardConfig : new AttenuationReward({ startBlock:park.startBlock,zooPerBlock:JSBI.BigInt(park.perBlockReward),halfAttenuationCycle:park.halfCycleBlock} ),

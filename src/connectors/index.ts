@@ -10,7 +10,7 @@ import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 import { ChainId } from '@liuxingfeiyu/zoo-sdk'
 
-const RPC = {
+export const RPC = {
   [ChainId.MAINNET]: 'https://mainnet.infura.io/v3/574c88a9425e47308ff624e2df66db12',
   [ChainId.ROPSTEN]: 'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
   [ChainId.RINKEBY]: 'https://eth-rinkeby.alchemyapi.io/v2/XVLwDlhGP6ApBXFz_lfv0aZ6VmurWhYD',
@@ -30,7 +30,8 @@ const RPC = {
   [ChainId.FUJI]: 'https://api.avax-test.network/ext/bc/C/rpc',
   [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
   [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com',
-  [ChainId.OASISETH_TEST]: 'http://web3.ja.nez.si:8545'
+  [ChainId.OASISETH_TEST]: 'https://testnet.emerald.oasis.dev',
+  [ChainId.OASISETH_MAIN]: 'https://emerald.oasis.dev'
 
 }
 
@@ -65,6 +66,7 @@ export const injected = new InjectedConnector({
     43113, // fuji
     128, // heco
     42261,//oasis test
+    42262,//oasis main
     256 // heco testnet
   ]
 })

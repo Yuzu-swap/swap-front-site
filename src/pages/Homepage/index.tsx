@@ -307,7 +307,7 @@ export default function Swap() {
       <div id="page-homepage">
         <LiquidityPledge />         
         {/*<NoticeList />*/}
-        {/*<AuditOrgs />*/}
+        <AuditOrgs />
         {/*<Partners />*/}
       </div>
       {!swapIsUnsupported ? null : (

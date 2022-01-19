@@ -28,7 +28,8 @@ export function useETHBalances(
         : [],
     [uncheckedAddresses]
   )
-
+  
+  const  nativeToken = Currency.getNativeCurrency(DefaultChainId)
   const results = useSingleContractMultipleData(
     multicallContract,
     'getEthBalance',
@@ -39,7 +40,7 @@ export function useETHBalances(
     () =>
       addresses.reduce<{ [address: string]: CurrencyAmount }>((memo, address, i) => {
         const value = results?.[i]?.result?.[0]
-        if (value) memo[address] = CurrencyAmount.ether(JSBI.BigInt(value.toString()))
+        if (value) memo[address] = new CurrencyAmount(nativeToken, JSBI.BigInt(value.toString()))
         return memo
       }, {}),
     [addresses, results]
@@ -106,7 +107,7 @@ export function useCurrencyBalances(
   ])
 
   const tokenBalances = useTokenBalances(account, tokens)
-  const  nativeToken = Currency.getNativeCurrency(DefaultChainId)
+  const nativeToken = Currency.getNativeCurrency(DefaultChainId)
   const containsETH: boolean = useMemo(() => currencies?.some(currency => currency === nativeToken) ?? false, [currencies])
   const ethBalance = useETHBalances(containsETH ? [account] : [])
 
@@ -120,6 +121,9 @@ export function useCurrencyBalances(
       }) ?? [],
     [account, currencies, ethBalance, tokenBalances]
   )
+}
+export function useCurrencyAddress( currency: Currency): string {
+  return "";
 }
 
 export function useCurrencyBalance(account?: string, currency?: Currency): CurrencyAmount | undefined {

@@ -8,6 +8,7 @@ i18next
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    lng: 'en-US',
     backend: {
       loadPath: `./locales/{{lng}}.json`
     },

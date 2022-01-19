@@ -18,17 +18,20 @@ import { ButtonPrimary, ButtonPrimaryNormal, ButtonGray } from '../Button'
 import { useSelector } from 'react-redux'
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool } from '@liuxingfeiyu/zoo-sdk'
 import { AppState } from 'state'
-import { DefaultChainId, ZOO_PARK_ADDRESS } from '../../constants'
+import { DefaultChainId, ZOO_PARK_ADDRESS, ZOO_PARK_EXT_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
 import { useApproveCallback, ApprovalState } from 'hooks/useApproveCallback'
 import { useStakingContract } from 'hooks/useContract'
 import useTransactionDeadline from 'hooks/useTransactionDeadline'
 import useZooParkCallback from 'zooswap-hooks/useZooPark'
 import { tokenAmountForshow, numberToString } from 'utils/ZoosSwap'
-import { useMyAllStakePoolList } from 'data/ZooPark'
+import { TokenReward, useMyAllStakePoolList, useMyAllYuzuParkExtList, ZooParkExt} from 'data/ZooPark'
 import { useTranslation } from 'react-i18next'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
+import { fixFloatFloor } from 'utils/fixFloat'
+import Decimal from 'decimal.js'
+import CurrencyLogo from 'components/CurrencyLogo'
 //import { useEffect } from 'hoist-non-react-statics/node_modules/@types/react'
 
 const StyledCloseIcon = styled(X)`
@@ -52,14 +55,16 @@ const ModalContentWrapper = styled.div`
   width: 100%;
 `
 
-export default function BoardroomSelected(props: RouteComponentProps<{ pid: string }>) {
+export default function BoardroomSelected(props: RouteComponentProps<{ pid: string , extpid: string}>) {
   const {
     location: { search },
     match: {
-      params: { pid }
+      params: { pid , extpid }
     }
   } = props
   const pindex = parseInt(pid)
+  const extpindex = parseInt(extpid)
+  const isExt = pindex == -1 ? true: false
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [pledgeValue, setPledgeValue] = useState('0')
   const [isHarvest, setHarvest] = useState(false) //提现对话框
@@ -67,6 +72,8 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   const [status, setStatus] = useState({ type: 'init', tips: '' })
 
   const [poolList, statics] = useMyAllStakePoolList()
+  const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
+
 
   const winLabals = {
     coin : 'YUZU',
@@ -80,7 +87,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
   const { t } = useTranslation();
   // tododo：页面刷新时无数据来源
-  const pool = poolList[pindex]
+  const pool =  pindex != -1 ? poolList[pindex] : poolExtList[extpindex]
+  const tokenRewards = isExt? poolExtList[extpindex]?.tokenRewards : null
+  
 
   const ZERO = JSBI.BigInt(0)
   // 个人质押总额
@@ -88,7 +97,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   // 个人未领取奖励
   const myReward = pool ? tokenAmountForshow(pool.myReward) : ZERO
   // 个人lp 余额
-  const myLpBalance = pool ? numberToString(JSBI.toNumber(pool.myLpBalance) / 1e18) : ZERO
+  const myLpBalance = pool ? fixFloatFloor(JSBI.toNumber(pool.myLpBalance) / 1e18, 8) : ZERO
 
   const poolId = pool && pool.pid
 
@@ -103,9 +112,11 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   }
   // 是否已授权 ，授权操作函数
 
-  const [approval, approveCallback] = useApproveCallback(pool ? new TokenAmount(new Token(chainId ?? DefaultChainId, pool.lpAddress, 18,"YuzuSwap LP Token"), pool.myLpBalance) : undefined, ZOO_PARK_ADDRESS[chainId ?? DefaultChainId])
+  const ParkAdderess = isExt ? ZOO_PARK_EXT_ADDRESS[chainId ?? DefaultChainId] : ZOO_PARK_ADDRESS[chainId ?? DefaultChainId]
+
+  const [approval, approveCallback] = useApproveCallback(pool ? new TokenAmount(new Token(chainId ?? DefaultChainId, pool.lpAddress, 18,"YuzuSwap LP Token"), pool.myLpBalance) : undefined, ParkAdderess)
   // 质押和解除质押函数 ， 提取奖励操作使用解除质押来实现（amount参数为0)
-  const { deposit, withdraw } = useZooParkCallback()
+  const { deposit, withdraw } = useZooParkCallback(isExt)
 
   const lastAp = useRef(approval);
 
@@ -178,7 +189,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   }
   const onDeposit = async () => {
     try {
-      const amount = pledgeValue.indexOf(".") == -1 ? JSBI.multiply(JSBI.BigInt(pledgeValue), JSBI.BigInt(1e18)).toString(10) : Math.round(parseFloat(pledgeValue) * 1e18).toString()
+      const amount = pledgeValue.indexOf(".") == -1 ? JSBI.multiply(JSBI.BigInt(pledgeValue), JSBI.BigInt(1e18)).toString(10) : new Decimal(parseFloat(pledgeValue) * 1e18).toFixed(0)
       setWinValue(pledgeValue);
       setWinLabel(winLabals.lp)
       setWinOpt(winOpts.deposite);
@@ -235,11 +246,27 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
       <div className="s-boardroom-selected">
         <div className="s-boardroom-account">
           <div className="s-boardroom-information">
-            <p>{t('myReward')}</p>
+            {
+              isExt? <p style={{margin: '10px auto'}}>{t('myReward')}</p> : <p>{t('myReward')}</p>
+            }
             <p className="s-boardroom-balance">
               <img src={YuzuSwapLogo}/>
               {myReward.toString(10)}
             </p>
+            {
+              isExt && tokenRewards?
+              tokenRewards.map(
+                (value: TokenReward)=>{
+                  return (
+                    <p className="s-boardroom-balance">
+                      <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={value.token} />
+                      {tokenAmountForshow(value.MyPendingAmount, value.token.decimals)}
+                    </p>
+                  )
+                }
+              )
+              : null
+            }
           </div>
           <div className="s-boardroom-select s-boardroom-tokens" onClick={async () => { await onHarvest() }}>{t('withdrawal')}</div>
         </div>

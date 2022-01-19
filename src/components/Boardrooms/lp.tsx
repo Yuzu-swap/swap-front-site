@@ -21,6 +21,7 @@ import { useBlockNumber } from 'state/application/hooks'
 import { tokenAmountForshow,numberToString } from 'utils/ZoosSwap'
 import { useTranslation } from 'react-i18next'
 import { Decimal } from "decimal.js"
+import { fixFloatFloor } from 'utils/fixFloat'
 
 
 
@@ -46,15 +47,15 @@ export default function BoardroomLP({zoopark}:{zoopark :StakePool}  ) {
         <h2>{zoopark.token0.symbol}/{zoopark.token1.symbol}</h2>
         <div className="s-trading-item-detail">
           <label>{t('myLpBalance')}: </label>
-          <em>{numberToString(JSBI.toNumber(zoopark.myLpBalance)/1e18)}</em>
+          <em>{fixFloatFloor(JSBI.toNumber(zoopark.myLpBalance)/1e18, 8)}</em>
         </div>
         <div className="s-trading-item-detail">
           <label>{zoopark.token0.symbol} ：</label>
-          <em>{tokenAmountForshow(zoopark.token0Balance,zoopark.token0.decimals)*poolShareRatio }</em>
+          <em>{fixFloatFloor(tokenAmountForshow(zoopark.token0Balance,zoopark.token0.decimals)*poolShareRatio, 8) }</em>
         </div>
         <div className="s-trading-item-detail">
           <label>{zoopark.token1.symbol}：</label>
-          <em>{tokenAmountForshow(zoopark.token1Balance,zoopark.token1.decimals)*poolShareRatio } </em>
+          <em>{fixFloatFloor(tokenAmountForshow(zoopark.token1Balance,zoopark.token1.decimals)*poolShareRatio, 8) } </em>
         </div>
         <div className="s-trading-item-detail">
           <label>{t('poolTokenPercentage')}:</label>

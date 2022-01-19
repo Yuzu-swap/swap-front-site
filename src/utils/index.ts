@@ -176,7 +176,16 @@ const builders = {
     }
   },
   oasistest: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
-    const prefix = `http://65.21.156.183:4000`
+    const prefix = `https://explorer.testnet.oasis.updev.si/`
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+  oasismain:(chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://explorer.emerald.oasis.dev/`
     switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
@@ -277,6 +286,10 @@ const chains: ChainObject = {
   [ChainId.OASISETH_TEST]: {
     chainName: 'oasis test',
     builder: builders.oasistest
+  },
+  [ChainId.OASISETH_MAIN]: {
+    chainName: 'Emerald mainnet',
+    builder: builders.oasismain
   },
 }
 

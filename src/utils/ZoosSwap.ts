@@ -1,7 +1,7 @@
 import { JSBI } from "@liuxingfeiyu/zoo-sdk";
 import { Decimal } from "decimal.js"
 
-export function tokenAmountForshow(amount :JSBI, decimal:number = 18) :number{
+export function tokenAmountForshow(amount :any, decimal:number = 18) :number{
 //    console.log("decimal is ",decimal,"amount is ",amount.toString(10), "res is ",JSBI.toNumber( JSBI.divide( JSBI.multiply(amount,JSBI.BigInt(100)),JSBI.BigInt(Math.pow(10,decimal)))))
     return new Decimal(amount.toString()).div( new Decimal(Math.pow(10,decimal) )).toNumber()
     //return JSBI.toNumber( JSBI.divide( JSBI.multiply(amount,JSBI.BigInt(1e10)),JSBI.BigInt(Math.pow(10,decimal))))/1e10

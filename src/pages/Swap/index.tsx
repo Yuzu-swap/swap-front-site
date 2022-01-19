@@ -294,6 +294,7 @@ export default function Swap() {
 
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
+
   return (
     <>
       <TokenWarningModal

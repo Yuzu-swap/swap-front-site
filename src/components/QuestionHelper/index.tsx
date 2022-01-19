@@ -1,3 +1,5 @@
+import { auto } from '@popperjs/core'
+import { position } from 'polished'
 import React, { useCallback, useState } from 'react'
 import { HelpCircle as Question } from 'react-feather'
 import styled from 'styled-components'
@@ -41,8 +43,31 @@ const LightQuestionWrapper = styled.div`
   }
 `
 
+const AddQuestionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  border: 2px solid ${({ theme }) => theme.black};
+  background: none;
+  outline: none;
+  cursor: default;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: ${({ theme }) => theme.black};
+
+  :hover,
+  :focus {
+    opacity: 0.7;
+  }
+`
+
 const QuestionMark = styled.span`
   font-size: 1rem;
+  margin-top: -2px;
 `
 
 export default function QuestionHelper({ text }: { text: string }) {
@@ -74,6 +99,23 @@ export function LightQuestionHelper({ text }: { text: string }) {
         <LightQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
           <QuestionMark>?</QuestionMark>
         </LightQuestionWrapper>
+      </Tooltip>
+    </span>
+  )
+}
+
+export function AddQuestionHelper({ text , onClick}: { text: string , onClick: ()=>void}) {
+  const [show, setShow] = useState<boolean>(false)
+
+  const open = useCallback(() => setShow(true), [setShow])
+  const close = useCallback(() => setShow(false), [setShow])
+
+  return (
+    <span style={{ marginLeft: '10px', marginBottom: auto, marginTop: auto, position: 'relative'}} onClick={onClick}>
+      <Tooltip text={text} show={show}>
+        <AddQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
+          <QuestionMark>+</QuestionMark>
+        </AddQuestionWrapper>
       </Tooltip>
     </span>
   )

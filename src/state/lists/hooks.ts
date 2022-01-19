@@ -14,7 +14,6 @@ export interface TagInfo extends TagDetails {
   id: string
 }
 
-
 //fix DEFAULT_TOKEN_LIST contract address
 DEFAULT_TOKEN_LIST.tokens.map (a => { 
   if( (AllDefaultChainTokens as any )[a.chainId] && (AllDefaultChainTokens as any )[a.chainId][a.name]){
@@ -69,7 +68,7 @@ const EMPTY_LIST: TokenAddressMap = {
   [ChainId.HECO]: {},
   [ChainId.HECO_TESTNET]: {},
   [ChainId.OASISETH_TEST]: {},
-  [ChainId.OASISETH]: {}
+  [ChainId.OASISETH_MAIN]: {}
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -140,8 +139,8 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     43113: { ...map1[43113], ...map2[43113] }, // avax testnet fuji
     65: { ...map1[65], ...map2[65] } ,
     66: { ...map1[66], ...map2[66] } ,
-    69: { ...map1[69], ...map2[69] } ,
-    42261: { ...map1[42261], ...map2[42261] } 
+    42261: { ...map1[42261], ...map2[42261] } ,
+    42262: { ...map1[42262], ...map2[42262] } 
   }
 }
 

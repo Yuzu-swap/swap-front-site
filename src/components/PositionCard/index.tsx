@@ -12,6 +12,7 @@ import { useTokenBalance } from '../../state/wallet/hooks'
 import { ExternalLink, TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
 import { unwrappedToken } from '../../utils/wrappedCurrency'
+import { stringFix } from '../../utils/fixFloat'
 import { ButtonPrimary, ButtonSecondary, ButtonEmpty, ButtonPrimaryNormal } from '../Button'
 import { transparentize } from 'polished'
 import { CardNoise } from '../earn/styled'
@@ -43,7 +44,8 @@ const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
   border: 1px solid #ED4962;
   background: rgba(237, 73, 98, 0.05);
   border-radius: 6px;
-  width: 680px
+  width: unset;
+  
   margin: 5px 20px; 
   /* background: ${({ theme, bgColor }) =>
     `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `}; */
@@ -107,7 +109,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
               </RowFixed>
               <RowFixed>
                 <Text fontWeight={500} fontSize={20}>
-                  {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                  {userPoolBalance ? stringFix(userPoolBalance.toSignificant(4), 4) : '-'}
                 </Text>
               </RowFixed>
             </FixedHeightRow>
@@ -246,7 +248,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               {t('myLpBalance')}:
               </Text>
               <Text fontSize={16} fontWeight={500}>
-                {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                {userPoolBalance ? stringFix(userPoolBalance.toSignificant(4), 4) : '-'}
               </Text>
             </FixedHeightRow>
             {stakedBalance && (
@@ -268,7 +270,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               {token0Deposited ? (
                 <RowFixed>
                   <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
-                    {token0Deposited?.toSignificant(6)}
+                    {stringFix(token0Deposited?.toSignificant(6), 6)}
                   </Text>
                   <CurrencyLogo size="20px" style={{ marginLeft: '8px' }} currency={currency0} />
                 </RowFixed>
@@ -286,7 +288,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               {token1Deposited ? (
                 <RowFixed>
                   <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
-                    {token1Deposited?.toSignificant(6)}
+                    {stringFix(token1Deposited?.toSignificant(6), 6)}
                   </Text>
                   <CurrencyLogo size="20px" style={{ marginLeft: '8px' }} currency={currency1} />
                 </RowFixed>

@@ -160,5 +160,6 @@
   "haveadd": "已添加",
   "haveremove" : "已移除",
   "inputamount" : "请输入金额",
-  "warn": "警告"
+  "warn": "警告",
+  "bridge": "跨链兑换"
 }

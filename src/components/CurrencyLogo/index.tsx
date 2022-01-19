@@ -17,6 +17,7 @@ import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
 import { useActiveWeb3React } from '../../hooks'
+import YUZULogo from '../../assets/tokenlogo/0x1fb9F58AFe55b0c5AEF738c60594A54B38E31Dfc/logo.png'
 
 const getTokenLogoURL = (address: string) =>
   `./${address}/logo.png`
@@ -54,6 +55,7 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.OKCHAIN_TEST]: OKTLogo,
   [ChainId.ROPSTEN]: ROPSTENETHlogo,
   [ChainId.OASISETH_TEST]: OasisRoseToken,
+  [ChainId.OASISETH_MAIN]: OasisRoseToken,
 }
 
 export default function CurrencyLogo({
@@ -70,7 +72,6 @@ export default function CurrencyLogo({
 
   const srcs: string[] = useMemo(() => {
     if (currency === ETHER) return []
-
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
         return [getTokenLogoURL(currency.address), ...uriLocations]
@@ -84,6 +85,9 @@ export default function CurrencyLogo({
   let nativeToken = Currency.getNativeCurrency(chainId)
   if (currency === nativeToken && chainId) {
     return <StyledNativeCurrencyLogo src={logo[chainId]} size={size} style={style} />
+  }
+  if(currency?.symbol === "YUZU"){
+    return <StyledNativeCurrencyLogo size={size} src={YUZULogo} style={style}/>
   }
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
 }

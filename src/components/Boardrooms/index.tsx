@@ -1,7 +1,7 @@
-import React,{ useContext, useMemo, useRef, useReducer } from 'react'
+import React,{ useContext, useMemo, useRef, useReducer, useState, useEffect} from 'react'
 import styled from 'styled-components'
 import { CardProps, Text } from 'rebass'
-import QuestionHelper from '../QuestionHelper'
+import QuestionHelper, {LightQuestionHelper}  from '../QuestionHelper'
 import { Box } from 'rebass/styled-components'
 import { Link } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/Button'
 import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import FantomLogo from '../../assets/images/fantom-logo.png'
 import Trans from '../../assets/newUI/trans.png'
+import DoublegetIcon from '../../assets/images/doubleget2.png'
 import { DefaultChainId, ZOO_PARK_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
 import { STAKING_REWARDS_INTERFACE } from 'constants/abis/staking-rewards'
@@ -19,6 +20,7 @@ import useTransactionDeadline from 'hooks/useTransactionDeadline'
 import { useStakingContract } from 'hooks/useContract'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import useZooParkCallback from 'zooswap-hooks/useZooPark'
+import {ZooParkExt} from 'data/ZooPark'
 import {ChainId, CurrencyAmount, JSBI, Token, TokenAmount ,StakePool, ZERO} from '@liuxingfeiyu/zoo-sdk'
 import { useBlockNumber } from 'state/application/hooks'
 import { tokenAmountForshow } from 'utils/ZoosSwap'
@@ -64,15 +66,27 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
     height : 35px;
   `
 
-  const blockNumber = useBlockNumber()
+  const blockNumber = useBlockNumber() || 0
   const prices:any  =  useSelector<AppState>(state=>state.zoo.tokenPrices)
-  const rewardPrice = prices["ZOO"] 
+
+  const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 1
+
+  const prodPerBlock:number = useMemo(()=>  tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)) * pool.rewardEffect / totalEffect ,[blockNumber, pool])
+  const Apr = useMemo(()=>{
+    
+    return (prodPerBlock * UserRatioOfReward * zooPrice * 10 * 60 * 24 * 365 * 100) / tvl
+  },
+  [blockNumber, prices, pool]
+  )
+
+  console.log("boardroom-----", pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1).toString(), tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)))
+
   const dayReturn = useMemo(()=>{
     const rewardPrice = prices["ZOO"] 
     const token0Price = prices[pool?.token0?.symbol||""] || 1
     const token1Price = prices[pool?.token1?.symbol||""] || 1
 
-
+    
     return  rewardPrice? pool.getDayReturn(blockNumber??0,rewardPrice,token0Price*Math.pow(10,18-pool.token0.decimals),token1Price*Math.pow(10,18-pool.token1.decimals)).toNumber() /10000:0
   },[blockNumber])
 
@@ -82,14 +96,12 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
   },[pool.token0,pool.token1])
 
   const jumpUrl = `/add/${pool?.token0.address}/${pool?.token1.address}`
-  const dayProduce = useMemo(()=>{
+  /*const dayProduce = useMemo(()=>{
     //per block every 4s
     return  JSBI.toNumber(pool.rewardConfig.getZooRewardBetween(blockNumber??0,(blockNumber??0)+24*3600/4))*pool.rewardEffect/1e18/10000
-  },[blockNumber])
+  },[blockNumber])*/
 
-  const prodPerBlock:number = useMemo(()=>  tokenAmountForshow(pool.rewardConfig.zooPerBlock) * pool.rewardEffect / totalEffect ,[blockNumber, pool])
 
-  const Apr = (prodPerBlock * UserRatioOfReward * rewardPrice * 10 * 60 * 24 * 365 * 100) / tvl
   const { t } = useTranslation();
   return (
     <div className="s-boardroom-item">
@@ -123,10 +135,10 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
           </BoardRoomDetail>          
         </div>
         <div className="s-boardroom-apy">
-          <span>APR</span>
+          <span>APR<LightQuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/></span>
           <span>{fixFloat(Apr, 3)}%</span>
         </div>
-        <ResponsiveButtonSecondary  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/${pool.pid}`}>
+        <ResponsiveButtonSecondary  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/${pool.pid}/extselect/-1`}>
         {t('select')}
         </ResponsiveButtonSecondary>
                 
@@ -138,7 +150,267 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
 }
 
 
-export default function Boardroom({rooms,statics}:{rooms: StakePool[],statics:any}) {
+export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key:number ,totalEffect:number,tvl:number}) {
+  // const { chainId, account } = useActiveWeb3React()
+  // const deadline = useTransactionDeadline()
+  // const stakingContract = useStakingContract(pool.lpAddress)
+  // const [approval, approveCallback] = useApproveCallback(new TokenAmount(new Token(chainId ?? DefaultChainId, pool.lpAddress, 18), balance), ZOO_PARK_ADDRESS[chainId ?? DefaultChainId])
+//  console.log('StakePoolStakePoolStakePool', pool);
+
+  // 个人质押总额
+  const myStaked = tokenAmountForshow(pool.myCurrentLp || 0)
+  // 个人未领取奖励
+  const myReward = tokenAmountForshow(pool.myReward || 0)
+  // 个人lp 余额
+  const myBalance = tokenAmountForshow(pool.myLpBalance || 0)
+
+  const totalLp = tokenAmountForshow(pool.totalLp || 0)
+  
+  const totalLpInPark = tokenAmountForshow(pool.totalLpInPark || 0)
+
+  const myRatio =   JSBI.greaterThan(pool.totalLpInPark,ZERO ) ?   (new Decimal(pool.myCurrentLp.toString())).div(new Decimal(pool.totalLpInPark.toString())).toNumber() :0
+
+
+
+  const ResponsiveButtonSecondary = styled(ButtonSecondary)`
+`
+
+
+  const blockNumber = useBlockNumber() || 0
+  const prices:any  =  useSelector<AppState>(state=>state.zoo.tokenPrices)
+
+  const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 1
+
+  const prodPerBlock:number = useMemo(()=>  tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)) * pool.rewardEffect / totalEffect ,[blockNumber, pool])
+  const Apr = useMemo(()=>{
+    let extprice = 0
+    if(pool.tokenRewards){
+      for(let i = 0; i < pool.tokenRewards.length;i++){
+        let num = tokenAmountForshow(pool.tokenRewards[i].PerblockReward, pool.tokenRewards[i].token.decimals)
+        let tokenExtPrice = prices[pool.tokenRewards[i].token.symbol || ""] || 1
+        extprice += num * tokenExtPrice
+      }
+    }
+    
+    return ((prodPerBlock * UserRatioOfReward * zooPrice+ extprice )* 10 * 60 * 24 * 365 * 100) / tvl
+  },
+  [blockNumber, prices, pool]
+  )
+
+  const extProdPerBlockInfo: String[] = useMemo(
+    ()=>{
+      let re: String[] = []
+      if(pool.tokenRewards){
+        for(let i = 0; i < pool.tokenRewards.length;i++){
+          let num = tokenAmountForshow(pool.tokenRewards[i].PerblockReward, pool.tokenRewards[i].token.decimals)
+          let str = fixFloat(num , 2)
+          str += " "
+          str += pool.tokenRewards[i].token.symbol || ""
+          re.push(str)
+        }
+      }
+      return re
+    },
+    [blockNumber, pool]
+  )
+
+  const extRewardInfo: String[] = useMemo(
+    ()=>{
+      let re :String[]= []
+      if(pool.tokenRewards){
+        for(let i = 0; i < pool.tokenRewards.length;i++){
+          let num = tokenAmountForshow(pool.tokenRewards[i].MyPendingAmount, pool.tokenRewards[i].token.decimals)
+          let str = fixFloat(num , 4)
+          str += " "
+          str += pool.tokenRewards[i].token.symbol || ""
+          re.push(str)
+        }
+      }
+      return re
+    },
+    [blockNumber, pool]
+  )
+
+  const extSymbolInfo: string = useMemo(
+    ()=>{
+      let str = ""
+      if(pool.tokenRewards){
+        for(let i = 0; i < pool.tokenRewards.length;i++){
+          str += pool.tokenRewards[i].token.symbol
+          str += "+"
+        }
+      }
+      return str.substr(0, str.length-1)
+    },
+    [blockNumber, pool]
+  )
+
+  const minExtBlock: number = useMemo(
+    ()=>{
+      let num: Number = -1;
+      if(pool.tokenRewards){
+        for(let i = 0; i < pool.tokenRewards.length;i++){
+          let temp = pool.tokenRewards[i].RewardEndAt
+          if(temp < num || num == -1){
+            num = temp
+          }
+        }
+      }
+      return num.valueOf()
+    },
+    [blockNumber, pool]
+  ) 
+
+
+  const now = Math.floor((new Date()).valueOf()/1000)
+  const [timestamp,setTimeStamp] = useState(now)
+  const [lastBlockAt,setLastBlockAt] = useState(now)
+
+  useEffect(()=> {
+    setLastBlockAt(Math.floor((new Date()).valueOf()/1000) )
+  },[blockNumber])
+
+  const [day,hour,min,second] = useMemo(()=>{
+    let nextBlockTime= 0
+    let day,hour,min,second
+    if (blockNumber&& blockNumber>0) {
+      nextBlockTime = (minExtBlock - (blockNumber?? 0))*15
+      nextBlockTime -= (timestamp-lastBlockAt)
+      day = Math.floor(nextBlockTime/86400)
+      hour = Math.floor((nextBlockTime-day*86400)/ 3600)
+      min = Math.floor((nextBlockTime-day*86400-hour*3600)/60)
+      second = Math.floor(nextBlockTime%60)
+    }
+    return [day,hour,min,second]
+  },[lastBlockAt,timestamp])
+
+  useEffect(()=>{
+    const timer = setTimeout(()=>{
+      setTimeStamp(Math.floor((new Date()).valueOf()/1000))
+    },1000)
+    return () =>{
+      clearTimeout(timer)
+    }
+  },[timestamp])
+
+  console.log("boardroom-----ext", pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1).toString(), tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)))
+
+  const dayReturn = useMemo(()=>{
+    const rewardPrice = prices["ZOO"] 
+    const token0Price = prices[pool?.token0?.symbol||""] || 1
+    const token1Price = prices[pool?.token1?.symbol||""] || 1
+
+    
+    return  rewardPrice? pool.getDayReturn(blockNumber??0,rewardPrice,token0Price*Math.pow(10,18-pool.token0.decimals),token1Price*Math.pow(10,18-pool.token1.decimals)).toNumber() /10000:0
+  },[blockNumber])
+
+  const allTokens = useAllTokens()
+  const [token0WithLogo,token1WithLogo] =useMemo( ()=>{
+    return [ allTokens[pool.token0.address],allTokens[pool.token1.address]]
+  },[pool.token0,pool.token1])
+
+  const jumpUrl = `/add/${pool?.token0.address}/${pool?.token1.address}`
+  /*const dayProduce = useMemo(()=>{
+    //per block every 4s
+    return  JSBI.toNumber(pool.rewardConfig.getZooRewardBetween(blockNumber??0,(blockNumber??0)+24*3600/4))*pool.rewardEffect/1e18/10000
+  },[blockNumber])*/
+
+
+  const RewardShow = styled.div`
+    background: rgba(237, 73, 98, 0.09);
+    border: 1px solid #ED4962;
+    border-radius: 5px;
+    color: #ED4962;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 34px;
+  `
+
+  const TimeBLock = styled.div`
+    text-align: center;
+    display: inline-block;
+    background: #333333;
+    border-radius: 4px;
+    border: 1px solid #F57C78;
+    line-height: 18px;
+    color: #FFFFFF;
+    min-width: 20px;
+  `
+
+
+  const { t } = useTranslation();
+  return (
+    <div className="s-doubleget-item">
+      <div className="s-doubleget-item-trans">
+      <Link to={jumpUrl}>
+      <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token0WithLogo} />
+      <span>&nbsp;&nbsp;</span>
+      <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token1WithLogo}  />
+      <span>&nbsp;&nbsp;</span>
+      { <h3 style={{display: 'inline-block', margin: '0px auto', verticalAlign: 'middle', lineHeight: '34px'}}>{pool.token0.symbol}{'-'}{pool.token1.symbol}</h3> }
+      </Link>
+      <RewardShow>
+        <img className="s-doubleget-icon" src={DoublegetIcon}/>
+        YUZU+{extSymbolInfo}
+      </RewardShow>
+      </div>
+
+      <div className="s-doubleget-item-details">
+      <div className="s-doubleget-item-detail">
+            <label>Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
+            <em><TimeBLock>{day}</TimeBLock>:<TimeBLock>{hour}</TimeBLock>:<TimeBLock>{min}</TimeBLock>:<TimeBLock>{second}</TimeBLock></em>
+        </div>
+        <div className="s-doubleget-item-detail" style={{height: '80px'}}>
+            <label>{t('productionperblock')}:</label> 
+            <em>{ fixFloat(prodPerBlock * UserRatioOfReward, 1)} YUZU 
+            {
+              extProdPerBlockInfo.map((value : String)=>{
+                return (<>
+                  <br/>
+                  {value}
+                </>)
+              })
+            }
+             </em>
+        </div>
+        <div className="s-doubleget-item-detail">
+            <label>{t('totalLp')}:</label>
+            <em>{ fixFloat(tvl, 4)} USDT</em>
+        </div>
+        <div className="s-doubleget-item-detail">
+            <label>{t('myStaked')}:</label> 
+            <em>{ fixFloat(myRatio * 100, 2)}%</em>
+        </div>
+        <div className="s-doubleget-item-detail" style={{height: '80px'}}>
+            <label>{t('myReward')}:</label> 
+            <em>{ fixFloat(myReward, 4)} YUZU
+            {
+              extRewardInfo.map((value : String)=>{
+                return (<>
+                  <br/>
+                  {value}
+                </>)
+              })
+            }
+            </em>      
+        </div>
+      </div>
+      <div className="s-boardroom-apy" style={{margin: "0px 10px"}}>
+          <span>APR<LightQuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/></span>
+          <span>{fixFloat(Apr, 3)}%</span>
+      </div>
+      <div style={{margin: "0px 10px 10px"}}>
+        <ResponsiveButtonSecondary  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/-1/extselect/${pool.pid}`}>
+        {t('select')}
+        </ResponsiveButtonSecondary>
+      </div>
+    </div>
+  )
+}
+
+
+export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: StakePool[],statics:any, extrooms: ZooParkExt[], extstatics: any}) {
 
   const { chainId, account } = useActiveWeb3React()
   
@@ -146,11 +418,30 @@ export default function Boardroom({rooms,statics}:{rooms: StakePool[],statics:an
   for(let i = 0; i < rooms.length; i++){
     totalEffect += rooms[i].rewardEffect
   }
+  const Titleb = styled.h1`
+  text-align : center;
+  font-weight: 500;
+  color: #333333;
+  `
+  const Titlew = styled.h1`
+  text-align : center;
+  font-weight: 500;
+  color: #FFFFFF;
+  `
   return (
-    <div className="s-trading-list">
-       {rooms.map((pool: StakePool, i: number) => {
-        return <BoardItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (statics && statics.tvls&&statics.tvls[i])||0}/>
-      })}
+    <div>
+      {/*<Titlew>Dual Yield</Titlew>*/}
+      <div className="s-trading-list">
+        {extrooms.map((pool: ZooParkExt, i: number) => {
+          return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>
+        })}
+      </div>
+      <Titleb>ALL FARMS</Titleb>
+      <div className="s-trading-list">
+        {rooms.map((pool: StakePool, i: number) => {
+          return <BoardItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (statics && statics.tvls&&statics.tvls[i])||0}/>
+        })}
+      </div>
     </div>
   )
 }

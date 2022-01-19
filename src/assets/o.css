@@ -174,9 +174,11 @@
 }
 .s-audit-orgs img{
 	height: 88px;
-	width: 284;
+	width: 100%;
+	max-width: 330px;
 	box-shadow: 0px 16px 24px 0px rgba(43, 43, 43, 0.09);
 	border-radius: 8px;
+	/*border: 1px solid #F36E7F;*/
 	margin: 13px;
 }
 .s-parters img{
@@ -299,6 +301,22 @@
 	height: 86px;
 	padding:0.8rem 0 0.5rem;
 }
+
+.s-doubleget-item-trans{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	text-align: center;
+	background: #FFFFFF;
+	padding:0.8rem 0 0.5rem;
+}
+
+.s-doubleget-item-trans a{
+	text-decoration: none;
+	color:#171717;
+}
+
+
 .s-trading-item-trans a{
 	text-decoration: none;
 	color:#171717;
@@ -347,6 +365,59 @@
 }
 .s-trading-item-detail:nth-child(odd){
 	background-color: #f5f5f5;
+}
+
+.s-doubleget-item-details{
+	padding:0.5rem 0px;
+}
+.s-doubleget-item-detail{
+	display: flex;
+	width: 100%;
+	font-size: 0.8rem;
+	font-weight: 500;
+	line-height: 2;
+	padding: 10px 10px;
+	color: #333333;
+	justify-content: space-between;
+	line-height: 20px;
+}
+.s-doubleget-item-detail label{
+	display: inline-block;
+	width: fit-content;
+	height: 20px;
+	margin: auto 0px;
+	vertical-align: middle;
+}
+.s-doubleget-item-detail em{
+	display: inline-block;
+	width: fit-content;
+	text-align: right;
+	font-style: normal;
+	height: fit-content;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+.s-doubleget-item-detail:nth-child(odd){
+	background-color: #f5f5f5;
+}
+.s-doubleget-item{
+	width: 430px;
+	background: #FFFFFF;
+	box-shadow: 0px 14px 20px 4px rgba(237, 73, 98, 0.1);
+	border-radius: 8px;
+	margin:2rem 0.5rem 0;
+	border: 2px solid #F36E7F;
+	overflow: hidden;
+	padding: 20px 0px 0px;
+	box-sizing: border-box;
+	text-align: center;
+}
+
+.s-doubleget-icon{
+	display: inline-block;
+	width: 34px;
+	height: 34px;
+	vertical-align: middle;
 }
 
 
@@ -416,7 +487,7 @@
 }
 
 .s-boardroom-information{
-	width: 306px;
+	width: 100%;
 	height: 123px;
 	background: #F9F9F9;
 	border-radius: 6px;
@@ -426,8 +497,9 @@
 	color: #333333;
 }
 
+
 .s-boardroom-information-no-drak{
-	width: 306px;
+	width: 100%;
 	height: 123px;
 	font-size: 18px;
 	font-weight: 500;
@@ -456,12 +528,13 @@
 	display: inline;
 }
 
-.s-boardroom-balance{}
+.s-boardroom-balance{
+	margin: 0px auto;
+}
 .s-boardroom-balance img{
-	width:1.2rem;
-	vertical-align: middle;
-	margin-right: 0.5rem;
-	margin-bottom: 10px;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
 }
 .s-boardroom-plus{
 	display: inline-block;
@@ -565,7 +638,7 @@
 }
 .s-open-settings-dialog-button {
 	border: none;
-	margin: 5px 1rem 2px 1rem;
+	margin: 0;
 	padding: 0;
 	height: 28px;
 	width:28px;
@@ -576,7 +649,7 @@
 /*右上角链接列表*/
 .s-top-links-btn{
 	border: none;
-	margin: 5px 1rem 2px 1rem;
+	margin: 0;
 	padding: 0;
 	height: 28px;
 	width:28px;
@@ -659,6 +732,10 @@
 .s-top-links .telegram{
 	background-image:url(./newUI/telegram.png);
 }
+.s-top-links .dexscreener{
+	background-size: contain;
+	background-image:url(./newUI/dexscreener.png);
+}
 .s-top-link-button{
 	background: none;
 	border: none;
@@ -678,7 +755,8 @@
 
 .s-banner{
 	text-align: center;
-	width:700px;
+	width: 100%;
+	max-width:700px;
 	font-size: 30px;
 	font-family: PingFangSC-Semibold, PingFang SC;
 	font-weight: 600;
@@ -2063,4 +2141,39 @@
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+}
+
+.s-zap-body{
+	display: flex;
+	flex-wrap: wrap;
+	width: 850px;
+	margin: 200px auto;
+	color:#FFFFFF;
+	text-align: center;
+	padding: 10px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.s-zap-img{}
+
+.s-zap-exchange{
+	width: 428px;
+	background: #FFFFFF;
+	box-shadow: 0px 16px 24px 0px rgba(43, 43, 43, 0.09);
+	border-radius: 8px;
+	padding: 20px;
+	position: relative;
+	height: fit-content;
+}
+
+.s-zap-input{
+	background: #F5F5F5;
+	border-radius: 6px;
+	padding: 10px;
+}
+
+.s-zap-line{
+	display: flex;
+	justify-content: space-between;
 }

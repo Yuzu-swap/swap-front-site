@@ -19,6 +19,8 @@ import UserUpdater from './state/user/updater'
 import ZooUpdater from './state/zoo/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -55,6 +57,16 @@ function Updaters() {
     </>
   )
 }
+
+Sentry.init({
+  dsn: "https://d714bc2ea0c4464f8dbfa9ccfc12db76@sentry.yuzu-swap.com/2",
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 ReactDOM.render(
   <StrictMode>

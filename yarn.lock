@@ -2015,18 +2015,17 @@
   version "4.72.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.72.0.tgz#43df23af013ad1135407e5cf33ca6e4c4c7708d5"
 
-"@liuxingfeiyu/default-token-list@1.0.9":
+"@liuxingfeiyu/default-token-list@1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/default-token-list/-/default-token-list-1.0.15.tgz#b691b166f93728e1f624700ee1fd481bf6f15839"
+
+"@liuxingfeiyu/zoo-core@1.0.9":
   version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/default-token-list/-/default-token-list-1.0.9.tgz#83abeaad13feddaee649a2e899e1649f5267e1c6"
+  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-core/-/zoo-core-1.0.9.tgz#a95cf3692f52fed085144896c00929655367d510"
 
-"@liuxingfeiyu/zoo-core@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-core/-/zoo-core-1.0.5.tgz#6c041d9c88be2e853b78f03dcc7787f50e78a7f0"
-
-"@liuxingfeiyu/zoo-sdk@1.0.55":
-  version "1.0.55"
-  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-sdk/-/zoo-sdk-1.0.55.tgz#8368ba0ac5023a3b92d3aff69f346d0be4f0cb9e"
-  integrity sha512-mpzBD+3EpKjHtgYb5PdjqDE5j29n6Je2QTHq8JBc2ilIyY6O3ue1yTjShYDLs4eRpJ0MUvKWzEGMbsba0JUBfg==
+"@liuxingfeiyu/zoo-sdk@1.0.69":
+  version "1.0.69"
+  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-sdk/-/zoo-sdk-1.0.69.tgz#61d8173c4a7e27291ea557a21c337adc25dac733"
   dependencies:
     "@uniswap/v2-core" "1.0.1"
     big.js "^5.2.2"
@@ -2153,6 +2152,73 @@
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.1.tgz#a21117b19ee9be70c379ec1877537ef2e1c63301"
   dependencies:
     any-observable "^0.3.0"
+
+"@sentry/browser@6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/browser/download/@sentry/browser-6.15.0.tgz?cache=0&sync_timestamp=1637053023771&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40sentry%2Fbrowser%2Fdownload%2F%40sentry%2Fbrowser-6.15.0.tgz#7a1d316dd31cedee446e359a21774bf93d1e553d"
+  dependencies:
+    "@sentry/core" "6.15.0"
+    "@sentry/types" "6.15.0"
+    "@sentry/utils" "6.15.0"
+    tslib "^1.9.3"
+
+"@sentry/core@6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/core/download/@sentry/core-6.15.0.tgz?cache=0&sync_timestamp=1637053033807&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40sentry%2Fcore%2Fdownload%2F%40sentry%2Fcore-6.15.0.tgz#5e877042fe18452f2273247126b32e139d5f907c"
+  dependencies:
+    "@sentry/hub" "6.15.0"
+    "@sentry/minimal" "6.15.0"
+    "@sentry/types" "6.15.0"
+    "@sentry/utils" "6.15.0"
+    tslib "^1.9.3"
+
+"@sentry/hub@6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/hub/download/@sentry/hub-6.15.0.tgz?cache=0&sync_timestamp=1637053028926&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40sentry%2Fhub%2Fdownload%2F%40sentry%2Fhub-6.15.0.tgz#fb8a91d12fdd2726a884374ea7242f6bbd081d69"
+  dependencies:
+    "@sentry/types" "6.15.0"
+    "@sentry/utils" "6.15.0"
+    tslib "^1.9.3"
+
+"@sentry/minimal@6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/minimal/download/@sentry/minimal-6.15.0.tgz?cache=0&sync_timestamp=1637053028483&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40sentry%2Fminimal%2Fdownload%2F%40sentry%2Fminimal-6.15.0.tgz#fcc083ba901cfe57d25303d0b5fa8cd13e164466"
+  dependencies:
+    "@sentry/hub" "6.15.0"
+    "@sentry/types" "6.15.0"
+    tslib "^1.9.3"
+
+"@sentry/react@^6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/react/download/@sentry/react-6.15.0.tgz#4a1a3f39f61c03a675b90a114ff79a9163bcbe3b"
+  dependencies:
+    "@sentry/browser" "6.15.0"
+    "@sentry/minimal" "6.15.0"
+    "@sentry/types" "6.15.0"
+    "@sentry/utils" "6.15.0"
+    hoist-non-react-statics "^3.3.2"
+    tslib "^1.9.3"
+
+"@sentry/tracing@^6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/tracing/download/@sentry/tracing-6.15.0.tgz?cache=0&sync_timestamp=1637053909683&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40sentry%2Ftracing%2Fdownload%2F%40sentry%2Ftracing-6.15.0.tgz#5a5f08ee6b9cc1189227536fca053cd23488600d"
+  dependencies:
+    "@sentry/hub" "6.15.0"
+    "@sentry/minimal" "6.15.0"
+    "@sentry/types" "6.15.0"
+    "@sentry/utils" "6.15.0"
+    tslib "^1.9.3"
+
+"@sentry/types@6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/types/download/@sentry/types-6.15.0.tgz#a2917f8aed91471bdfd6651384ffcd47b95c43ad"
+
+"@sentry/utils@6.15.0":
+  version "6.15.0"
+  resolved "https://registry.npmmirror.com/@sentry/utils/download/@sentry/utils-6.15.0.tgz?cache=0&sync_timestamp=1637053033923&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40sentry%2Futils%2Fdownload%2F%40sentry%2Futils-6.15.0.tgz#0c247cb092b1796d39c3d16d8e6977b9cdab9ca2"
+  dependencies:
+    "@sentry/types" "6.15.0"
+    tslib "^1.9.3"
 
 "@sideway/address@^4.1.0":
   version "4.1.1"

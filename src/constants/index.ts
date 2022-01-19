@@ -1,5 +1,7 @@
 import { ChainId, JSBI, Percent, Token, WETH ,SUSHI_ADDRESS,DefaultChainToken} from '@liuxingfeiyu/zoo-sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import { EnumParams } from 'ajv'
+import { chain } from 'lodash'
 
 import { fortmatic, injected, portis, lattice, walletconnect, walletlink, torus } from '../connectors'
 
@@ -10,7 +12,8 @@ export { PRELOADED_PROPOSALS } from './proposals'
 export {
   ZOO_USDT_SWAP_PAIR_ADDRESS,
   ZOO_SWAP_MINING_ADDRESS,
-  ZOO_PARK_ADDRESS
+  ZOO_PARK_ADDRESS,
+  ZOO_PARK_EXT_ADDRESS
 } from '@liuxingfeiyu/zoo-sdk'
 // a list of tokens by chain
 type ChainTokenList = {
@@ -40,6 +43,7 @@ export const SUSHI: ChainTokenMap = {
   ),
   [ChainId.ROPSTEN]:  DefaultChainToken[ChainId.ROPSTEN].YUZU,
   [ChainId.OASISETH_TEST]:  DefaultChainToken[ChainId.OASISETH_TEST].YUZU,
+  [ChainId.OASISETH_MAIN]:  DefaultChainToken[ChainId.OASISETH_MAIN].YUZU,
   [ChainId.RINKEBY]: new Token(
     ChainId.RINKEBY,
     '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
@@ -91,7 +95,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.HECO]: [WETH[ChainId.HECO]],
   [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]],
   [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]],
-  [ChainId.OASISETH]: [WETH[ChainId.OASISETH]],
+  [ChainId.OASISETH_MAIN]: [WETH[ChainId.OASISETH_MAIN]],
   [ChainId.OASISETH_TEST]: [WETH[ChainId.OASISETH_TEST]],
 }
 
@@ -124,6 +128,7 @@ export const FANTOM: { [key: string]: Token } = {
 export const OKCHAIN_TEST  = DefaultChainToken[ChainId.OKCHAIN_TEST]
 export const ROPSTEN_TOKENS = DefaultChainToken[ChainId.ROPSTEN]
 export const OASISETH_TEST_TOKENS = DefaultChainToken[ChainId.OASISETH_TEST]
+export const OASISETH_MAIN_TOKENS = DefaultChainToken[ChainId.OASISETH_MAIN]
 export const AllDefaultChainTokens = DefaultChainToken
 
 
@@ -135,6 +140,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
   [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB],
   [ChainId.OASISETH_TEST]: [...WRAPPED_NATIVE_ONLY[ChainId.OASISETH_TEST], OASISETH_TEST_TOKENS.YUZU,OASISETH_TEST_TOKENS.BTC,OASISETH_TEST_TOKENS.ETH,OASISETH_TEST_TOKENS.USDT],
+  [ChainId.OASISETH_MAIN]: [...WRAPPED_NATIVE_ONLY[ChainId.OASISETH_MAIN], OASISETH_MAIN_TOKENS.YUZU,OASISETH_MAIN_TOKENS.ETH,OASISETH_MAIN_TOKENS.USDT],
 }
 
 export const CREAM = new Token(ChainId.MAINNET, '0x2ba592F78dB6436527729929AAf6c908497cB200', 18, 'CREAM', 'Cream')
@@ -240,6 +246,13 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
     [OASISETH_TEST_TOKENS.USDT,OASISETH_TEST_TOKENS.YUZU],
     [OASISETH_TEST_TOKENS.USDT,OASISETH_TEST_TOKENS.BTC],
     [OASISETH_TEST_TOKENS.USDT,WETH[ChainId.OASISETH_TEST]],
+  ],
+  [ChainId.OASISETH_MAIN]: [
+    [SUSHI[ChainId.OASISETH_MAIN] as Token, WETH[ChainId.OASISETH_MAIN]],
+    [OASISETH_MAIN_TOKENS.YUZU,OASISETH_MAIN_TOKENS.ETH],
+    [OASISETH_MAIN_TOKENS.USDT,OASISETH_MAIN_TOKENS.ETH],
+    [OASISETH_MAIN_TOKENS.USDT,OASISETH_MAIN_TOKENS.YUZU],
+    [OASISETH_MAIN_TOKENS.USDT,WETH[ChainId.OASISETH_MAIN]],
   ],
 
 }
@@ -376,9 +389,10 @@ export const BLOCKED_ADDRESSES: string[] = [
   '0x901bb9583b24D97e995513C6778dc6888AB6870e',
   '0xA7e5d5A720f06526557c513402f2e6B5fA20b008'
 ]
+//process.env.REACT_APP_DEFAULTCHAINID
 
-export const DefaultChainId = ChainId.OASISETH_TEST
+export const DefaultChainId : ChainId = (<any>ChainId)[process.env.REACT_APP_DEFAULTCHAINID || 'OASISETH_MAIN']
 
-export const APIHost = 'http://oasistest-devnet.yuzu-swap.com/api'
+export const APIHost = process.env.REACT_APP_APIHOST
 
 export const UserRatioOfReward : number = 0.7

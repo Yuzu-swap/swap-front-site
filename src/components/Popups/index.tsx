@@ -12,7 +12,7 @@ const MobilePopupWrapper = styled.div<{ height: string | number }>`
   height: ${({ height }) => height};
   margin: ${({ height }) => (height ? '0 auto;' : 0)};
   margin-bottom: ${({ height }) => (height ? '20px' : 0)}};
-
+  z-index: 3;
   display: none;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     display: block;

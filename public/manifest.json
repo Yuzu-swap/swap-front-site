@@ -1,9 +1,9 @@
 {
-  "short_name": "ZooSwap",
-  "name": "ZooSwap",
+  "short_name": "YuzuSwap",
+  "name": "YuzuSwap",
   "icons": [
     {
-      "src": "./images/logo.png",
+      "src": "./images/yuzulogo.svg",
       "sizes": "70x70",
       "type": "image/png",
       "purpose": "any maskable"

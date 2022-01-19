@@ -19,6 +19,8 @@ import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
 
 import SAAVE_ABI from '../constants/sushiAbis/saave.json'
 import { abi as STAKE_MINING_ABI } from '@liuxingfeiyu/zoo-core/deployments/ropsten/YuzuPark.json'
+import { abi as STAKE_MINING_EXT_ABI } from '@liuxingfeiyu/zoo-core/deployments/oasistest/YuzuParkExt.json'
+import { abi as ZAP_ABI } from '@liuxingfeiyu/zoo-core/deployments/oasistest/YuzuZap.json'
 import { abi as SWAP_MINING_ABI } from  '@liuxingfeiyu/zoo-core/deployments/ropsten/YuzuSwapMining.json'
 
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
@@ -70,4 +72,11 @@ export function useSwapMiningContract(swapMiningAddress?: string, withSignerIfPo
 }
 export function useZooParkContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKE_MINING_ABI, withSignerIfPossible)
+}
+export function useZooParkExtContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(stakingAddress, STAKE_MINING_EXT_ABI, withSignerIfPossible)
+}
+
+export function useZooZapExtContract(zapAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(zapAddress, ZAP_ABI, withSignerIfPossible)
 }

@@ -2,15 +2,16 @@ import { useCallback } from 'react'
 import { useSwapMiningContract, useZooParkContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { TransactionResponse } from '@ethersproject/providers'
-import { ZOO_SWAP_MINING_ADDRESS, DefaultChainId, ZOO_PARK_ADDRESS } from '../constants'
+import { ZOO_SWAP_MINING_ADDRESS, DefaultChainId, ZOO_PARK_ADDRESS , ZOO_PARK_EXT_ADDRESS} from '../constants'
 import { useActiveWeb3React } from 'hooks'
 import { calculateGasMargin } from 'utils'
 
 
 
-export default function useZooParkCallback(): {withdraw: (pid:number,amount:string,callback?:any)=> Promise<void>,deposit:(pid:number,amount:string,callback?:any)=>Promise<void>} {
+export default function useZooParkCallback(isExt:boolean = false): {withdraw: (pid:number,amount:string,callback?:any)=> Promise<void>,deposit:(pid:number,amount:string,callback?:any)=>Promise<void>} {
       const { chainId, account } = useActiveWeb3React()
-      const zooParkContract = useZooParkContract(ZOO_PARK_ADDRESS[chainId?? DefaultChainId], true)
+      const ParkAdderss = isExt? ZOO_PARK_EXT_ADDRESS[chainId?? DefaultChainId] : ZOO_PARK_ADDRESS[chainId?? DefaultChainId]
+      const zooParkContract = useZooParkContract(ParkAdderss, true)
       const addTransaction = useTransactionAdder()
   
   

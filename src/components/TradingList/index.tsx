@@ -7,7 +7,7 @@ import { Box } from 'rebass/styled-components'
 import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import FantomLogo from '../../assets/images/fantom-logo.png'
 import Trans from '../../assets/newUI/trans.png'
-import { CurrencyAmount, JSBI, Token, Trade ,TradePool} from '@liuxingfeiyu/zoo-sdk'
+import { CurrencyAmount, JSBI, Token, Trade ,TradePool, ZERO} from '@liuxingfeiyu/zoo-sdk'
 import { useBlockNumber } from 'state/application/hooks'
 import { math } from 'polished'
 import { tokenAmountForshow } from 'utils/ZoosSwap'
@@ -22,16 +22,17 @@ import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import fixFloat from 'utils/fixFloat'
 import { UserRatioOfReward } from '../../constants'
+import { Decimal } from "decimal.js"
 
 let targetPool:TradePool;
-export function TradingItem({pool,statics,totalEffect}:{ pool: TradePool,statics:any, totalEffect:number }){
+export function TradingItem({pool,index,statics,totalEffect}:{ pool: TradePool,statics:any, totalEffect:number ,index:number}){
 
   const { t } = useTranslation();
 //  console.log('TradingItemTradingItemTradingItem', pool, "statics ",statics);
   const getTokenPair  = (token0:Token,token1:Token) => {
     return token0.getSymbol() + " — " + token1.getSymbol()
   }
-  const blockNumber = useBlockNumber()
+  const blockNumber = useBlockNumber() || 0 
   // 日收益率
   const dayReturn:number = useMemo(()=>{
     return pool.getDayReturn(blockNumber??0,1,1).toNumber ()/10000 * 100
@@ -50,12 +51,13 @@ export function TradingItem({pool,statics,totalEffect}:{ pool: TradePool,statics
   //已分配奖励：
   const currentTotalReward:number = useMemo(()=>{return  tokenAmountForshow(JSBI.BigInt( statics?.withdrawedAmount?.[pool.pid]??0 ))  },[blockNumber, pool])
   // 个人交易总额
-  const myCurrentTradeVolume:number = useMemo(()=> tokenAmountForshow(pool.myCurrentLp,targetDecimal) ,[blockNumber, pool])
+  const myCurrentTradeVolume:number = useMemo(()=> {return statics?.currentVolumes?.[index]??0} ,[blockNumber, pool])
   // 个人当前奖励
   const myCurrentReward:number = useMemo(()=>  tokenAmountForshow(pool.myReward) ,[blockNumber, pool])
   //每块产量
-  const prodPerBlock:number = useMemo(()=>  tokenAmountForshow(pool.rewardConfig.zooPerBlock) * pool.rewardEffect / totalEffect ,[blockNumber, pool])
+  const prodPerBlock:number = useMemo(()=>  tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)) * pool.rewardEffect / totalEffect ,[blockNumber, pool])
 
+  const myRatio = JSBI.greaterThan(pool.totalLp,ZERO ) ?   (new Decimal(pool.myCurrentLp.toString())).div(new Decimal(pool.totalLp.toString())).toNumber() :0
 
   const allTokens = useAllTokens()
 
@@ -108,7 +110,7 @@ export function TradingItem({pool,statics,totalEffect}:{ pool: TradePool,statics
         </div>
         <div className="s-trading-item-detail">
           <label>{t('myCurrentTradeVolume')}<QuestionHelper text={t('myCurrentTradeVolumeTip')} />：</label>
-          <em>{fixFloat(myCurrentTradeVolume, 4)} USDT</em>
+          <em>{fixFloat(myCurrentTradeVolume * myRatio, 4)} USDT</em>
         </div>
         <div className="s-trading-item-detail">
           <label>{t('myCurrentReward')}<QuestionHelper text={t('myCurrentRewardTip')} />：</label>
@@ -138,7 +140,7 @@ export default function TradingList({poolList,statics}:{poolList:TradePool[],sta
   return (
     <div className="s-trading-list">
       {poolList.map((pool, i) => {
-        return <TradingItem key={i} pool={pool} statics={statics} totalEffect={totalEffect}/>
+        return <TradingItem index={i} key={i} pool={pool} statics={statics} totalEffect={totalEffect}/>
       })}
       <TradingGroupModal isOpen={showTradingGroupModal} handleCurrencySelect={handleCurrencySelect}/>
     </div>

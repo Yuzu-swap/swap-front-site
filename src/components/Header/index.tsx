@@ -1,5 +1,6 @@
 import { ChainId, TokenAmount, Currency } from '@liuxingfeiyu/zoo-sdk'
-import React, { useState } from 'react'
+import React, { useState, useRef, useMemo } from 'react'
+import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { Text } from 'rebass'
 import { NavLink } from 'react-router-dom'
 import { darken } from 'polished'
@@ -35,7 +36,10 @@ import { Dots } from '../swap/styleds'
 import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
+import { RPC } from 'connectors'
 import { SUSHI } from '../../constants'
+import { chain } from 'lodash'
+import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -67,6 +71,8 @@ const HeaderControls = styled.div`
   flex-direction: row;
   align-items: center;
   justify-self: flex-end;
+  width: fit-content;
+  min-width: 33vw;
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
     flex-direction: row;
@@ -82,7 +88,7 @@ const HeaderControls = styled.div`
     z-index: 99;
     height: 72px;
     border-radius: 12px 12px 0 0;
-    background-color: ${({ theme }) => theme.blue1};
+    background-color: ${({ theme }) => theme.bg6};
   `};
 
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
@@ -112,6 +118,8 @@ const HeaderElement = styled.div`
 const HeaderElementWrap = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  width: 50%;
 `
 
 const HeaderRow = styled(RowFixed)`
@@ -182,6 +190,11 @@ const NetworkCard = styled(YellowCard)`
   padding: 8px 12px;
   white-space: nowrap;
   color: #FFFFFF;
+  cursor: pointer;
+  :hover {
+    opacity: 0.8;
+  }
+  border: 1px solid #FFFFFF;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
     margin-right: 0.5rem;
@@ -329,8 +342,42 @@ export const StyledMenuButton = styled.button`
     margin-left: 4px;
   `};
 `
+const StyledMenu = styled.div`
+  margin-left: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: none;
+  text-align: left;
+
+  ${({ theme }) => theme.mediaWidth.upToExtra2Small`
+    margin-left: 0.2rem;
+  `};
+`
+
+const MenuFlyout = styled.span`
+  border-radius: ${({ theme }) => theme.borderRadius};
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    top: -8rem !important;
+    :after{
+      border-color: #fff transparent transparent transparent !important;
+      top: 70px !important;
+    }
+  `};
+`
+const StyledDropDown = styled(DropDown)`
+  margin: 0 0.25rem 0.1rem 0.5rem;
+  height: 35%;
+
+  path {
+    stroke: ${({ theme }) => (theme.white)};
+    stroke-width: 1.5px;
+  }
+`
 
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]: 'Ethereum',
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',
   [ChainId.GÖRLI]: 'Görli',
@@ -349,12 +396,91 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.FUJI]: 'Fuji',
   [ChainId.HECO]: 'HECO',
   [ChainId.HECO_TESTNET]: 'HECO Testnet',
-  [ChainId.OASISETH_TEST]: 'Emerald Testnet'
+  [ChainId.OASISETH_TEST]: 'Emerald Testnet',
+  [ChainId.OASISETH_MAIN]: 'Emerald mainnet'
+}
+
+const CHAIN_CONFIG = {
+  [ChainId.OASISETH_TEST]: {
+    chainId: '0xa515',
+    rpcUrl: RPC[ChainId.OASISETH_TEST],
+    chainName: NETWORK_LABELS[ChainId.OASISETH_TEST]||'',
+    blockExplorerUrl: 'https://explorer.testnet.oasis.updev.si/',
+  },
+  [ChainId.OASISETH_MAIN]: {
+    chainId: '0xa516',
+    rpcUrl: RPC[ChainId.OASISETH_MAIN],
+    chainName: NETWORK_LABELS[ChainId.OASISETH_MAIN]||'',
+    blockExplorerUrl: 'https://explorer.emerald.oasis.dev/',
+  }
 }
 
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
+
+  const { ethereum } = window
+
+  async function addChain(chainId : string, rpcUrl: string, chainName: string, blockExplorerUrl: string) {
+    try {
+      const eRequest = ethereum?.request
+      if(eRequest){
+        await eRequest({
+          method: 'wallet_addEthereumChain',
+          params: [{ chainId: chainId, rpcUrls: [rpcUrl] , chainName: chainName, blockExplorerUrls: [blockExplorerUrl] }],
+        });
+      }
+      
+    } catch (addError) {
+      console.log(addError)
+    }
+  }
+
+  async function switchChain(chainId: string, rpcUrl: string, chainName: string, blockExplorerUrl: string) {
+    try {
+      const eRequest = ethereum?.request
+      if(eRequest){
+        await eRequest({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chainId }],
+        });
+      }
+      
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        addChain(chainId, rpcUrl, chainName, blockExplorerUrl)
+      }
+      // handle other "switch" errors
+    }
+    
+  }
+
+  async function addCurrency(address: string, sybmol: string, decimals: number) {
+    const eRequest = ethereum?.request
+    if(eRequest){
+      await eRequest({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20',
+        options: {
+          address: address,
+          symbol: sybmol,
+          decimals: decimals,
+        },
+      },
+      })
+      .then((success: any) => {
+        if (success) {
+          console.log('successfully added to wallet!')
+        } else {
+          throw new Error('Something went wrong.')
+        }
+      })
+      .catch(console.error)
+
+    }
+  }
 
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
@@ -362,7 +488,9 @@ export default function Header() {
 
   const toggleClaimModal = useToggleSelfClaimModal()
 
-
+  const node = useRef<HTMLDivElement>()
+  const [open, setOpen] = useState<boolean>(false)
+  useOnClickOutside(node, ()=>setOpen(false))
 
   const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
 
@@ -372,6 +500,14 @@ export default function Header() {
   const countUpValue = aggregateBalance?.toFixed(0) ?? '0'
   const countUpValuePrevious = usePrevious(countUpValue) ?? '0'
 
+  const isMainNet:boolean = useMemo(
+    ()=>{
+      return chainId && chainId == ChainId.OASISETH_MAIN ? true : false
+    }
+    ,
+    [chainId]
+  )
+
   return (
     <HeaderFrame className="s-header-frame">
       <ClaimModal />
@@ -379,7 +515,7 @@ export default function Header() {
         <UniBalanceContent setShowUniBalanceModal={setShowUniBalanceModal} />
       </Modal>
       <HeaderRow className="s-header-row">
-        <Title href=".">
+        <Title href="https://yuzu-swap.com">
           <HoverIcon>
             <img width={'145px'} height={'42px'} src={Logo} alt="logo" className="s-header-logo" />
           </HoverIcon>
@@ -413,6 +549,12 @@ export default function Header() {
           <StyledNavLink id={`boardroom-nav-link`} to={'/liquiditymining'}>
             {t('boardroom')}
           </StyledNavLink>
+          <StyledNavLink id={`zap-nav-link`} to={'/zap'}>
+            {t('zap')}
+          </StyledNavLink>
+          <StyledNavLink id={`bridge-nav-link`} to={'/bridge'}>
+            {t('bridge')}
+          </StyledNavLink>
           {/* <StyledNavLink id={`boardroom-nav-link`} to={'/singlecurrency'}>
             {t('singleCurrencyPledge')}
           </StyledNavLink> */}
@@ -437,13 +579,32 @@ export default function Header() {
       <HeaderControls className="s-header-controls">
         <HeaderElement className="s-header-element">
           <HideSmall>
-            {chainId && NETWORK_LABELS[chainId] && (
-              <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
-            )}
+            <StyledMenu ref={node as any}>
+              {chainId && NETWORK_LABELS[chainId] ?
+                <NetworkCard  onClick={()=>setOpen(true)} title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}
+                  {!isMainNet && <StyledDropDown/>}
+                </NetworkCard>
+                :
+                <NetworkCard  onClick={()=>setOpen(true)} title={'Switch Chain'}>{'Switch Chain'}
+                  {!isMainNet && <StyledDropDown/>}
+                </NetworkCard>
+              }
+              {open && !isMainNet && (
+                <MenuFlyout className="s-top-links">
+                  {/*<button className="s-top-link-button" onClick={()=>switchChain(CHAIN_CONFIG[ChainId.OASISETH_TEST].chainId, CHAIN_CONFIG[ChainId.OASISETH_TEST].rpcUrl, CHAIN_CONFIG[ChainId.OASISETH_TEST].chainName, CHAIN_CONFIG[ChainId.OASISETH_TEST].blockExplorerUrl)}>
+                    <span>Emerald Testnet</span>
+              </button>*/}
+                  <button className="s-top-link-button" onClick={()=>switchChain(CHAIN_CONFIG[ChainId.OASISETH_MAIN].chainId, CHAIN_CONFIG[ChainId.OASISETH_MAIN].rpcUrl, CHAIN_CONFIG[ChainId.OASISETH_MAIN].chainName, CHAIN_CONFIG[ChainId.OASISETH_MAIN].blockExplorerUrl)}>
+                    <span>Emerald Mainnet</span>
+                  </button>
+                </MenuFlyout>
+              )}
+            </StyledMenu>
+            
           </HideSmall>
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
             {account && chainId && userEthBalance ? (
-              <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
+              <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500} >
                 {userEthBalance?.toSignificant(4)} {Currency.getNativeCurrencySymbol(chainId)}
               </BalanceText>
             ) : null}

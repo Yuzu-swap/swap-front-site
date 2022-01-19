@@ -13,8 +13,8 @@ import { useTranslation } from 'react-i18next'
 
 export function Pledge(props: any){
   const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 0
-  const StarBlock = 11398200
-  const PeriodBlock = 21440000
+  const StarBlock = 57100
+  const PeriodBlock = 5000000
   const blockNumber = useBlockNumber()
   const now = Math.floor((new Date()).valueOf()/1000)
   const [timestamp,setTimeStamp] = useState(now)
@@ -28,7 +28,7 @@ export function Pledge(props: any){
     let nextBlockTime= 0
     let day,hour,min,second
     if (blockNumber&& blockNumber>0) {
-      nextBlockTime = (PeriodBlock - (blockNumber?? 0- StarBlock )% PeriodBlock)*15
+      nextBlockTime = (PeriodBlock - (blockNumber?? 0- StarBlock )% PeriodBlock)*6
       nextBlockTime -= (timestamp-lastBlockAt)
       day = Math.floor(nextBlockTime/86400)
       hour = Math.floor((nextBlockTime-day*86400)/ 3600)

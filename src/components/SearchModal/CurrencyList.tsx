@@ -19,8 +19,9 @@ import ImportRow from './ImportRow'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { LightGreyCard } from 'components/Card'
 import TokenListLogo from '../../assets/svg/tokenlist.svg'
-import QuestionHelper from 'components/QuestionHelper'
+import QuestionHelper, {AddQuestionHelper} from 'components/QuestionHelper'
 import useTheme from 'hooks/useTheme'
+import {AllDefaultChainTokens} from '../../constants/index'
 
 function currencyKey(currency: Currency): string {
   return currency instanceof Token ? currency.address : currency === ETHER ? 'ETHER' : ''
@@ -116,25 +117,55 @@ function CurrencyRow({
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
+  async function addCurrency() {
+    const eRequest = window.ethereum?.request
+    if(eRequest && currency instanceof WrappedTokenInfo){
+      await eRequest({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20',
+        options: {
+          address: currency.address,
+          symbol: currency.symbol,
+          decimals: currency.decimals,
+        },
+      },
+      })
+      .then((success: any) => {
+        if (success) {
+          console.log('successfully added to wallet!')
+        } else {
+          throw new Error('Something went wrong.')
+        }
+      })
+      .catch(console.error)
+
+    }
+  }
 
   // only show add or remove buttons if not on selected list
   return (
     <MenuItem
       style={style}
       className={`token-item-${key}`}
-      onClick={() => (isSelected ? null : onSelect())}
+      onClick={() => {
+        !isSelected && onSelect()
+      }}
       disabled={isSelected}
       selected={otherSelected}
     >
       <CurrencyLogo currency={currency} size={'24px'} />
-      <Column>
-        <Text title={currency.getName(chainId)} fontWeight={500}>
-          {currency.getSymbol(chainId)}
-        </Text>
-        <TYPE.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
-          {currency.getName(chainId)} {!isOnSelectedList && customAdded && '• Added by user'}
-        </TYPE.darkGray>
-      </Column>
+      <div style={{display: 'flex'}}>
+        <Column>
+          <Text title={currency.getName(chainId)} fontWeight={500}>
+            {currency.getSymbol(chainId)}
+          </Text>
+          <TYPE.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
+            {currency.getName(chainId)} {!isOnSelectedList && customAdded && '• Added by user'}
+          </TYPE.darkGray>
+        </Column>
+        {currency instanceof WrappedTokenInfo &&  <AddQuestionHelper text={'Add to Wallet'} onClick={addCurrency}/> }
+      </div>
       <TokenTags currency={currency} />
       <RowFixed style={{ justifySelf: 'flex-end' }}>
         {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}

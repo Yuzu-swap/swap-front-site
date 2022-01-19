@@ -35,8 +35,9 @@ export default function useWrapCallback(
     if (!wethContract || !chainId || !inputCurrency || !outputCurrency) return NOT_APPLICABLE
 
     const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
-
-    if (inputCurrency === ETHER && currencyEquals(WETH[chainId], outputCurrency)) {
+    let nativeToken = Currency.getNativeCurrency(chainId)
+    
+    if (inputCurrency === nativeToken && currencyEquals(WETH[chainId], outputCurrency)) {
       return {
         wrapType: WrapType.WRAP,
         execute:
@@ -56,7 +57,7 @@ export default function useWrapCallback(
             : undefined,
         inputError: sufficientBalance ? undefined : `Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`
       }
-    } else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
+    } else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === nativeToken) {
       return {
         wrapType: WrapType.UNWRAP,
         execute:

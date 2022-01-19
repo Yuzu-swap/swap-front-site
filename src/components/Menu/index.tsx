@@ -97,7 +97,7 @@ export default function Menu() {
 
       {open && (
         <MenuFlyout className="s-top-links">
-          <MenuItem id="link" href="https://yuzu-swap.com">
+          <MenuItem id="link" href="https://yuzuswap-1.gitbook.io/tutorials/">
             <span className="docs">Docs</span>
           </MenuItem>
           <MenuItem id="link" href="https://github.com/yuzuswap-oasis">
@@ -108,6 +108,9 @@ export default function Menu() {
           </MenuItem>
           <MenuItem id="link" href="https://t.me/yuzuswap_on_oasis">
             <span className="telegram">Telegram</span>
+          </MenuItem>
+          <MenuItem id="link" href="https://dexscreener.com/oasisemerald/yuzuswap">
+            <span className="dexscreener">Info</span>
           </MenuItem>
           {/* {account && (
             <ButtonPrimary onClick={openClaimModal} padding="8px 16px" width="100%" borderradius="20px" mt="0.5rem">

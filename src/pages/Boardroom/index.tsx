@@ -12,11 +12,14 @@ import { useMyPendingZooListInPark, useMyCurrentLpListInPark, useMyLpBalanceList
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, AppState } from 'state'
 import { updateZooPrice, updateZooStatePools } from 'state/zoo/reducer'
-import { useMyAllStakePoolList } from 'data/ZooPark'
+import { useMyAllStakePoolList,useMyAllYuzuParkExtList } from 'data/ZooPark'
 import { useTranslation } from 'react-i18next'
 
 export default function BoradRoom() {
   const [poolList,statics] = useMyAllStakePoolList()
+  const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
+
+  console.log("poolExtList is  ",poolExtList)
   const { t } = useTranslation();
 
 
@@ -25,7 +28,7 @@ export default function BoradRoom() {
       <Sloganer/>
       <div id="page-boardroom">
         <div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ statics.totalVolume?statics.totalVolume.toFixed(3):null}</div>
-        <Boardrooms  rooms={poolList} statics={statics} />
+        <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} />
       </div>
     </>
   )
