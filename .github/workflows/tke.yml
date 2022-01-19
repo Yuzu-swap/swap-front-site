@@ -1,0 +1,40 @@
+name: Tencent Kubernetes Engine
+on: workflow_dispatch
+
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  TKE_REGION: ${{ secrets.TENCENT_TKE_REGION }}
+  TKE_CLUSTER_ID: ${{ secrets.TENCENT_TKE_CLUSTER_ID }}
+  DEPLOYMENT_NAME: yuzuswap-app-front-pre
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - name: Set up Kustomize
+      run: |
+        curl -o kustomize --location https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+        chmod u+x ./kustomize
+
+    - name: Set up ~/.kube/config for connecting TKE cluster
+      uses: TencentCloud/tke-cluster-credential-action@v1
+      with:
+        secret_id: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+        secret_key: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+        tke_region: ${{ env.TKE_REGION }}
+        cluster_id: ${{ env.TKE_CLUSTER_ID }}
+    
+    - name: Switch to TKE context
+      run: |
+        kubectl config use-context ${TKE_CLUSTER_ID}-context-default
+
+    # Deploy the Docker image to the TKE cluster
+    - name: Deploy
+      run: |
+        ./kustomize edit set image ${TENCENT_DOCKER_REGISTERY_REPO}:main_f3da040_6
+        ./kustomize build . | kubectl apply -f -
+        kubectl rollout status deployment/${DEPLOYMENT_NAME}
+        kubectl get services -o wide
