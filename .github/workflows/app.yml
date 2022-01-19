@@ -28,7 +28,9 @@ jobs:
       run: yarn
 
     - name: Build
-      run: yanr build
+      run: yarn build
       
     - name: Buid docker
       run: echo "Build docker"
+    - name: show dir
+      run: ls `pwd`
