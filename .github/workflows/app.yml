@@ -43,6 +43,6 @@ jobs:
       run: |
         TAG="$(git rev-parse --abbrev-ref HEAD |head -1)_$(git rev-parse --short HEAD)_${{github.run_number}}"
         echo ${TAG}
-        docker tag yuzu-front ${{ TENCENT_DOCKER_REGISTERY_REPO}}:${TAG}
-        docker push ${{ TENCENT_DOCKER_REGISTERY_REPO}}:${TAG}
+        docker tag yuzu-front ${{secrets.TENCENT_DOCKER_REGISTERY_REPO}}:${TAG}
+        docker push ${{secrets.TENCENT_DOCKER_REGISTERY_REPO}}:${TAG}
 
