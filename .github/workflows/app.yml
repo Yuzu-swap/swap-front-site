@@ -40,7 +40,7 @@ jobs:
       run:  docker login hkccr.ccs.tencentyun.com --username=${{secrets.TENCENT_DOCKER_REGISTERY_USER}} --password  ${{secrets.TENCENT_DOCKER_REGISTERY_PASSWORD}} 
 
     - name: Push to docker registry
-      run:  |
+      run: |
         TAG="$(git rev-parse --abbrev-ref HEAD |head -1)_$(git rev-parse --short HEAD)_${{github.run_number}}"
         echo ${TAG}
         docker tag yuzu-front ${{ TENCENT_DOCKER_REGISTERY_REPO}}:${TAG}
