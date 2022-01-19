@@ -100,7 +100,7 @@ export default function Menu() {
           <MenuItem id="link" href="https://yuzuswap-1.gitbook.io/tutorials/">
             <span className="docs">Docs</span>
           </MenuItem>
-          <MenuItem id="link" href="https://github.com/yuzuswap-oasis">
+          <MenuItem id="link" href="https://github.com/Yuzu-swap">
             <span className="code">Github</span>
           </MenuItem>
           <MenuItem id="link" href="https://twitter.com/Yuzu_Swap">
