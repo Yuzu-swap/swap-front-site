@@ -400,7 +400,7 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.OASISETH_MAIN]: 'Emerald mainnet'
 }
 
-const CHAIN_CONFIG = {
+export const CHAIN_CONFIG = {
   [ChainId.OASISETH_TEST]: {
     chainId: '0xa515',
     rpcUrl: RPC[ChainId.OASISETH_TEST],

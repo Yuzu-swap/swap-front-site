@@ -396,3 +396,5 @@ export const DefaultChainId : ChainId = (<any>ChainId)[process.env.REACT_APP_DEF
 export const APIHost = process.env.REACT_APP_APIHOST
 
 export const UserRatioOfReward : number = 0.7
+
+export const BLACKHOLE_ADDRESS : string = '0x00b9dCA177aa3DB6F344A455d9E0511a6Aa7ad8D';
