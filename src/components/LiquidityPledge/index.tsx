@@ -82,7 +82,8 @@ export function Pledge(props: any){
           <span>${tradeOneDay.toFixed(3)}</span>
           <span 
           style={{ cursor: "pointer"}}
-          onClick={()=>{window.open((CHAIN_CONFIG as any)[DefaultChainId].blockExplorerUrl + BLACKHOLE_ADDRESS)}}>
+          onClick={()=>{window.open((CHAIN_CONFIG as any)[DefaultChainId].blockExplorerUrl +'address/' +BLACKHOLE_ADDRESS + '/transactions'
+              )}}>
             {yuzuShow} YUZU</span>
           <span className="s-pledge-item-timer">
             <em>{day}</em>:
