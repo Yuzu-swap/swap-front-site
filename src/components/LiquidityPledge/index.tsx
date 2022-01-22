@@ -11,7 +11,7 @@ import { APIHost , DefaultChainId , AllDefaultChainTokens} from '../../constants
 import { usePairStaticsInfo } from 'data/Pairs'
 import { useTranslation } from 'react-i18next'
 import { useSingleCallResult } from '../../state/multicall/hooks'
-import { useBlackHoleContract } from 'hooks/useContract'
+import { useTokenContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import fixFloat from 'utils/fixFloat'
 import { tokenAmountForshow } from 'utils/ZoosSwap'
@@ -28,8 +28,8 @@ export function Pledge(props: any){
   const [timestamp,setTimeStamp] = useState(now)
   const [lastBlockAt,setLastBlockAt] = useState(now)
   const yuzuToken = (AllDefaultChainTokens as any)[DefaultChainId].YUZU
-  const BlackHole = useBlackHoleContract()
-  const blackholeRe = useSingleCallResult(BlackHole, "balanceOf", yuzuToken.address).result 
+  const yuzuTokenCon = useTokenContract(yuzuToken.address, false)
+  const blackholeRe = useSingleCallResult(yuzuTokenCon, "balanceOf", [BLACKHOLE_ADDRESS]).result 
   const yuzuShow =  fixFloat(tokenAmountForshow(blackholeRe ?? '0', yuzuToken.decimals), 3)  
 
 
