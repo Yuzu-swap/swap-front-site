@@ -28,6 +28,12 @@ html,body{
 	text-align: right;
 	line-height: 2;
 }
+
+.s-mobile .s-header-links div{
+	display:  none;
+	text-align: right;
+	line-height: 2;
+}
 .s-mobile .s-header-links:hover{ 
 	width: fit-content;
 	padding: 10px;
@@ -36,6 +42,10 @@ html,body{
 	display: none;
 }
 .s-mobile .s-header-links:hover a {
+	display: block;
+}
+
+.s-mobile .s-header-links:hover div {
 	display: block;
 }
 
