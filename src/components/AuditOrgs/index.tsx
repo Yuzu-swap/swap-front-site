@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import org0 from '../../assets/newUI/WechatIMG673.jpeg'
-import org1 from '../../assets/newUI/fairproof.png'
+import org1 from '../../assets/newUI/Verilog.png'
 import org2 from '../../assets/newUI/slowmist.png'
 
 export default function AuditOrgs(props: any) {
@@ -20,11 +20,14 @@ export default function AuditOrgs(props: any) {
       <p style={{color: '#FF0000'}}>This protocol is in beta, please use at your own risk.</p>
       <a href={url} target='_blank'>
         <img src={org0} />
-        {/*
+      </a>
+      <a href={'https://hackmd.io/@verilog/yuzuswap'} target='_blank'>
         <img src={org1} />
+      </a>
+        {/*
         <img src={org2} />*/
         }
-      </a>
+
     </div>
   )
 }

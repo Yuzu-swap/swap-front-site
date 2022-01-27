@@ -271,6 +271,22 @@ const StyledNavLink = styled(NavLink).attrs({
     color: ${({ theme }) => theme.bg2};
   }
 `
+
+const StyledNOutLink = styled.div`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: left;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme }) => theme.bg2};
+  font-size: 18px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  width: fit-content;
+  margin: 0 12px;
+  font-weight: 400;
+  height: 36px;
+`
+
 /*
   :hover,
   :focus {
@@ -400,7 +416,7 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.OASISETH_MAIN]: 'Emerald mainnet'
 }
 
-const CHAIN_CONFIG = {
+export const CHAIN_CONFIG = {
   [ChainId.OASISETH_TEST]: {
     chainId: '0xa515',
     rpcUrl: RPC[ChainId.OASISETH_TEST],
@@ -552,9 +568,11 @@ export default function Header() {
           <StyledNavLink id={`zap-nav-link`} to={'/zap'}>
             {t('zap')}
           </StyledNavLink>
-          <StyledNavLink id={`bridge-nav-link`} to={'/bridge'}>
+          <StyledNOutLink id={`bridge-nav-link`} onClick={()=>{
+            window.open("https://wormholebridge.com/#/transfer")
+        }}>
             {t('bridge')}
-          </StyledNavLink>
+          </StyledNOutLink>
           {/* <StyledNavLink id={`boardroom-nav-link`} to={'/singlecurrency'}>
             {t('singleCurrencyPledge')}
           </StyledNavLink> */}

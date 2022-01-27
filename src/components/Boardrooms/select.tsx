@@ -99,6 +99,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   // 个人lp 余额
   const myLpBalance = pool ? fixFloatFloor(JSBI.toNumber(pool.myLpBalance) / 1e18, 8) : ZERO
 
+  const myStakedPoolShareRatio =  pool && JSBI.greaterThan(pool.myCurrentLp,ZERO) ?   (new Decimal(pool.myCurrentLp.toString() ).div( new Decimal(pool.totalLp.toString())).toNumber()):0
+
+
   const poolId = pool && pool.pid
 
   const [WinValue, setWinValue] = useState('')
@@ -274,6 +277,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
           <div className="s-boardroom-information-no-drak">
             <p>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</p>
             <p className="s-boardroom-balance">{myStaked} </p>
+            <p style={{fontSize: "12px"}}>Corresponding num of tokens<br/>
+            {pool? pool.token0.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token0Balance, pool.token0.decimals)* myStakedPoolShareRatio , 4) :''}<br/>
+            {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</p>
           </div>
           {btn}
         </div>

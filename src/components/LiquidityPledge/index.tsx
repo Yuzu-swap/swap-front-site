@@ -7,9 +7,17 @@ import { useSelector } from 'react-redux'
 import { AppDispatch, AppState } from '../../state'
 import { useBlockNumber } from 'state/application/hooks'
 import { math } from 'polished'
-import { APIHost } from '../../constants'
+import { APIHost , DefaultChainId , AllDefaultChainTokens} from '../../constants'
 import { usePairStaticsInfo } from 'data/Pairs'
 import { useTranslation } from 'react-i18next'
+import { useSingleCallResult } from '../../state/multicall/hooks'
+import { useTokenContract } from 'hooks/useContract'
+import { BigNumber } from '@ethersproject/bignumber'
+import fixFloat from 'utils/fixFloat'
+import { tokenAmountForshow } from 'utils/ZoosSwap'
+import { CHAIN_CONFIG } from 'components/Header'
+import { ExternalLink } from '../../theme/components'
+import { BLACKHOLE_ADDRESS } from '../../constants'
 
 export function Pledge(props: any){
   const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 0
@@ -19,9 +27,16 @@ export function Pledge(props: any){
   const now = Math.floor((new Date()).valueOf()/1000)
   const [timestamp,setTimeStamp] = useState(now)
   const [lastBlockAt,setLastBlockAt] = useState(now)
+  const yuzuToken = (AllDefaultChainTokens as any)[DefaultChainId].YUZU
+  const yuzuTokenCon = useTokenContract(yuzuToken.address, false)
+  const blackholeRe = useSingleCallResult(yuzuTokenCon, "balanceOf", [BLACKHOLE_ADDRESS]).result 
+  const yuzuShow =  fixFloat(tokenAmountForshow(blackholeRe ?? '0', yuzuToken.decimals), 3)  
+
+
 
   useEffect(()=> {
     setLastBlockAt(Math.floor((new Date()).valueOf()/1000) )
+   
   },[blockNumber])
 
   const [day,hour,min,second] = useMemo(()=>{
@@ -65,7 +80,11 @@ export function Pledge(props: any){
           <span>${zooPrice.toFixed(3)}</span>
           <span>${autobuyCurr.toFixed(3)}</span>
           <span>${tradeOneDay.toFixed(3)}</span>
-          <span>${autobuyTotal.toFixed(3)}</span>
+          <span 
+          style={{ cursor: "pointer"}}
+          onClick={()=>{window.open((CHAIN_CONFIG as any)[DefaultChainId].blockExplorerUrl +'address/' +BLACKHOLE_ADDRESS + '/transactions'
+              )}}>
+            {yuzuShow} YUZU</span>
           <span className="s-pledge-item-timer">
             <em>{day}</em>:
             <em>{hour}</em>:
