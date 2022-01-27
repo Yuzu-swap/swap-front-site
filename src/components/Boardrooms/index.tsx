@@ -203,7 +203,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
       if(pool.tokenRewards){
         for(let i = 0; i < pool.tokenRewards.length;i++){
           let num = tokenAmountForshow(pool.tokenRewards[i].PerblockReward, pool.tokenRewards[i].token.decimals)
-          let str = fixFloat(num , 2)
+          let str = fixFloat(num , 4)
           str += " "
           str += pool.tokenRewards[i].token.symbol || ""
           re.push(str)
@@ -358,7 +358,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
 
       <div className="s-doubleget-item-details">
       <div className="s-doubleget-item-detail">
-            <label>Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
+            <label>Dual Yeild Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
             <em><TimeBLock>{day}</TimeBLock>:<TimeBLock>{hour}</TimeBLock>:<TimeBLock>{min}</TimeBLock>:<TimeBLock>{second}</TimeBLock></em>
         </div>
         <div className="s-doubleget-item-detail" style={{height: '80px'}}>
@@ -430,7 +430,7 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   `
   return (
     <div>
-      {/*<Titlew>Dual Yield</Titlew>*/}
+      <Titlew>Dual Yield</Titlew>
       <div className="s-trading-list">
         {extrooms.map((pool: ZooParkExt, i: number) => {
           return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>

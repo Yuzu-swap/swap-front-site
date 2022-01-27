@@ -2023,9 +2023,10 @@
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-core/-/zoo-core-1.0.9.tgz#a95cf3692f52fed085144896c00929655367d510"
 
-"@liuxingfeiyu/zoo-sdk@1.0.69":
-  version "1.0.69"
-  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-sdk/-/zoo-sdk-1.0.69.tgz#61d8173c4a7e27291ea557a21c337adc25dac733"
+"@liuxingfeiyu/zoo-sdk@1.0.72":
+  version "1.0.72"
+  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-sdk/-/zoo-sdk-1.0.72.tgz#423b70e638c0633c7c125fb4078a1d182d5d49cd"
+  integrity sha512-vAGDahHPh/rK7YYC6kW5Lse/EVkEBwUSINIUn/d5bM1ZyHOS3N1OtYiny8BLF+sqgR8P09qUPb6HuGLqSY1KIg==
   dependencies:
     "@uniswap/v2-core" "1.0.1"
     big.js "^5.2.2"

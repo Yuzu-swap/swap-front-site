@@ -573,6 +573,11 @@ export default function Header() {
         }}>
             {t('bridge')}
           </StyledNOutLink>
+          <StyledNOutLink id={`cbridge-nav-link`} onClick={()=>{
+            window.open("https://cbridge.celer.network/#/transfer")
+        }}>
+            {'cBridge'}
+          </StyledNOutLink>
           {/* <StyledNavLink id={`boardroom-nav-link`} to={'/singlecurrency'}>
             {t('singleCurrencyPledge')}
           </StyledNavLink> */}
