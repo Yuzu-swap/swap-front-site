@@ -40,6 +40,7 @@ import { RPC } from 'connectors'
 import { SUSHI } from '../../constants'
 import { chain } from 'lodash'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
+import { relative } from 'path'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -271,6 +272,22 @@ const StyledNavLink = styled(NavLink).attrs({
     color: ${({ theme }) => theme.bg2};
   }
 `
+
+const StyledNOutLink = styled.div`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: left;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme }) => theme.bg2};
+  font-size: 18px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  width: fit-content;
+  margin: 0 12px;
+  font-weight: 400;
+  height: 36px;
+`
+
 /*
   :hover,
   :focus {
@@ -492,6 +509,10 @@ export default function Header() {
   const [open, setOpen] = useState<boolean>(false)
   useOnClickOutside(node, ()=>setOpen(false))
 
+  const bnode = useRef<HTMLDivElement>()
+  const [bopen, setBOpen] = useState<boolean>(false)
+  useOnClickOutside(bnode, ()=>setBOpen(false))
+
   const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
 
   const [showUniBalanceModal, setShowUniBalanceModal] = useState(false)
@@ -552,9 +573,23 @@ export default function Header() {
           <StyledNavLink id={`zap-nav-link`} to={'/zap'}>
             {t('zap')}
           </StyledNavLink>
-          <StyledNavLink id={`bridge-nav-link`} to={'/bridge'}>
-            {t('bridge')}
-          </StyledNavLink>
+          <div ref={bnode as any} style={{position:"relative"}}>
+            <StyledNOutLink id={`bridge-nav-link`} onClick={()=>setBOpen(true)}>
+              {t('bridge')}
+            </StyledNOutLink>
+            {bopen && (
+                <MenuFlyout className="s-top-links">
+                  <button className="s-top-link-button" onClick={()=>
+                    window.open("https://wormholebridge.com/#/transfer")}>
+                    <span>Wormhole</span>
+                  </button>
+                  <button className="s-top-link-button" onClick={()=>
+                    window.open("https://cbridge.celer.network/#/transfer")}>
+                    <span>CBridge</span>
+                  </button>
+                </MenuFlyout>
+              )}
+          </div>
           {/* <StyledNavLink id={`boardroom-nav-link`} to={'/singlecurrency'}>
             {t('singleCurrencyPledge')}
           </StyledNavLink> */}
