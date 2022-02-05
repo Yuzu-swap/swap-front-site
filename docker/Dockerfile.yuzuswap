@@ -1,0 +1,7 @@
+FROM nginx
+RUN mkdir /data \
+  && mkdir /data/yuzuswap-front-main \
+  &&  mkdir /data/yuzu-swap.com
+
+COPY yuzu.conf /etc/nginx/conf.d/
+COPY targets /data/yuzuswap-front-main

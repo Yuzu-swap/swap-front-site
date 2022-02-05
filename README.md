@@ -6,8 +6,10 @@ An open source interface for YUZUSwap -- a protocol for decentralized exchange o
 
 - Website: [yuzu-swap.com](https://www.yuzu-swap.com/)
 - Interface: [app.yuzu-swap.com](https://app.yuzu-swap.com)
+- ContractInfo: [Contracts](https://github.com/Yuzu-swap/yuzuswap-contract)
 ## Development
 
+- Testnet: [oasistest-devnet.yuzu-swap.com](http://oasistest-devnet.yuzu-swap.com)
 ### Install Dependencies
 ```bash
 yarn
@@ -19,6 +21,15 @@ yarn
 yarn start
 ```
 
+### Build for testnet
+```
+yarn  build-testnet && yarn  deploy-testnet
+```
+
+
 The interface will not work on other networks.
 
 ## Contributions
+1 Fork 
+2 Commit
+3 Send Pull Request

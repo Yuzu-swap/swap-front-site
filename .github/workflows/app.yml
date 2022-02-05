@@ -31,6 +31,18 @@ jobs:
       run: yarn build
       
     - name: Buid docker
-      run: echo "Build docker"
-    - name: show dir
-      run: ls `pwd`
+      run: |
+        cd docker 
+        cp -fr ../build targets
+        docker build    -f Dockerfile.yuzuswap -t yuzu-front ./
+
+    - name: Login to docker registry
+      run:  docker login yuzuswap.tencentcloudcr.com --username=${{secrets.TENCENT_DOCKER_REGISTERY_USER}} --password  ${{secrets.TENCENT_DOCKER_REGISTERY_PASSWORD}} 
+
+    - name: Push to docker registry
+      run: |
+        TAG="$(git rev-parse --abbrev-ref HEAD |head -1)_$(git rev-parse --short HEAD)_${{github.run_number}}"
+        echo ${TAG}
+        docker tag yuzu-front ${{secrets.TENCENT_DOCKER_REGISTERY_REPO}}:${TAG}
+        docker push ${{secrets.TENCENT_DOCKER_REGISTERY_REPO}}:${TAG}
+
