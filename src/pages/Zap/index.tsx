@@ -267,6 +267,7 @@ export function Zap(){
             <div className="s-zap-img">
                 <h2>ZAP</h2>
                 <p>Convert single tokens to LP tokens directly.</p>
+                <SmallText>Warning: Zap may cause slippage, please use at your own risk.</SmallText>
                 <img style={{width: "300px", height: "300px"}}src={ZapImg}/>
             </div>
             <div className="s-zap-exchange">
