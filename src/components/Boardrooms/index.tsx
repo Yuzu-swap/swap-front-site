@@ -418,6 +418,10 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   for(let i = 0; i < rooms.length; i++){
     totalEffect += rooms[i].rewardEffect
   }
+
+  for(let i = 0; i < extrooms.length; i++){
+    totalEffect += extrooms[i].rewardEffect
+  }
   const Titleb = styled.h1`
   text-align : center;
   font-weight: 500;
@@ -427,6 +431,7 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   text-align : center;
   font-weight: 500;
   color: #FFFFFF;
+  margin-top: 40px;
   `
   return (
     <div>

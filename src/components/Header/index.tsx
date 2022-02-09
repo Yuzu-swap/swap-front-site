@@ -40,6 +40,7 @@ import { RPC } from 'connectors'
 import { SUSHI } from '../../constants'
 import { chain } from 'lodash'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
+import { relative } from 'path'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -508,6 +509,10 @@ export default function Header() {
   const [open, setOpen] = useState<boolean>(false)
   useOnClickOutside(node, ()=>setOpen(false))
 
+  const bnode = useRef<HTMLDivElement>()
+  const [bopen, setBOpen] = useState<boolean>(false)
+  useOnClickOutside(bnode, ()=>setBOpen(false))
+
   const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
 
   const [showUniBalanceModal, setShowUniBalanceModal] = useState(false)
@@ -568,16 +573,23 @@ export default function Header() {
           <StyledNavLink id={`zap-nav-link`} to={'/zap'}>
             {t('zap')}
           </StyledNavLink>
-          <StyledNOutLink id={`bridge-nav-link`} onClick={()=>{
-            window.open("https://wormholebridge.com/#/transfer")
-        }}>
-            {t('bridge')}
-          </StyledNOutLink>
-          <StyledNOutLink id={`cbridge-nav-link`} onClick={()=>{
-            window.open("https://cbridge.celer.network/#/transfer")
-        }}>
-            {'cBridge'}
-          </StyledNOutLink>
+          <div ref={bnode as any} style={{position:"relative"}}>
+            <StyledNOutLink id={`bridge-nav-link`} onClick={()=>setBOpen(true)}>
+              {t('bridge')}
+            </StyledNOutLink>
+            {bopen && (
+                <MenuFlyout className="s-top-links">
+                  <button className="s-top-link-button" onClick={()=>
+                    window.open("https://wormholebridge.com/#/transfer")}>
+                    <span>Wormhole</span>
+                  </button>
+                  <button className="s-top-link-button" onClick={()=>
+                    window.open("https://cbridge.celer.network/#/transfer")}>
+                    <span>CBridge</span>
+                  </button>
+                </MenuFlyout>
+              )}
+          </div>
           {/* <StyledNavLink id={`boardroom-nav-link`} to={'/singlecurrency'}>
             {t('singleCurrencyPledge')}
           </StyledNavLink> */}
