@@ -30,6 +30,6 @@ yarn  build-testnet && yarn  deploy-testnet
 The interface will not work on other networks.
 
 ## Contributions
-1 Fork 
-2 Commit
-3 Send Pull Request
+* 1 Fork 
+* 2 Commit
+* 3 Send Pull Request
