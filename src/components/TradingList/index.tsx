@@ -102,7 +102,7 @@ export function TradingItem({pool,index,statics,totalEffect}:{ pool: TradePool,s
         }
         <div className="s-trading-item-detail">
           <label>{t('productionperblock')}:</label>
-          <em>{fixFloat(prodPerBlock * UserRatioOfReward, 1)} YUZU</em>
+          <em>{fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU</em>
         </div>
         <div className="s-trading-item-detail">
           <label>{t('totalTradeVolume')}<QuestionHelper text={t('totalTradeVolumeTip')} />：</label>

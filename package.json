@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "CI= GENERATE_SOURCEMAP=false react-scripts build",
-    "build-testnet": "REACT_APP_DEFAULTCHAINID=OASISETH_TEST PUBLIC_URL='' react-scripts build",
+    "build-testnet": "yarn && REACT_APP_DEFAULTCHAINID=OASISETH_TEST PUBLIC_URL='' react-scripts build",
     "deploy-testnet": "ssh root@119.28.186.224 mkdir -p /data/oasis-test-yuzuswap-dev && scp  -r ./build/* root@119.28.186.224:/data/oasis-test-yuzuswap-dev/",
     "test": "react-scripts test --env=jsdom",
     "release": "yarn build && yarn deploy",
@@ -28,7 +28,7 @@
     "@apollo/react-components": "^3.1.5",
     "@apollo/react-hooks": "^3.1.5",
     "@ethersproject/experimental": "^5.0.1",
-    "@liuxingfeiyu/default-token-list": "1.0.23",
+    "@liuxingfeiyu/default-token-list": "1.0.26",
     "@liuxingfeiyu/zoo-core": "1.0.9",
     "@liuxingfeiyu/zoo-sdk": "1.0.74",
     "@popperjs/core": "^2.4.4",
