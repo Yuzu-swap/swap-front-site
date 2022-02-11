@@ -27,8 +27,11 @@ export default function BoradRoom() {
     <>
       <Sloganer/>
       <div id="page-boardroom">
-        <div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ statics.totalVolume?statics.totalVolume.toFixed(3):null}</div>
-        <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} />
+        <h1 className="s-banner-coming">YuzuSwap is updating the smart contract to launch the Dual Yield function, the update will be done in 1 hour.</h1>
+        {/*
+          <div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ statics.totalVolume?statics.totalVolume.toFixed(3):null}</div>
+          <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} />
+        */}
       </div>
     </>
   )
