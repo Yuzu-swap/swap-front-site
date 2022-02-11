@@ -250,7 +250,11 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
         <div className="s-boardroom-account">
           <div className="s-boardroom-information">
             {
-              isExt? <p style={{margin: '10px auto'}}>{t('myReward')}</p> : <p>{t('myReward')}</p>
+              isExt? <p style={{margin: '10px auto'}}>{t('myReward')}
+              <QuestionHelper text={
+                t('doublegetRewardHint')
+              } /></p> 
+              : <p>{t('myReward')}</p>
             }
             <p className="s-boardroom-balance">
               <img src={YuzuSwapLogo}/>
