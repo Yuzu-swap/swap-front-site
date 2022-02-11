@@ -274,7 +274,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     let nextBlockTime= 0
     let day,hour,min,second
     if (blockNumber&& blockNumber>0) {
-      nextBlockTime = (minExtBlock - (blockNumber?? 0))*15
+      nextBlockTime = (minExtBlock - (blockNumber?? 0))* 6
       nextBlockTime -= (timestamp-lastBlockAt)
       day = Math.floor(nextBlockTime/86400)
       hour = Math.floor((nextBlockTime-day*86400)/ 3600)
@@ -383,7 +383,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
             <em>{ fixFloat(myRatio * 100, 2)}%</em>
         </div>
         <div className="s-doubleget-item-detail" style={{height: '80px'}}>
-            <label>{t('myReward')}:</label> 
+            <label>{t('myReward')} <QuestionHelper text={t('doublegetRewardHint')}/>:</label> 
             <em>{ fixFloat(myReward, 4)} YUZU
             {
               extRewardInfo.map((value : String)=>{
