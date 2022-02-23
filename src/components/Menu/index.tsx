@@ -97,7 +97,7 @@ export default function Menu() {
 
       {open && (
         <MenuFlyout className="s-top-links">
-          <MenuItem id="link" href="https://yuzuswap-1.gitbook.io/tutorials/">
+          <MenuItem id="link" href="https://yuzuswap-1.gitbook.io/yuzuswap/introduction/what-is-yuzuswap">
             <span className="docs">Docs</span>
           </MenuItem>
           <MenuItem id="link" href="https://github.com/Yuzu-swap">
