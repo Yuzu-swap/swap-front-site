@@ -109,6 +109,9 @@ export default function Menu() {
           <MenuItem id="link" href="https://t.me/yuzuswap_on_oasis">
             <span className="telegram">Telegram</span>
           </MenuItem>
+          <MenuItem id="link" href="https://discord.gg/RxwT7atuBn">
+            <span className="discord">Discord</span>
+          </MenuItem>
           <MenuItem id="link" href="https://dexscreener.com/oasisemerald/yuzuswap">
             <span className="dexscreener">Info</span>
           </MenuItem>
