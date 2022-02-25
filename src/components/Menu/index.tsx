@@ -97,7 +97,7 @@ export default function Menu() {
 
       {open && (
         <MenuFlyout className="s-top-links">
-          <MenuItem id="link" href="https://yuzuswap-1.gitbook.io/yuzuswap/introduction/what-is-yuzuswap">
+          <MenuItem id="link" href="https://yuzuswap-1.gitbook.io/tutorials/">
             <span className="docs">Docs</span>
           </MenuItem>
           <MenuItem id="link" href="https://github.com/Yuzu-swap">
@@ -108,9 +108,6 @@ export default function Menu() {
           </MenuItem>
           <MenuItem id="link" href="https://t.me/yuzuswap_on_oasis">
             <span className="telegram">Telegram</span>
-          </MenuItem>
-          <MenuItem id="link" href="https://discord.gg/RxwT7atuBn">
-            <span className="discord">Discord</span>
           </MenuItem>
           <MenuItem id="link" href="https://dexscreener.com/oasisemerald/yuzuswap">
             <span className="dexscreener">Info</span>

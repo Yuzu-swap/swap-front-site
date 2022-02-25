@@ -74,6 +74,8 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   const [poolList, statics] = useMyAllStakePoolList()
   const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
 
+  console.log("zooooooooo is ext", poolExtList)
+
 
   const winLabals = {
     coin : 'YUZU',
@@ -87,8 +89,28 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
   const { t } = useTranslation();
   // tododo：页面刷新时无数据来源
-  const pool =  pindex != -1 ? poolList[pindex] : poolExtList[extpindex]
-  const tokenRewards = isExt? poolExtList[extpindex]?.tokenRewards : null
+  const pool : any = useMemo(
+    ()=>{
+      let re : any
+      if(pindex != -1){
+        for(let i = 0; i < poolList.length; i++){
+          if(poolList[i].pid == pindex){
+            re = poolList[i]
+          }
+        }
+      }
+      else{
+        for(let i = 0; i < poolExtList.length; i++){
+          if(poolExtList[i].pid == extpindex){
+            re = poolExtList[i]
+          }
+        }
+      }
+      return re 
+    }
+    ,[pindex, poolList, poolExtList]
+  )
+  const tokenRewards = isExt? pool?.tokenRewards : null
   
 
   const ZERO = JSBI.BigInt(0)
@@ -250,11 +272,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
         <div className="s-boardroom-account">
           <div className="s-boardroom-information">
             {
-              isExt? <p style={{margin: '10px auto'}}>{t('myReward')}
-              <QuestionHelper text={
-                t('doublegetRewardHint')
-              } /></p> 
-              : <p>{t('myReward')}</p>
+              isExt? <p style={{margin: '10px auto'}}>{t('myReward')}</p> : <p>{t('myReward')}</p>
             }
             <p className="s-boardroom-balance">
               <img src={YuzuSwapLogo}/>

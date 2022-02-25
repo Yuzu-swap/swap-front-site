@@ -18,19 +18,6 @@ import { useTranslation } from 'react-i18next'
 export default function BoradRoom() {
   const [poolList,statics] = useMyAllStakePoolList()
   const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
-  const tvl = useMemo(()=>{
-      let re = 0
-      if(statics.totalVolume){
-        re += statics.totalVolume
-        //console.log("statics is  ", statics.totalVolume.toFixed(3))
-      }
-      if(extStatics.totalVolume){
-        re += extStatics.totalVolume
-        //console.log("extStatics is  ", extStatics.totalVolume.toFixed(3))
-      }
-      return re.toFixed(3)
-  },[statics, extStatics]
-  )
 
   console.log("poolExtList is  ",poolExtList)
   const { t } = useTranslation();
@@ -41,7 +28,7 @@ export default function BoradRoom() {
       <Sloganer/>
       <div id="page-boardroom">
         {/*<h1 className="s-banner-coming">YuzuSwap is updating the smart contract to launch the Dual Yield function, the update will be done in 1 hour.</h1>*/}
-          <div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ tvl}</div>
+          <div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ statics.totalVolume?statics.totalVolume.toFixed(3):null}</div>
           <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} />
       </div>
     </>
