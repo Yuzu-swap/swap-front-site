@@ -177,5 +177,5 @@
   "warn": "Warning",
   "bridge": "Bridge",
   "zap": "ZAP",
-  "doublegetRewardHint": "The number of CELR rewards you see is estimated, it is influenced by others' stake/unstake activities, so it may decrease. But if you withdraw the rewards now, the number of CELR rewards you see will be the number of CELR you receive. "
+  "doublegetRewardHint": "The number of non-YUZU rewards you see is estimated, it is influenced by others' stake/unstake activities, so it may decrease. But if you withdraw the rewards now, the number of non-YUZU rewards you see will be the number of non-YUZU you receive. "
 }

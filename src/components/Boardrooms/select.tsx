@@ -2,7 +2,6 @@ import React, { useState, useMemo, useRef, useEffect, MutableRefObject } from 'r
 import { Settings, X } from 'react-feather'
 import styled from 'styled-components'
 import { CardProps, Text } from 'rebass'
-import QuestionHelper from '../QuestionHelper'
 import { Box } from 'rebass/styled-components'
 import { Redirect, RouteComponentProps } from 'react-router-dom'
 import YuzuSwapLogo from '../../assets/svg/yuzusinglelogo.svg'
@@ -16,22 +15,28 @@ import { RowBetween, RowFixed } from '../Row'
 import Toggle from '../Toggle'
 import { ButtonPrimary, ButtonPrimaryNormal, ButtonGray } from '../Button'
 import { useSelector } from 'react-redux'
-import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool } from '@liuxingfeiyu/zoo-sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool, Currency } from '@liuxingfeiyu/zoo-sdk'
 import { AppState } from 'state'
 import { DefaultChainId, ZOO_PARK_ADDRESS, ZOO_PARK_EXT_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
 import { useApproveCallback, ApprovalState } from 'hooks/useApproveCallback'
-import { useStakingContract } from 'hooks/useContract'
+import { useStakingContract,useTokenWrapper } from 'hooks/useContract'
 import useTransactionDeadline from 'hooks/useTransactionDeadline'
 import useZooParkCallback from 'zooswap-hooks/useZooPark'
 import { tokenAmountForshow, numberToString } from 'utils/ZoosSwap'
-import { TokenReward, useMyAllStakePoolList, useMyAllYuzuParkExtList, ZooParkExt} from 'data/ZooPark'
+import { TokenReward, useMyAllStakePoolList, useMyAllYuzuParkExtList, ZooParkExt, useWTokenBalanceList} from 'data/ZooPark'
 import { useTranslation } from 'react-i18next'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
 import { fixFloatFloor } from 'utils/fixFloat'
 import Decimal from 'decimal.js'
 import CurrencyLogo from 'components/CurrencyLogo'
+import QuestionHelper, {AddQuestionHelper} from 'components/QuestionHelper'
+import { useSingleCallResult } from '../../state/multicall/hooks'
+import { useCallback } from 'hoist-non-react-statics/node_modules/@types/react'
+import { configureScope } from '@sentry/minimal'
+import { Contract } from '@ethersproject/contracts'
+import { useWTokenUnWrapCallback } from 'hooks/useWTokenUnWrapCallback'
 //import { useEffect } from 'hoist-non-react-statics/node_modules/@types/react'
 
 const StyledCloseIcon = styled(X)`
@@ -87,9 +92,60 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
   const { t } = useTranslation();
   // tododo：页面刷新时无数据来源
-  const pool =  pindex != -1 ? poolList[pindex] : poolExtList[extpindex]
-  const tokenRewards = isExt? poolExtList[extpindex]?.tokenRewards : null
+  const pool : any = useMemo(
+    ()=>{
+      let re : any
+      if(pindex != -1){
+        for(let i = 0; i < poolList.length; i++){
+          if(poolList[i].pid == pindex){
+            re = poolList[i]
+          }
+        }
+      }
+      else{
+        for(let i = 0; i < poolExtList.length; i++){
+          if(poolExtList[i].pid == extpindex){
+            re = poolExtList[i]
+          }
+        }
+      }
+      return re 
+    }
+    ,[pindex, poolList, poolExtList]
+  )
+  const tokenRewards = isExt? pool?.tokenRewards : null
+
+  const wrappedTokenRewards : any[]= useMemo(
+    ()=>{
+      let re : any []= []
+      if(!tokenRewards){
+        return re
+      }
+      for(let i = 0; i < tokenRewards.length; i++){
+        if(tokenRewards[i]?.wrapped){
+          re.push(tokenRewards[i])
+        }
+      }
+      return re
+    },
+    [tokenRewards]
+  ) 
+  const wtokenAddresses:string[] = useMemo( ()=> wrappedTokenRewards.map( (p,e)=>p.token.address )  ,[wrappedTokenRewards])
+  console.log("wrapped token addrss", wtokenAddresses)
   
+  const WrapperBalance = useWTokenBalanceList(wtokenAddresses)
+
+  const [wtoken, setWtoken] = useState<Token>()
+  const [wamount, setWamount] = useState<JSBI>(JSBI.BigInt(0))
+  const unwrap = useWTokenUnWrapCallback(wamount, wtoken)
+  const onUnwrap = (i:number)=>{
+    if(wrappedTokenRewards && wrappedTokenRewards.length >= i +1){
+      setWtoken(wrappedTokenRewards[i].token)
+      setWamount(WrapperBalance[i])
+      unwrap()
+    }
+  }
+
 
   const ZERO = JSBI.BigInt(0)
   // 个人质押总额
@@ -215,6 +271,35 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
     }
   }
 
+
+  
+
+  async function addCurrency(token : Token) {
+    const eRequest = window.ethereum?.request
+    if(eRequest && token){
+      await eRequest({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20',
+        options: {
+          address: token.address,
+          symbol: token.symbol,
+          decimals: token.decimals,
+        },
+      },
+      })
+      .then((success: any) => {
+        if (success) {
+          console.log('successfully added to wallet!')
+        } else {
+          throw new Error('Something went wrong.')
+        }
+      })
+      .catch(console.error)
+
+    }
+  }
+
   let btn = (
     <div className="s-boardroom-select s-boardroom-stake-button" onClick={
       async () => {
@@ -268,6 +353,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
                     <p className="s-boardroom-balance">
                       <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={value.token} />
                       {tokenAmountForshow(value.MyPendingAmount, value.token.decimals)}
+                      <AddQuestionHelper text={'Add to Wallet'} onClick={()=>addCurrency(value.token)}/>
                     </p>
                   )
                 }
@@ -276,14 +362,29 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             }
           </div>
           <div className="s-boardroom-select s-boardroom-tokens" onClick={async () => { await onHarvest() }}>{t('withdrawal')}</div>
+          {
+              isExt && wrappedTokenRewards?
+              wrappedTokenRewards.map(
+                (value: TokenReward, i : number)=>{
+                  return (
+                    <div className="s-boardroom-unwrap">
+                      <span>{value.token.symbol}</span>
+                      <span>{fixFloatFloor(tokenAmountForshow(WrapperBalance[i], value.token.decimals),4)}</span>
+                      <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>UnWrap</div>
+                    </div>
+                  )
+                }
+              )
+              : null
+            }
         </div>
         <div className="s-boardroom-stake">
           <div className="s-boardroom-information-no-drak">
-            <p>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</p>
-            <p className="s-boardroom-balance">{myStaked} </p>
-            <p style={{fontSize: "12px"}}>Corresponding num of tokens<br/>
+            <div>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</div>
+            <div className="s-boardroom-balance">{myStaked} </div>
+            <div style={{fontSize: "12px", marginTop: "20px"}}>Corresponding num of tokens<br/>
             {pool? pool.token0.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token0Balance, pool.token0.decimals)* myStakedPoolShareRatio , 4) :''}<br/>
-            {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</p>
+            {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</div>
           </div>
           {btn}
         </div>
