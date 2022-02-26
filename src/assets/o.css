@@ -472,6 +472,7 @@
 	font-size: 20px;
 }
 .s-boardroom-selected{
+	display: flex;
 	width: 760px;
 	margin:0 auto;
 	text-align: center;
@@ -500,7 +501,6 @@
 
 .s-boardroom-information-no-drak{
 	width: 100%;
-	height: 123px;
 	font-size: 18px;
 	font-weight: 500;
 	background: #FFFFFF;
@@ -510,10 +510,11 @@
 }
 .s-boardroom-account,
 .s-boardroom-stake{
-	display: inline-block;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	vertical-align: top;
 	width: 340px;
-	height: 248px;
 	margin: 1rem 20px;
 	border:1px solid #dedede;
 	background-color: #fff;
@@ -525,7 +526,25 @@
 }
 
 .s-boardroom-stake-inline{
-	display: inline;
+	display: flex;
+	justify-content: space-around;
+}
+
+.s-boardroom-unwrap{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.s-boardroom-unwrap-button{
+	width: 100px;
+	border:1px solid #ED4962;
+	border-radius: 10px;
+	color:#ED4962;
+	padding:5px 10px;
+	cursor: pointer;
+	font-weight: 500;
+	font-size: 20px;
 }
 
 .s-boardroom-balance{
@@ -878,7 +897,7 @@
 	width: 140px;
 	height: 60px;
 	padding: 16px 0px;
-	margin: 20px 5px;
+	margin: auto
 }
 
 #page-singlecurrency{

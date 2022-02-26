@@ -70,7 +70,7 @@ html,body{
 .s-mobile .s-tradingmining-banner{ margin-left: 0.5rem; }
 
 
-.s-mobile .s-boardroom-selected{ width:100%; }
+.s-mobile .s-boardroom-selected{ width:100%; flex-direction: column; align-items: center;}
 .s-mobile .s-boardroom-account,
 .s-mobile .s-boardroom-lp-wrapper,
 .s-mobile .s-boardroom-stake{ width:95%; margin: 1rem 0 ;}
