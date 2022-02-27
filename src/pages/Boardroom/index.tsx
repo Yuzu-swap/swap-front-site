@@ -16,8 +16,8 @@ import { useMyAllStakePoolList,useMyAllYuzuParkExtList } from 'data/ZooPark'
 import { useTranslation } from 'react-i18next'
 
 export default function BoradRoom() {
-  const [poolList,statics] = useMyAllStakePoolList()
-  const [poolExtList,extStatics, maintainFlag] = useMyAllYuzuParkExtList()
+  const [poolList,statics, maintainFlag] = useMyAllStakePoolList()
+  const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
   const tvl = useMemo(()=>{
       let re = 0
       if(statics.totalVolume){

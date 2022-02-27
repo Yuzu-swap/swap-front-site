@@ -101,11 +101,12 @@ export function useWTokenBalanceList(tokenaddrs:string[]): JSBI[] {
 }
 
 
-export function  useMyAllStakePoolList() :[StakePool[],any] {
+export function  useMyAllStakePoolList() :[StakePool[],any, boolean] {
   const [parkList,setParkList] = useState<any[]>([])
   const [poolIds,setPoolIds] = useState<number[]>([])
   const [statics,setStatics] = useState<{totalVolume:number,tvls:any}>({totalVolume:0,tvls :[]})
   const blockNumber = useBlockNumber()
+  const [maintainFlag, setMaintainFlag] = useState<boolean>(false)
   const { account, chainId } = useActiveWeb3React()
   // init fetch inteval
   useEffect(()=>{
@@ -117,6 +118,7 @@ export function  useMyAllStakePoolList() :[StakePool[],any] {
         // tododo, 待处理 fix
          setPoolIds(poolIds)
          setParkList(zooParkList.data)
+         setMaintainFlag(zooParkList?.maintain?.flag ?? false)
 
          setStatics({totalVolume:zooParkList.totalVolume, tvls: zooParkList.statics.tvl })
       }
@@ -156,7 +158,7 @@ export function  useMyAllStakePoolList() :[StakePool[],any] {
   }, [myBalances, parkList])
 
     
-    return [poolList,statics]
+    return [poolList,statics, maintainFlag]
 }
 
 export class TokenReward  {
@@ -182,11 +184,10 @@ export class ZooParkExt extends StakePool{
 }
 
 
-export function  useMyAllYuzuParkExtList() :[ZooParkExt[],any, boolean] {
+export function  useMyAllYuzuParkExtList() :[ZooParkExt[],any] {
   const [parkExtList,setParkExtList] = useState<any[]>([])
   const [poolIds,setPoolIds] = useState<number[]>([])
   const [statics,setStatics] = useState<{totalVolume:number,tvls:any}>({totalVolume:0,tvls :[]})
-  const [maintainFlag, setMaintainFlag] = useState<boolean>(false)
   const blockNumber = useBlockNumber()
   const { account, chainId } = useActiveWeb3React()
   // init fetch inteval
@@ -199,7 +200,7 @@ export function  useMyAllYuzuParkExtList() :[ZooParkExt[],any, boolean] {
         // tododo, 待处理 fix
          setPoolIds(poolIds)
          setParkExtList(zooParkExtList.data)
-         setMaintainFlag(zooParkExtList?.maintain?.flag || false)
+
 
          setStatics({totalVolume:zooParkExtList.totalVolume, tvls: zooParkExtList.statics.tvl })
       }
@@ -255,5 +256,5 @@ export function  useMyAllYuzuParkExtList() :[ZooParkExt[],any, boolean] {
   }, [myBalances, parkExtList])
 
     
- return [poolList,statics, maintainFlag]
+ return [poolList,statics]
 }
