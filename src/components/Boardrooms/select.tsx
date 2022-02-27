@@ -31,7 +31,7 @@ import { TransactionDetails } from '../../state/transactions/reducer'
 import { fixFloatFloor } from 'utils/fixFloat'
 import Decimal from 'decimal.js'
 import CurrencyLogo from 'components/CurrencyLogo'
-import QuestionHelper, {AddQuestionHelper} from 'components/QuestionHelper'
+import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
 import { useSingleCallResult } from '../../state/multicall/hooks'
 import { useCallback } from 'hoist-non-react-statics/node_modules/@types/react'
 import { configureScope } from '@sentry/minimal'
@@ -87,7 +87,8 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
   const winOpts = {
     deposite : 'Deposite',
-    withdraw : 'Withdraw'
+    withdraw : 'Withdraw',
+    unwrap : 'Unwrap'
   }
 
   const { t } = useTranslation();
@@ -140,6 +141,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   const unwrap = useWTokenUnWrapCallback(wamount, wtoken)
   const onUnwrap = (i:number)=>{
     if(wrappedTokenRewards && wrappedTokenRewards.length >= i +1){
+      setWinValue(fixFloatFloor(tokenAmountForshow(WrapperBalance[i], wrappedTokenRewards[i].token.decimals),4));
+      setWinLabel(wrappedTokenRewards[i].token.symbol);
+      setWinOpt(winOpts.unwrap);
       setWtoken(wrappedTokenRewards[i].token)
       setWamount(WrapperBalance[i])
       unwrap()
@@ -151,7 +155,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   // 个人质押总额
   const myStaked = pool ? tokenAmountForshow(pool.myCurrentLp) : ZERO
   // 个人未领取奖励
-  const myReward = pool ? tokenAmountForshow(pool.myReward) : ZERO
+  const myReward = pool ? tokenAmountForshow(pool.myReward) : 0
   // 个人lp 余额
   const myLpBalance = pool ? fixFloatFloor(JSBI.toNumber(pool.myLpBalance) / 1e18, 8) : ZERO
 
@@ -160,9 +164,10 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
   const poolId = pool && pool.pid
 
-  const [WinValue, setWinValue] = useState('')
+  const [WinValue, setWinValue] = useState<String>('')
   const [WinLabel, setWinLabel] = useState('')
   const [WinOpt, setWinOpt] = useState('')
+  const [winExtInfo, setWinExtInfo] = useState<string[]>([])
 
   const { chainId, account } = useActiveWeb3React()
 
@@ -202,6 +207,21 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
   const hasPendingTransactions = !!pending.length
 
+  const extWithDrawInfo = useMemo(
+    ()=>{
+      let re :string[] = []
+      if(!tokenRewards){
+        return re
+      }
+      for(let i = 0; i < tokenRewards.length; i++){
+        re.push(fixFloatFloor(tokenAmountForshow(tokenRewards[i].MyPendingAmount, tokenRewards[i].token.decimals),8) + " " + tokenRewards[i].token.symbol)
+      }
+      return re
+    }
+
+    ,[tokenRewards]
+  )
+
 
   const onHarvest = async () => {
     try {
@@ -209,6 +229,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
       setWinValue(myReward.toString());
       setWinLabel(winLabals.coin);
       setWinOpt(winOpts.withdraw);
+      setWinExtInfo(extWithDrawInfo);
       await withdraw(poolId, amount.toString(10), () => {
         let data = {
           type: 'success',
@@ -230,6 +251,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
       setWinValue(myStaked.toString(10));
       setWinLabel(winLabals.lp)
       setWinOpt(winOpts.withdraw);
+      setWinExtInfo([])
       await withdraw(poolId, pool.myCurrentLp.toString(10), () => {
         let data = {
           type: 'success',
@@ -252,6 +274,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
       setWinValue(pledgeValue);
       setWinLabel(winLabals.lp)
       setWinOpt(winOpts.deposite);
+      setWinExtInfo([])
       await deposit(poolId, amount, () => {
         // let data = {
         //   type: 'success',
@@ -308,6 +331,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             setWinValue("");
             setWinLabel("")
             setWinOpt("");
+            setWinExtInfo([])
           })
         }
       }
@@ -343,7 +367,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             }
             <p className="s-boardroom-balance">
               <img src={YuzuSwapLogo}/>
-              {myReward.toString(10)}
+              {fixFloatFloor(myReward, 8)}
             </p>
             {
               isExt && tokenRewards?
@@ -352,8 +376,8 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
                   return (
                     <p className="s-boardroom-balance">
                       <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={value.token} />
-                      {tokenAmountForshow(value.MyPendingAmount, value.token.decimals)}
-                      <AddQuestionHelper text={'Add to Wallet'} onClick={()=>addCurrency(value.token)}/>
+                      {fixFloatFloor(tokenAmountForshow(value.MyPendingAmount, value.token.decimals), 8)}
+                      <AddQuestionNoCHelper text={'Add to Wallet'} onClick={()=>addCurrency(value.token)}/>
                     </p>
                   )
                 }
@@ -370,7 +394,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
                     <div className="s-boardroom-unwrap">
                       <span>{value.token.symbol}</span>
                       <span>{fixFloatFloor(tokenAmountForshow(WrapperBalance[i], value.token.decimals),4)}</span>
-                      <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>UnWrap</div>
+                      <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>Unwrap <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
                     </div>
                   )
                 }
@@ -382,7 +406,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
           <div className="s-boardroom-information-no-drak">
             <div>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</div>
             <div className="s-boardroom-balance">{myStaked} </div>
-            <div style={{fontSize: "12px", marginTop: "20px"}}>Corresponding num of tokens<br/>
+          </div>
+          <div className="s-boardroom-information-no-drak">
+            <div style={{fontSize: "12px"}}>Corresponding num of tokens<br/>
             {pool? pool.token0.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token0Balance, pool.token0.decimals)* myStakedPoolShareRatio , 4) :''}<br/>
             {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</div>
           </div>
@@ -434,7 +460,14 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             </div>
             <h2>{t('loading')}</h2>
           </div>
-          <p className="s-boardroom-available">{WinOpt} {WinValue} {WinLabel}</p>
+          <p className="s-boardroom-available">{WinOpt} {WinValue} {WinLabel} 
+            {
+              winExtInfo.map((value)=>{
+                return<p> {value} </p>
+              }
+              )
+            }
+          </p>
         </div>
       </Modal>
 

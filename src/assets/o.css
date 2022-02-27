@@ -537,11 +537,11 @@
 }
 
 .s-boardroom-unwrap-button{
-	width: 100px;
+	width: 120px;
 	border:1px solid #ED4962;
 	border-radius: 10px;
 	color:#ED4962;
-	padding:5px 10px;
+	padding:5px 0px;
 	cursor: pointer;
 	font-weight: 500;
 	font-size: 20px;
@@ -897,7 +897,7 @@
 	width: 140px;
 	height: 60px;
 	padding: 16px 0px;
-	margin: auto
+	margin: 0px auto
 }
 
 #page-singlecurrency{

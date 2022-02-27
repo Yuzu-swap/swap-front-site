@@ -177,5 +177,6 @@
   "warn": "Warning",
   "bridge": "Bridge",
   "zap": "ZAP",
-  "doublegetRewardHint": "The number of non-YUZU rewards you see is estimated, it is influenced by others' stake/unstake activities, so it may decrease. But if you withdraw the rewards now, the number of non-YUZU rewards you see will be the number of non-YUZU you receive. "
+  "doublegetRewardHint": "The number of non-YUZU rewards you see is estimated, it is influenced by others' stake/unstake activities, so it may decrease. But if you withdraw the rewards now, the number of rewards you see will be the number you receive. ",
+  "unwrapExtRewardHint": "wLUNA is an interim token pegged with LUNA, you can always unwrap it to get LUNA at 1:1 ratio, we highly suggest that you should unwrap LUNA once you receive the rewards."
 }
