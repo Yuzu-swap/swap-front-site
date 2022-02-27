@@ -55,8 +55,6 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
 
   const myRatio =   JSBI.greaterThan(pool.totalLpInPark,ZERO ) ?   (new Decimal(pool.myCurrentLp.toString())).div(new Decimal(pool.totalLpInPark.toString())).toNumber() :0
 
-
-
   const ResponsiveButtonSecondary = styled(ButtonSecondary)`
 `
 
@@ -119,7 +117,7 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
           {/* <p>{pool.lpAddress}</p> */}
           <BoardRoomDetail>
             <p>{t('productionperblock')}:</p> 
-            <p>{ fixFloat(prodPerBlock * UserRatioOfReward, 1)} YUZU</p>
+            <p>{ fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU</p>
           </BoardRoomDetail>
           <BoardRoomDetail>
             <p>{t('totalLp')}:</p>
@@ -363,7 +361,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         </div>
         <div className="s-doubleget-item-detail" style={{height: '80px'}}>
             <label>{t('productionperblock')}:</label> 
-            <em>{ fixFloat(prodPerBlock * UserRatioOfReward, 1)} YUZU 
+            <em>{ fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU 
             {
               extProdPerBlockInfo.map((value : String)=>{
                 return (<>

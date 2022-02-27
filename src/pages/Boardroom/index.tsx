@@ -16,7 +16,7 @@ import { useMyAllStakePoolList,useMyAllYuzuParkExtList } from 'data/ZooPark'
 import { useTranslation } from 'react-i18next'
 
 export default function BoradRoom() {
-  const [poolList,statics] = useMyAllStakePoolList()
+  const [poolList,statics, maintainFlag] = useMyAllStakePoolList()
   const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
   const tvl = useMemo(()=>{
       let re = 0
@@ -40,9 +40,13 @@ export default function BoradRoom() {
     <>
       <Sloganer/>
       <div id="page-boardroom">
-        {/*<h1 className="s-banner-coming">YuzuSwap is updating the smart contract to launch the Dual Yield function, the update will be done in 1 hour.</h1>*/}
-          <div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ tvl}</div>
-          <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} />
+        
+        {maintainFlag ? 
+        <h1 className="s-banner-coming">YuzuSwap is updating the smart contract, the update will be done in a couple of hours.</h1>
+        :
+          <><div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ tvl}</div>
+          <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} /></>
+        }
       </div>
     </>
   )

@@ -6,6 +6,8 @@ import { useActiveWeb3React } from '../hooks/index'
 import {APIHost, DefaultChainId,AllDefaultChainTokens, ZOO_USDT_SWAP_PAIR_ADDRESS} from "../constants/index"
 import { usePairContract, useTokenContract } from 'hooks/useContract'
 import ERC20_INTERFACE from 'constants/abis/erc20'
+import { Interface } from '@ethersproject/abi'
+import { abi as TokenWrapper_ABI} from '@liuxingfeiyu/zoo-core/deployments/oasistest/TokenWrapper.json'
 import { useEffect, useMemo, useState } from 'react'
 import { useBlockNumber } from 'state/application/hooks'
 
@@ -33,7 +35,7 @@ export function useMyPendingZooListInPark(address: string|undefined,pids:number[
   const pendingZooParams = []
   if(account){
     for (let i = 0; i < pids.length; i++) {
-      pendingZooParams.push([i,account??""])
+      pendingZooParams.push([pids[i],account??""])
     }
   }
   const data = useSingleContractMultipleData(contract, 'pendingYuzu',pendingZooParams)
@@ -48,7 +50,7 @@ export function useMyPendingTokenListInParkExt(address: string|undefined,pids:nu
   const pendingZooParams = []
   if(account){
     for (let i = 0; i < pids.length; i++) {
-      pendingZooParams.push([i,account??""])
+      pendingZooParams.push([pids[i],account??""])
     }
   }
 //  (IERC20[] memory rewardTokens, uint256[] memory rewardAmounts)
@@ -65,7 +67,7 @@ export function useMyCurrentLpListInPark(address: string|undefined,pids:number[]
   const params = []
   if(account){
     for (let i = 0; i < pids.length; i++) {
-      params.push([i,account??""])
+      params.push([pids[i],account??""])
     }
   }
   const data = useSingleContractMultipleData(contract, 'userInfo',params)
@@ -86,12 +88,25 @@ export function useMyLpBalanceListInPark(address: string|undefined,lpaddrs:strin
   })
 }
 
+export function useWTokenBalanceList(tokenaddrs:string[]): JSBI[] {
+  const { account } = useActiveWeb3React()
+  const accountArg = useMemo(() => [account ?? undefined], [account])
+  // get all the info from the staking rewards contracts
+  const balances = useMultipleContractSingleData(tokenaddrs, new Interface(TokenWrapper_ABI), 'balanceOf', accountArg)
 
-export function  useMyAllStakePoolList() :[StakePool[],any] {
+  return balances.map((p, i) => {
+    const amount = balances[i]?.result?.[0] ?? "0"
+    return JSBI.BigInt(amount)
+  })
+}
+
+
+export function  useMyAllStakePoolList() :[StakePool[],any, boolean] {
   const [parkList,setParkList] = useState<any[]>([])
   const [poolIds,setPoolIds] = useState<number[]>([])
   const [statics,setStatics] = useState<{totalVolume:number,tvls:any}>({totalVolume:0,tvls :[]})
   const blockNumber = useBlockNumber()
+  const [maintainFlag, setMaintainFlag] = useState<boolean>(false)
   const { account, chainId } = useActiveWeb3React()
   // init fetch inteval
   useEffect(()=>{
@@ -103,6 +118,7 @@ export function  useMyAllStakePoolList() :[StakePool[],any] {
         // tododo, 待处理 fix
          setPoolIds(poolIds)
          setParkList(zooParkList.data)
+         setMaintainFlag(zooParkList?.maintain?.flag ?? false)
 
          setStatics({totalVolume:zooParkList.totalVolume, tvls: zooParkList.statics.tvl })
       }
@@ -142,7 +158,7 @@ export function  useMyAllStakePoolList() :[StakePool[],any] {
   }, [myBalances, parkList])
 
     
-    return [poolList,statics]
+    return [poolList,statics, maintainFlag]
 }
 
 export class TokenReward  {
@@ -151,6 +167,7 @@ export class TokenReward  {
   public readonly PerblockReward!: JSBI
   public readonly RewardEndAt!: Number
   public readonly MyPendingAmount: JSBI
+  public readonly wrapped!: boolean
   constructor(data: Partial<TokenReward>){
       Object.assign(this, data);
   }
@@ -184,6 +201,7 @@ export function  useMyAllYuzuParkExtList() :[ZooParkExt[],any] {
          setPoolIds(poolIds)
          setParkExtList(zooParkExtList.data)
 
+
          setStatics({totalVolume:zooParkExtList.totalVolume, tvls: zooParkExtList.statics.tvl })
       }
     }
@@ -211,6 +229,7 @@ export function  useMyAllYuzuParkExtList() :[ZooParkExt[],any] {
           PerblockReward: tr.PerblockReward,
           RewardEndAt: tr.RewardEndAt,
           MyPendingAmount: (myPendingRewards[i] && myPendingRewards[i][rindex]) || JSBI.BigInt(0),
+          wrapped: tr.wrapped
         }))
       }
       let t = new ZooParkExt({

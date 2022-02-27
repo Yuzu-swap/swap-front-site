@@ -120,3 +120,20 @@ export function AddQuestionHelper({ text , onClick}: { text: string , onClick: (
     </span>
   )
 }
+
+export function AddQuestionNoCHelper({ text , onClick}: { text: string , onClick: ()=>void}) {
+  const [show, setShow] = useState<boolean>(false)
+
+  const open = useCallback(() => setShow(true), [setShow])
+  const close = useCallback(() => setShow(false), [setShow])
+
+  return (
+    <span style={{ marginLeft: '10px', marginBottom: auto, marginTop: auto, position: 'absolute'}} onClick={onClick}>
+      <Tooltip text={text} show={show}>
+        <AddQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
+          <QuestionMark>+</QuestionMark>
+        </AddQuestionWrapper>
+      </Tooltip>
+    </span>
+  )
+}

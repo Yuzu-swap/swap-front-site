@@ -2020,9 +2020,10 @@
   resolved "https://registry.yarnpkg.com/@liuxingfeiyu/default-token-list/-/default-token-list-1.0.26.tgz#35aa870d5b68eaa82e579d58c11f7f3552103c84"
   integrity sha512-0JakDbwQck3mLK963JCeQ7KW55URjcMyfUfxQLLG4CMgyLl35uCvUPp7RjZX5RZpAYO3ty5FZBJIMHC4tfV+5g==
 
-"@liuxingfeiyu/zoo-core@1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-core/-/zoo-core-1.0.9.tgz#a95cf3692f52fed085144896c00929655367d510"
+"@liuxingfeiyu/zoo-core@1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/zoo-core/-/zoo-core-1.0.12.tgz#830fb141d538bc810db063cdc2fdd2e94e96a2b6"
+  integrity sha512-6ArqBD6ZL2ebsHS3OpE7he4ZwbkccoWVf9+dgEN9Z7AKk2ny17qsmiG47XvtPL8B7Y2BVhcISTS3LJjgP9amdA==
 
 "@liuxingfeiyu/zoo-sdk@1.0.77":
   version "1.0.77"
