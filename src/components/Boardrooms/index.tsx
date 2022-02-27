@@ -55,8 +55,6 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
 
   const myRatio =   JSBI.greaterThan(pool.totalLpInPark,ZERO ) ?   (new Decimal(pool.myCurrentLp.toString())).div(new Decimal(pool.totalLpInPark.toString())).toNumber() :0
 
-
-
   const ResponsiveButtonSecondary = styled(ButtonSecondary)`
 `
 

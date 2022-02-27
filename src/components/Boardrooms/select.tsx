@@ -141,7 +141,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   const unwrap = useWTokenUnWrapCallback(wamount, wtoken)
   const onUnwrap = (i:number)=>{
     if(wrappedTokenRewards && wrappedTokenRewards.length >= i +1){
-      setWinValue(fixFloatFloor(tokenAmountForshow(WrapperBalance[i], wrappedTokenRewards[i].token.decimals),4));
+      setWinValue(fixFloatFloor(tokenAmountForshow(WrapperBalance[i], wrappedTokenRewards[i].token.decimals),6));
       setWinLabel(wrappedTokenRewards[i].token.symbol);
       setWinOpt(winOpts.unwrap);
       setWtoken(wrappedTokenRewards[i].token)
@@ -393,7 +393,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
                   return (
                     <div className="s-boardroom-unwrap">
                       <span>{value.token.symbol}</span>
-                      <span>{fixFloatFloor(tokenAmountForshow(WrapperBalance[i], value.token.decimals),4)}</span>
+                      <span>{fixFloatFloor(tokenAmountForshow(WrapperBalance[i], value.token.decimals),6)}</span>
                       <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>Unwrap <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
                     </div>
                   )
