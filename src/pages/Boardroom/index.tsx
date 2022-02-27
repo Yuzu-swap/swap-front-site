@@ -42,7 +42,7 @@ export default function BoradRoom() {
       <div id="page-boardroom">
         
         {maintainFlag ? 
-        <h1 className="s-banner-coming">YuzuSwap is updating the smart contract, the update will be done in 3 hours.</h1>
+        <h1 className="s-banner-coming">YuzuSwap is updating the smart contract, the update will be done in a couple of hours.</h1>
         :
           <><div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ tvl}</div>
           <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} /></>
