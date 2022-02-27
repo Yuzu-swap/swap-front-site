@@ -512,7 +512,7 @@
 .s-boardroom-stake{
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: space-around;
 	vertical-align: top;
 	width: 340px;
 	margin: 1rem 20px;

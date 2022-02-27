@@ -35,7 +35,7 @@ export function useMyPendingZooListInPark(address: string|undefined,pids:number[
   const pendingZooParams = []
   if(account){
     for (let i = 0; i < pids.length; i++) {
-      pendingZooParams.push([i,account??""])
+      pendingZooParams.push([pids[i],account??""])
     }
   }
   const data = useSingleContractMultipleData(contract, 'pendingYuzu',pendingZooParams)
@@ -50,7 +50,7 @@ export function useMyPendingTokenListInParkExt(address: string|undefined,pids:nu
   const pendingZooParams = []
   if(account){
     for (let i = 0; i < pids.length; i++) {
-      pendingZooParams.push([i,account??""])
+      pendingZooParams.push([pids[i],account??""])
     }
   }
 //  (IERC20[] memory rewardTokens, uint256[] memory rewardAmounts)
@@ -67,7 +67,7 @@ export function useMyCurrentLpListInPark(address: string|undefined,pids:number[]
   const params = []
   if(account){
     for (let i = 0; i < pids.length; i++) {
-      params.push([i,account??""])
+      params.push([pids[i],account??""])
     }
   }
   const data = useSingleContractMultipleData(contract, 'userInfo',params)
