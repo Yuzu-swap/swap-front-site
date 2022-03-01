@@ -28,7 +28,7 @@
     "@apollo/react-components": "^3.1.5",
     "@apollo/react-hooks": "^3.1.5",
     "@ethersproject/experimental": "^5.0.1",
-    "@liuxingfeiyu/default-token-list": "1.0.26",
+    "@liuxingfeiyu/default-token-list": "1.0.27",
     "@liuxingfeiyu/zoo-core": "1.0.12",
     "@liuxingfeiyu/zoo-sdk": "1.0.77",
     "@popperjs/core": "^2.4.4",
