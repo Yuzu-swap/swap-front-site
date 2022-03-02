@@ -29,9 +29,10 @@ import { AppState } from 'state'
 import CurrencyLogo from 'components/CurrencyLogo'
 import { useAllTokens } from 'hooks/Tokens'
 import { useTranslation } from 'react-i18next'
-import fixFloat from 'utils/fixFloat'
+import fixFloat,{getTimeStr, transToThousandth} from 'utils/fixFloat'
 import { Decimal } from "decimal.js"
 import { UserRatioOfReward } from '../../constants'
+import isZero from 'utils/isZero'
 
 
 
@@ -121,7 +122,7 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
           </BoardRoomDetail>
           <BoardRoomDetail>
             <p>{t('totalLp')}:</p>
-            <p>{ fixFloat(tvl, 4)} USDT</p>
+            <p>{ transToThousandth(fixFloat(tvl, 4))} USDT</p>
           </BoardRoomDetail>
           <BoardRoomDetail>
             <p>{t('myStaked')}:</p> 
@@ -279,8 +280,31 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
       min = Math.floor((nextBlockTime-day*86400-hour*3600)/60)
       second = Math.floor(nextBlockTime%60)
     }
+    if(nextBlockTime < 0){
+      return [0,0,0,0]
+    }
     return [day,hour,min,second]
   },[lastBlockAt,timestamp])
+
+  const TimeCount = (day:number, hour:number, min:number, second:number) =>{
+    let notZero : boolean = true
+    if(day == 0 && hour == 0 && min == 0 && second == 0){
+      notZero = false
+      console.log("timecount bool :", notZero)
+    }
+    let dayStr = getTimeStr(day)
+    let hourStr = getTimeStr(hour)
+    let minStr = getTimeStr(min)
+    let secondStr = getTimeStr(second)
+    return (
+    <em>
+      <TimeBLock notZero={notZero}>{dayStr}</TimeBLock>:
+      <TimeBLock notZero={notZero}>{hourStr}</TimeBLock>:
+      <TimeBLock notZero={notZero}>{minStr}</TimeBLock>:
+      <TimeBLock notZero={notZero}>{secondStr}</TimeBLock>
+    </em>
+    )
+  }
 
   useEffect(()=>{
     const timer = setTimeout(()=>{
@@ -325,14 +349,14 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     line-height: 34px;
   `
 
-  const TimeBLock = styled.div`
+  const TimeBLock = styled.div<{notZero : boolean}>`
     text-align: center;
     display: inline-block;
     background: #333333;
     border-radius: 4px;
     border: 1px solid #F57C78;
     line-height: 18px;
-    color: #FFFFFF;
+    color: ${({notZero})=>(notZero ? '#FFFFFF' :  '#D0D0D0')};
     min-width: 20px;
   `
 
@@ -356,8 +380,8 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
 
       <div className="s-doubleget-item-details">
       <div className="s-doubleget-item-detail">
-            <label>Dual Yeild Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
-            <em><TimeBLock>{day}</TimeBLock>:<TimeBLock>{hour}</TimeBLock>:<TimeBLock>{min}</TimeBLock>:<TimeBLock>{second}</TimeBLock></em>
+            <label>Dual Yield Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
+            {TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)}
         </div>
         <div className="s-doubleget-item-detail" style={{height: '80px'}}>
             <label>{t('productionperblock')}:</label> 
@@ -374,7 +398,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         </div>
         <div className="s-doubleget-item-detail">
             <label>{t('totalLp')}:</label>
-            <em>{ fixFloat(tvl, 4)} USDT</em>
+            <em>{ transToThousandth(fixFloat(tvl, 4))} USDT</em>
         </div>
         <div className="s-doubleget-item-detail">
             <label>{t('myStaked')}:</label> 

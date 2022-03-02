@@ -14,6 +14,7 @@ import { AppDispatch, AppState } from 'state'
 import { updateZooPrice, updateZooStatePools } from 'state/zoo/reducer'
 import { useMyAllStakePoolList,useMyAllYuzuParkExtList } from 'data/ZooPark'
 import { useTranslation } from 'react-i18next'
+import { transToThousandth } from 'utils/fixFloat'
 
 export default function BoradRoom() {
   const [poolList,statics, maintainFlag] = useMyAllStakePoolList()
@@ -44,7 +45,7 @@ export default function BoradRoom() {
         {maintainFlag ? 
         <h1 className="s-banner-coming">YuzuSwap is updating the smart contract, the update will be done in a couple of hours.</h1>
         :
-          <><div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ tvl}</div>
+          <><div className="s-banner-button s-banner-button-boardroom">{t('CurrentLiquidityPledge')} ${ transToThousandth(tvl)}</div>
           <Boardrooms  rooms={poolList} statics={statics} extrooms={poolExtList} extstatics={extStatics} /></>
         }
       </div>

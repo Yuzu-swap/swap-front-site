@@ -38,6 +38,7 @@ import { useWithdrawAllCallback } from 'zooswap-hooks/useWithdrawAllCallback'
 import { useMyAllStakePoolList } from 'data/ZooPark'
 import { tokenAmountForshow } from 'utils/ZoosSwap'
 import { useTranslation } from 'react-i18next'
+import { transToThousandth } from 'utils/fixFloat'
 
 const Web3Withdrawal = styled(ButtonSecondary)<{ faded?: boolean }>`
   background-color: ${({ theme }) => theme.white};
@@ -70,8 +71,8 @@ export default function Header({statics,poolList}:{poolList:TradePool[],statics:
   //<Web3Withdrawal onClick={toggleWithdrawalRewardModal}>
   return (
     <div className="s-banner s-tradingmining-banner">
-      <p className="s-tradingmining-text">{t('totalTransactionAmount')}：${statics.totalSwapVolume?.toFixed(3) }</p>
-      <p className="s-tradingmining-text">{t('currentIndividualWithdrawableRewards')}：{ tokenAmountForshow(myReward).toFixed(3)} YUZU</p>
+      <p className="s-tradingmining-text">{t('totalTransactionAmount')}：${transToThousandth(statics.totalSwapVolume?.toFixed(3)) }</p>
+      <p className="s-tradingmining-text">{t('currentIndividualWithdrawableRewards')}：{ transToThousandth(tokenAmountForshow(myReward).toFixed(3))} YUZU</p>
       <Web3Withdrawal onClick={withdrawAll}>
         <Text>{t('withdrawalRewards')}</Text>
       </Web3Withdrawal>

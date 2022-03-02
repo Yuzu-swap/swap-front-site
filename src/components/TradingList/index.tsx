@@ -20,9 +20,10 @@ import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useTradingGroupModal } from '../../state/application/hooks'
 import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import fixFloat from 'utils/fixFloat'
+import fixFloat , {transToThousandth} from 'utils/fixFloat'
 import { UserRatioOfReward } from '../../constants'
 import { Decimal } from "decimal.js"
+
 
 let targetPool:TradePool;
 export function TradingItem({pool,index,statics,totalEffect}:{ pool: TradePool,statics:any, totalEffect:number ,index:number}){
@@ -106,7 +107,7 @@ export function TradingItem({pool,index,statics,totalEffect}:{ pool: TradePool,s
         </div>
         <div className="s-trading-item-detail">
           <label>{t('totalTradeVolume')}<QuestionHelper text={t('totalTradeVolumeTip')} />：</label>
-          <em>${fixFloat(totalTradeVolume, 3)}</em>
+          <em>${transToThousandth(fixFloat(totalTradeVolume, 3))}</em>
         </div>
         <div className="s-trading-item-detail">
           <label>{t('myCurrentTradeVolume')}<QuestionHelper text={t('myCurrentTradeVolumeTip')} />：</label>
