@@ -11,6 +11,7 @@ import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import FantomLogo from '../../assets/images/fantom-logo.png'
 import Trans from '../../assets/newUI/trans.png'
 import DoublegetIcon from '../../assets/images/doubleget2.png'
+import WebLinkJump from '../../assets/images/web-link.png'
 import { DefaultChainId, ZOO_PARK_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
 import { STAKING_REWARDS_INTERFACE } from 'constants/abis/staking-rewards'
@@ -244,18 +245,17 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     [blockNumber, pool]
   )
 
-  const minExtBlock: number = useMemo(
+  const [minExtBlock, isIfo] = useMemo(
     ()=>{
       let num: Number = -1;
+      let isIfo : boolean = false;
       if(pool.tokenRewards){
-        for(let i = 0; i < pool.tokenRewards.length;i++){
-          let temp = pool.tokenRewards[i].RewardEndAt
-          if(temp < num || num == -1){
-            num = temp
-          }
+        num = pool.tokenRewards[0].RewardEndAt
+        if(pool.tokenRewards[0].ifo){
+          isIfo = true
         }
       }
-      return num.valueOf()
+      return [num.valueOf(), isIfo]
     },
     [blockNumber, pool]
   ) 
@@ -360,7 +360,6 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     min-width: 20px;
   `
 
-
   const { t } = useTranslation();
   return (
     <div className="s-doubleget-item">
@@ -380,8 +379,38 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
 
       <div className="s-doubleget-item-details">
       <div className="s-doubleget-item-detail">
-            <label>Dual Yield Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
-            {TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)}
+            {
+              isIfo ? 
+              <label>Initial Farm Offering :</label> 
+              :
+              minExtBlock != 0 ?
+              <label>Dual Yield Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
+              :
+              <label>Dual Yield 
+                {pool.tokenRewards && pool.tokenRewards[0].ifo?.desc ?
+                  <QuestionHelper text={pool.tokenRewards[0].ifo?.desc as string}/>
+                  :
+                  null
+                }
+              </label> 
+            }
+            
+            {
+              minExtBlock != 0 ?
+              TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)
+              :
+              isIfo?
+              <strong>{(pool.tokenRewards && pool.tokenRewards[0].ifo?.title)+ " " ?? ''} 
+              <img 
+                src={WebLinkJump} 
+                height={'15px'} 
+                style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
+                onClick={()=>{window.open(((pool.tokenRewards && pool.tokenRewards[0].ifo?.link) ?? "")as string)}}
+              />
+              </strong>
+              :
+              <strong>Permanent</strong>
+            }
         </div>
         <div className="s-doubleget-item-detail" style={{height: '80px'}}>
             <label>{t('productionperblock')}:</label> 

@@ -2015,10 +2015,10 @@
   version "4.72.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.72.0.tgz#43df23af013ad1135407e5cf33ca6e4c4c7708d5"
 
-"@liuxingfeiyu/default-token-list@1.0.27":
-  version "1.0.27"
-  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/default-token-list/-/default-token-list-1.0.27.tgz#355e288bd0bb6d6d1e5ba7561b470cdca49f45c4"
-  integrity sha512-BdBSF53m9VAMj0KpQWAMyh57OQWihY22Dqqp3dwH/pvb9Nlnc8fc5MMr2nMcOY/deepW66tg5ud89J+izic0cA==
+"@liuxingfeiyu/default-token-list@1.0.28":
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/@liuxingfeiyu/default-token-list/-/default-token-list-1.0.28.tgz#6e84c6dd8fc6a03d7363481884917e29af1ee151"
+  integrity sha512-9Bu7vqXkHnNkTjcmOn7daQ8v857jrkd8OJWtzjXTmpW/U9ksVv8MIixBZtMu7HVYJcJuFpOHk2wjD0bGLzAWQA==
 
 "@liuxingfeiyu/zoo-core@1.0.12":
   version "1.0.12"
