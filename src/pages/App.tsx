@@ -45,6 +45,7 @@ import Coming from './Introduce/coming'
 import NewIntroHead from './HeaderBanner/newIntrohead'
 import NewIntroBody from './Introduce/newIntrobody'
 import { Bridge } from './Bridge'
+import { useMyAllStakePoolList} from 'data/ZooPark'
 
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
@@ -98,6 +99,7 @@ const Marginer = styled.div`
 
 export default function App() {
   const { chainId } = useActiveWeb3React()
+  const [poolList,statics, maintainFlag] = useMyAllStakePoolList()
   console.log(document.domain)
   return (
     <Suspense fallback={null}>
@@ -137,7 +139,7 @@ export default function App() {
               {/* <Route exact strict path="/vote" component={Vote} /> */}
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
               <Route exact path="/add" component={AddLiquidity} />
-              <Route exact path="/liquiditymining/select/:pid/extselect/:extpid" component={BoardroomSelect} />
+              {!maintainFlag && <Route exact path="/liquiditymining/select/:pid/extselect/:extpid" component={BoardroomSelect} />}
               <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
               <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
               <Route exact path="/create" component={AddLiquidity} />

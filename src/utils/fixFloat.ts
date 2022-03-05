@@ -32,3 +32,25 @@ export function stringFix(handle: string, fixto: number): String{
     target += '1'
     return num.toFixed(fixto) == zero ? target : num.toFixed(fixto);
 }
+
+export function getTimeStr(time : number){
+    var str = time.toFixed(0);
+    if(str.length == 1){
+        str = "0" + str
+    }
+    return str
+}
+
+
+export function transToThousandth(str : String){
+    var re = str.split('.')
+    var reg=/\d{1,3}(?=(\d{3})+$)/g;
+    var temp = re[0].replace(reg, '$&,');
+    if(re.length >= 2){
+        return temp + "." + re[1]
+    }
+    else 
+    {
+        return temp
+    }
+}

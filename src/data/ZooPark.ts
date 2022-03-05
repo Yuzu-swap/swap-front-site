@@ -168,9 +168,19 @@ export class TokenReward  {
   public readonly RewardEndAt!: Number
   public readonly MyPendingAmount: JSBI
   public readonly wrapped!: boolean
+  public readonly ifo: Ifo
   constructor(data: Partial<TokenReward>){
       Object.assign(this, data);
   }
+}
+
+export class Ifo{
+  public readonly desc : String
+  public readonly title : String
+  public readonly link : String
+  constructor(data: Partial<Ifo>){
+    Object.assign(this, data);
+}
 }
 
 
@@ -223,13 +233,24 @@ export function  useMyAllYuzuParkExtList() :[ZooParkExt[],any] {
       const tokenRewards:TokenReward[] = []
       for(let rindex:number =0; rindex< park.tokenRewards.length;rindex ++){
         const tr = park.tokenRewards[rindex]
+        let ifo = undefined
+        if(tr.ifo){
+          ifo = new Ifo(
+            {
+              desc : tr.ifo.desc,
+              title : tr.ifo.title,
+              link : tr.ifo.link
+            }
+          )
+        }
         tokenRewards.push(new TokenReward({
           token: new Token((chainId ?? DefaultChainId), tr.tokenAddr, tr.tokenDecimals, tr.tokenSymbol, tr.token),
           rewardContractAddr: tr.rewardContractAddr,
           PerblockReward: tr.PerblockReward,
           RewardEndAt: tr.RewardEndAt,
           MyPendingAmount: (myPendingRewards[i] && myPendingRewards[i][rindex]) || JSBI.BigInt(0),
-          wrapped: tr.wrapped
+          wrapped: tr.wrapped,
+          ifo: ifo
         }))
       }
       let t = new ZooParkExt({

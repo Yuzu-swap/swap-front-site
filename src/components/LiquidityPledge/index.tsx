@@ -18,6 +18,7 @@ import { tokenAmountForshow } from 'utils/ZoosSwap'
 import { CHAIN_CONFIG } from 'components/Header'
 import { ExternalLink } from '../../theme/components'
 import { BLACKHOLE_ADDRESS } from '../../constants'
+import { transToThousandth } from 'utils/fixFloat'
 
 export function Pledge(props: any){
   const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 0
@@ -30,7 +31,7 @@ export function Pledge(props: any){
   const yuzuToken = (AllDefaultChainTokens as any)[DefaultChainId].YUZU
   const yuzuTokenCon = useTokenContract(yuzuToken.address, false)
   const blackholeRe = useSingleCallResult(yuzuTokenCon, "balanceOf", [BLACKHOLE_ADDRESS]).result 
-  const yuzuShow =  fixFloat(tokenAmountForshow(blackholeRe ?? '0', yuzuToken.decimals), 3)  
+  const yuzuShow =  transToThousandth(fixFloat(tokenAmountForshow(blackholeRe ?? '0', yuzuToken.decimals), 3))
 
 
 
@@ -78,8 +79,8 @@ export function Pledge(props: any){
         </div>
         <div className="s-pledge-item-numbers">
           <span>${zooPrice.toFixed(3)}</span>
-          <span>${autobuyCurr.toFixed(3)}</span>
-          <span>${tradeOneDay.toFixed(3)}</span>
+          <span>${transToThousandth(autobuyCurr.toFixed(3))}</span>
+          <span>${transToThousandth(tradeOneDay.toFixed(3))}</span>
           <span 
           style={{ cursor: "pointer"}}
           onClick={()=>{window.open((CHAIN_CONFIG as any)[DefaultChainId].blockExplorerUrl +'address/' +BLACKHOLE_ADDRESS + '/transactions'
@@ -106,7 +107,7 @@ export default function LiquidityPledge(props:any ){
     <div className="s-liquidity-pledge">
       <div className="s-liquidity-rect"/>
       <div className="s-liquidity-title">{t('homepageCurrentLiquidityminingPool')} </div>
-      <div className="s-liquidity-title1">{stakedTotal.toFixed(3)} USDT</div>
+      <div className="s-liquidity-title1">{transToThousandth(stakedTotal.toFixed(3))} USDT</div>
       <Pledge />
     </div>
   )
