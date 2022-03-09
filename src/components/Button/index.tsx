@@ -5,6 +5,7 @@ import { darken, lighten } from 'polished'
 import { RowBetween } from '../Row'
 import { ChevronDown } from 'react-feather'
 import { Button as RebassButton, ButtonProps } from 'rebass/styled-components'
+import reatBanner from '../../assets/newUI/reatBanner.png'
 
 const Base = styled(RebassButton)<{
   padding?: string
@@ -304,6 +305,49 @@ const ButtonConfirmedStyle = styled(Base)`
   &:disabled {
     opacity: 50%;
     cursor: auto;
+  }
+`
+
+export const ButtonLRTab = styled(Base)<{isLeft : boolean}>`
+  background-color: ${({ theme }) => lighten(0.5, theme.green1)};
+  color: ${({ theme }) => theme.green1};
+  border: 1px solid ${({ theme }) => theme.green1};
+  border-radius : ${({isLeft}) =>(isLeft? '10px 0 0 0' : '0 10px 0 0')};
+  &:disabled {
+    opacity: 50%;
+    cursor: auto;
+  }
+`
+
+export const ButtonUnderLine = styled(Base)<{active : boolean}>`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: left;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme }) => theme.bg2};
+  font-size: 18px;
+  width: fit-content;
+  margin: 0 12px;
+  font-weight: 400;
+  height: 36px;
+  background: none;
+  
+  &:hover {
+    font-weight: 600;
+  }
+  ${({active})=>(
+    active?
+    `font-weight: 600;
+    background: url(${reatBanner});
+    background-repeat: no-repeat;
+    background-position-x: 50%;
+    background-position-y: 32px;
+    background-size: 80% 10%;`
+    :``
+  )
+
+  } 
   }
 `
 

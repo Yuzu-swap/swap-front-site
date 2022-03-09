@@ -2208,3 +2208,20 @@
 	display: flex;
 	justify-content: space-between;
 }
+
+.s-xyuzu-body{
+	display: flex;
+	flex-direction: column;
+	width: 900px;
+	margin: 200px auto;
+	color:#FFFFFF;
+	text-align: center;
+	padding: 10px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.s-xyuzu-tab{
+	display: flex;
+	justify-content: center;
+}

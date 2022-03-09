@@ -62,6 +62,7 @@ import Saave from './Saave'
 
 import ComingSoonModal from '../components/ComingSoonModal'
 import { Zap } from './Zap'
+import { XYuzu } from './XYuzu'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -158,6 +159,7 @@ export default function App() {
               <Route exact path="/singlecurrency/select/:pid" component={SingleCurrencySelect} />
               <Route exact path="/bridge" component={Bridge} />
               <Route exact path="/zap" component={Zap} />
+              <Route exact path="/xyuzu" component={XYuzu} />
               <Route exact path="/intro" component={Intro} />
               <Route exact path="/airdrop" component={Airdrop} />
               <Route exact path="/coming" component={Coming}/>

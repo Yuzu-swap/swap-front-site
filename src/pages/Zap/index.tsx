@@ -89,8 +89,7 @@ export function Zap(){
 
     const Text2 = styled.div`
         font-size: 24px;
-        font-weight: bold;
-        font-family: DINPro-Bold, DINPro;
+        font-weight: 500;
         color: ${({ theme }) => theme.text1};
         line-height: 31px;
         text-overflow: ellipsis;

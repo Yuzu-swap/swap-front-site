@@ -570,6 +570,9 @@ export default function Header() {
           <StyledNavLink id={`boardroom-nav-link`} to={'/liquiditymining'}>
             {t('boardroom')}
           </StyledNavLink>
+          <StyledNavLink id={`zap-nav-link`} to={'/xyuzu'}>
+            {t('xyuzu')}
+          </StyledNavLink>
           <StyledNavLink id={`zap-nav-link`} to={'/zap'}>
             {t('zap')}
           </StyledNavLink>
