@@ -93,7 +93,7 @@
   "toleranceExplanation": "Lowering this limit decreases your risk of frontrunning. However, this makes more likely that your transaction will fail due to normal price movements.",
   "tokenSearchPlaceholder": "Search name or paste address",
   "minute": "minute",
-  "slogan": "YuzuSwap: An Open, Safe, Fair DEX Ecosystem with High Composability built on Emerald, the EVM Compatible ParaTime on Oasis",
+  "slogan": "-An Open, Safe, Fair DEX Ecosystem with High Composability built on Emerald, the EVM Compatible ParaTime on Oasis",
   "homepageCurrentLiquidityminingPool": "Total Pool Size",
   "homepageCurrentPrice": "YUZU Price",
   "homepagetoBeRepurchasedAmount": "Buyback Pool Size",

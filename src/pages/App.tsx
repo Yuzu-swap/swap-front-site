@@ -46,6 +46,7 @@ import NewIntroHead from './HeaderBanner/newIntrohead'
 import NewIntroBody from './Introduce/newIntrobody'
 import { Bridge } from './Bridge'
 import { useMyAllStakePoolList} from 'data/ZooPark'
+import backLogo from '../assets/newUI/backLogo.png'
 
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
@@ -70,6 +71,7 @@ const AppWrapper = styled.div`
   align-items: flex-start;
   overflow-x: hidden;
   position: relative;
+  background-color : ${({theme}) => theme.black1};
 `
 
 
@@ -107,6 +109,7 @@ export default function App() {
       <Route component={GoogleAnalyticsReporter} />
       <Route component={DarkModeQueryParamReader} />
       <AppWrapper className="s-app-wrapper">
+        <img className="s-app-wrapper-bg" src={backLogo}/>
         <BodyWrapper className="s-body-wrapper">
           <Switch>
             <Route exact path="/intro" component={IntroHead}/>
@@ -179,11 +182,6 @@ export default function App() {
             <Route exact path="/introhome" component={()=>{
               return(<div/>)
             }}/>
-            <Route component={()=>{
-              return(
-                <div className= "s-banner-bg-youzi1"></div>
-              )
-            }} />
           </Switch>
         
       </AppWrapper>

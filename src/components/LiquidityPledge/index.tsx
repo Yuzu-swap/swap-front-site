@@ -19,6 +19,7 @@ import { CHAIN_CONFIG } from 'components/Header'
 import { ExternalLink } from '../../theme/components'
 import { BLACKHOLE_ADDRESS } from '../../constants'
 import { transToThousandth } from 'utils/fixFloat'
+import pledgeTop from '../../assets/newUI/pledgeTop.png'
 
 export function Pledge(props: any){
   const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 0
@@ -70,6 +71,7 @@ export function Pledge(props: any){
 
   return (
     <div className="s-pledge-item">
+      <div className="s-pledge-item-in">
         <div className="s-pledge-item-title">
           <span>{t('homepageCurrentPrice')}</span>
           <span>{t('homepagetoBeRepurchasedAmount')} </span>
@@ -93,6 +95,7 @@ export function Pledge(props: any){
             <em>{second}</em>
           </span>
         </div>
+      </div>
     </div>
   )
 }
@@ -102,9 +105,19 @@ export default function LiquidityPledge(props:any ){
   let [tradeOneDay,stakedTotal]  =  usePairStaticsInfo()
   stakedTotal = stakedTotal || 0;
   const { t } = useTranslation()
+
+  const TopImg = styled.img`
+    position : absolute;
+    z-index: -1;
+    width : 400px;
+    margin-top: -200px;
+    margin-left: 100px;
+  `
+
   /*todo 参数传入*/
   return (
     <div className="s-liquidity-pledge">
+      <TopImg src={pledgeTop}/>
       <div className="s-liquidity-rect"/>
       <div className="s-liquidity-title">{t('homepageCurrentLiquidityminingPool')} </div>
       <div className="s-liquidity-title1">{transToThousandth(stakedTotal.toFixed(3))} USDT</div>

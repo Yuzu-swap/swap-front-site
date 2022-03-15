@@ -53,6 +53,8 @@ export interface Colors {
   yellow2: Color
   blue1: Color
 
+  black1: Color
+
   borderRadius: string
 }
 

@@ -9,6 +9,29 @@ import { useTranslation } from 'react-i18next'
 import org0 from '../../assets/newUI/WechatIMG673.jpeg'
 import org1 from '../../assets/newUI/Verilog.png'
 import org2 from '../../assets/newUI/slowmist.png'
+import titleL from '../../assets/newUI/titleLeft.png'
+import titleR from '../../assets/newUI/titleRight.png'
+
+
+
+
+function Title(str : string){
+  const Tt = styled.div`
+    display : inline ;
+    font-size: 30px;
+    font-weight: bold;
+    color: #FFFFFF;
+    line-height: 35px;
+  `
+  return(
+    <Tt>
+      <img src={titleL} height={"10px"}/>
+      {" " + str + " "}
+      <img src={titleR} height={"10px"}/>
+    </Tt>
+  )
+
+}
 
 export default function AuditOrgs(props: any) {
   const { t } = useTranslation();
@@ -16,7 +39,7 @@ export default function AuditOrgs(props: any) {
   let url = '/PeckShield-Audit-Report-YuzuSwap-v1.0_final.pdf';
   return (
     <div className="s-audit-orgs">
-      <h2>{t('auditOrgName')}</h2>
+      {Title(t('auditOrgName'))}
       <p style={{color: '#FF0000'}}>This protocol is in beta, please use at your own risk.</p>
       <a href={url} target='_blank'>
         <img src={org0} />

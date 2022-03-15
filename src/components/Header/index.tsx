@@ -12,6 +12,7 @@ import styled from 'styled-components'
 // import LogoDark from '../../assets/svg/logo_white.svg'
 import Settings from '../Settings'
 import Logo from '../../assets/newUI/logo.png'
+import Arrow from '../../assets/newUI/layoutArrow.png'
 import reatBanner from '../../assets/newUI/reatBanner.png'
 import LogoHover from '../../assets/newUI/logo_hover.png'
 
@@ -55,6 +56,7 @@ const HeaderFrame = styled.div`
   position: relative;
   padding: 1rem;
   z-index: 2;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   ${({ theme }) => theme.mediaWidth.upToMedium`
     grid-template-columns: 1fr;
     padding: 0 1rem;
@@ -74,6 +76,7 @@ const HeaderControls = styled.div`
   justify-self: flex-end;
   width: fit-content;
   min-width: 33vw;
+  margin-top: -15px;
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
     flex-direction: row;
@@ -127,6 +130,13 @@ const HeaderRow = styled(RowFixed)`
   ${({ theme }) => theme.mediaWidth.upToMedium`
    width: 100%;
   `};
+`
+
+const HeaderGap = styled.div`
+  margin-top: -1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  height: 85px;
+  width: 0px;
 `
 
 const HeaderLinks = styled(Row)`
@@ -195,6 +205,7 @@ const NetworkCard = styled(YellowCard)`
   :hover {
     opacity: 0.8;
   }
+  opacity: 0.59;
   border: 1px solid #FFFFFF;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
@@ -254,21 +265,14 @@ const StyledNavLink = styled(NavLink).attrs({
   text-decoration: none;
   color: ${({ theme }) => theme.bg2};
   font-size: 18px;
-  font-family: PingFangSC-Regular, PingFang SC;
   width: fit-content;
   margin: 0 12px;
   font-weight: 400;
   height: 36px;
 
   &.${activeClassName} {
-    font-weight: 600;
+    font-weight: bold;
     font-size: 18px;
-    font-family: PingFangSC-Semibold, PingFang SC;
-    background: url(${reatBanner});
-    background-repeat: no-repeat;
-    background-position-x: 50%;
-    background-position-y: 32px;
-    background-size: 80% 10%;
     color: ${({ theme }) => theme.bg2};
   }
 `
@@ -281,7 +285,6 @@ const StyledNOutLink = styled.div`
   text-decoration: none;
   color: ${({ theme }) => theme.bg2};
   font-size: 18px;
-  font-family: PingFangSC-Regular, PingFang SC;
   width: fit-content;
   margin: 0 12px;
   font-weight: 400;
@@ -544,6 +547,7 @@ export default function Header() {
             <img width={'40px'} src={Logo} alt="logo" className="s-header-logo" />
           </StaticIcon> */}
         </Title>
+        <HeaderGap/>
         <HeaderLinks className="s-header-links">
           <StyledNavLink id={`swap-nav-link`} to={'/homepage'}>
             {t('homepage')}
@@ -570,15 +574,16 @@ export default function Header() {
           <StyledNavLink id={`boardroom-nav-link`} to={'/liquiditymining'}>
             {t('boardroom')}
           </StyledNavLink>
-          <StyledNavLink id={`zap-nav-link`} to={'/xyuzu'}>
+          {/*<StyledNavLink id={`zap-nav-link`} to={'/xyuzu'}>
             {t('xyuzu')}
-          </StyledNavLink>
+          </StyledNavLink>*/}
           <StyledNavLink id={`zap-nav-link`} to={'/zap'}>
             {t('zap')}
           </StyledNavLink>
           <div ref={bnode as any} style={{position:"relative"}}>
             <StyledNOutLink id={`bridge-nav-link`} onClick={()=>setBOpen(true)}>
               {t('bridge')}
+              <img src={Arrow} height={"16px"} style={{margin:"5px 0 0 0"}}/>
             </StyledNOutLink>
             {bopen && (
                 <MenuFlyout className="s-top-links">
@@ -655,7 +660,7 @@ export default function Header() {
           </StyledMenuButton>
           <Settings />
           <Menu />
-          <Language/>
+          {/*<Language/>*/}
         </HeaderElementWrap>
       </HeaderControls>
     </HeaderFrame>

@@ -351,6 +351,24 @@ export const ButtonUnderLine = styled(Base)<{active : boolean}>`
   }
 `
 
+
+export const ButtonXyuzuPercent = styled(Base)<{active : boolean}>`
+  background-color: ${({ theme }) => theme.red1};
+  border: 1px solid ${({ theme }) => theme.red1};
+
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.red1)};
+  }
+  ${({active})=>(
+    active?
+    `font-weight: 600;
+    `
+    :``
+  )
+  } 
+  
+`
+
 const ButtonErrorStyle = styled(Base)`
   background-color: ${({ theme }) => theme.red1};
   border: 1px solid ${({ theme }) => theme.red1};
