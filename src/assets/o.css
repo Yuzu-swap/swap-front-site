@@ -811,11 +811,13 @@
 .s-banner-title{
 	font-size: 40px;
 	font-weight: bold;
+	text-transform: uppercase;
 	width: fit-content;
 	color: #FF526C;
 	line-height: 48px;
 	background: linear-gradient(123deg, #ED4962 0%, #F98F81 100%);
 	-webkit-background-clip: text;
+	background-clip: text;
 	-webkit-text-fill-color: transparent;
 	border-bottom: 2px solid #FF526C;
 }
@@ -2232,18 +2234,24 @@
 
 .s-zap-exchange{
 	width: 428px;
-	background: #FFFFFF;
-	box-shadow: 0px 16px 24px 0px rgba(43, 43, 43, 0.09);
-	border-radius: 8px;
 	padding: 20px;
 	position: relative;
 	height: fit-content;
+	background: #2C3035;
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .s-zap-input{
 	background: #F5F5F5;
 	border-radius: 6px;
 	padding: 10px;
+}
+.s-zap-output{
+	background: #222529;
+	border-radius: 6px;
+	opacity: 0.54;
+	padding: 12px;
 }
 
 .s-zap-line{
@@ -2255,9 +2263,8 @@
 	display: flex;
 	flex-direction: column;
 	width: 900px;
-	margin: 200px auto;
+	margin: 150px auto;
 	color:#FFFFFF;
-	text-align: center;
 	padding: 10px;
 	justify-content: space-between;
 	align-items: center;
@@ -2265,5 +2272,59 @@
 
 .s-xyuzu-tab{
 	display: flex;
-	justify-content: center;
+	width: 100%;
+	background-color: #222529;
+	font-size: 24px;
+	font-weight: 400;
+	color: #FFFFFF;
+	line-height: 28px;
+	border-radius: 8px;
+}
+
+.s-xyuzu-header{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	align-items: flex-start;
+}
+
+.s-xyuzu-header-banner{
+	font-size: 40px;
+	font-weight: bold;
+	color: #FFFFFF;
+	line-height: 48px;
+	text-transform: uppercase;
+}
+
+.s-xyuzu-header-text1{
+	font-size: 26px;
+	font-weight: 400;
+	color: #FFFFFF;
+	line-height: 30px;
+	opacity: 0.6;
+}
+
+.s-xyuzu-header-text2{
+	font-size: 26px;
+	font-weight: 400;
+	color: #FFFFFF;
+	line-height: 28px;
+}
+
+.s-xyuzu-header-number{
+	font-size: 24px;
+	font-weight: bold;
+	color: #FF526C;
+	line-height: 28px;
+}
+
+.s-xyuzu-tab-wrapper{
+	padding: 1px;
+	background: linear-gradient(138deg, #ED4962 0%, #F98F81 100%);;
+	border-radius: 8px;
+}
+
+.s-modal-wrapper{
+	padding: 1px;
+	border-radius: 8px;
 }

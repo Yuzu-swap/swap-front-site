@@ -308,14 +308,16 @@ const ButtonConfirmedStyle = styled(Base)`
   }
 `
 
-export const ButtonLRTab = styled(Base)<{isLeft : boolean}>`
-  background-color: ${({ theme }) => lighten(0.5, theme.green1)};
-  color: ${({ theme }) => theme.green1};
-  border: 1px solid ${({ theme }) => theme.green1};
-  border-radius : ${({isLeft}) =>(isLeft? '10px 0 0 0' : '0 10px 0 0')};
+export const ButtonLRTab = styled(Base)`
+  background-color: #222529;
+  border-radius : 8px;
+  font-weight: 400;
+  opacity: 0.6;
+  color: #FFFFFF;
   &:disabled {
-    opacity: 50%;
-    cursor: auto;
+    font-weight: bold;
+    opacity: 1;
+    background-color: #2C3035;
   }
 `
 

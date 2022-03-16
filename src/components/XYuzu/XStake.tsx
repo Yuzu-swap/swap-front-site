@@ -4,6 +4,7 @@ import { AutoRow, RowBetween } from '../Row'
 import Loader from '../Loader'
 import { darken } from 'polished'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
+import ArrowDownImg from '../../assets/newUI/arrowDown.png'
 import { Input as NumericalInput } from '../NumericalInput'
 import { ButtonLRTab, ButtonXyuzuPercent } from '../Button'
 
@@ -46,13 +47,18 @@ export function XStake(){
     `
     const ZapTitle = styled.div`
         text-align: left;
-        font-weight: 500;
-        color: #333333
-        margin: 0px;
+        font-size: 20px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 24px;
     `
+    const BalanceValue = styled.span`
+        color: rgba(255, 255, 255, 1);
+    `
+
     const Arrowline = styled.div`
         font-weight: 500;
-        color: #333333
+        color: #fffff
         margin: 15px auto;
     `
     const Line = styled.div`
@@ -69,9 +75,9 @@ export function XStake(){
 
     const Text2 = styled.div`
         font-size: 24px;
-        font-weight: 500;
-        color: ${({ theme }) => theme.text1};
-        line-height: 31px;
+        font-weight: 400;
+        color: #FFFFFF;
+        line-height: 28px;
         text-overflow: ellipsis;
         flex: 1 1 auto;
         text-align: left;
@@ -122,17 +128,13 @@ export function XStake(){
         }
     `
     return (
-        <div>
-             <div className="s-zap-exchange">
-                <ZapTitle>ZAP</ZapTitle>
+        <div style={{marginTop: "40px", width:"100%"}}>
+             <div className="s-zap-exchange" style={{width:"100%"}}>
+                <Line>
+                    <ZapTitle>Stake YUZU</ZapTitle>
+                    <ZapTitle>Balance:<BalanceValue> 123</BalanceValue></ZapTitle>
+                </Line>
                 <div className="s-zap-input" style={{marginTop:"20px"}}>
-                    <Line style={{marginBottom:"15px"}}>
-                        <Text1>From Token</Text1>
-                        <Text1>{
-                             ' -'
-                            }</Text1>
-                    </Line>
-                    
                     <div className="s-zap-line">
                         <>
                            { <NumericalInput
@@ -147,27 +149,26 @@ export function XStake(){
                         </>
                     </div>
                 </div>
-                <Arrowline>↓</Arrowline>
-                <div className="s-zap-input"  style={{marginBottom:"40px"}} >
-                    <Line  style={{marginBottom:"15px"}}>
-                        <Text1>To LP </Text1>
-                        <Text1>{
-                             '-'
-                            }</Text1>
-                    </Line>
+                <img src={ArrowDownImg} style={{marginTop:"10px", marginBottom:"10px"}} height={'24px'}/>
+                <Line>
+                    <ZapTitle>To xYUZU</ZapTitle>
+                    <ZapTitle>Balance:<BalanceValue> 123</BalanceValue></ZapTitle>
+                </Line>
+                <div className="s-zap-output"  style={{marginTop:"20px", marginBottom:"10px"}} >
                     <Line>
-                        <Text2>{1322}</Text2>
+                        <Text2>{123}</Text2>
                     </Line>
                 </div>
-
+                <Line>
+                    <ZapTitle>Set Stake Time:</ZapTitle>
+                    <ZapTitle>1 YUZU for 0.124 xYUZU</ZapTitle>
+                </Line>
                 <ButtonXyuzuPercent active={true}>123</ButtonXyuzuPercent>
 
                 {/*<ButtonPrimary disabled={true}>
                     <TYPE.main mb="4px">{t('invalidassets')}</TYPE.main>
                                 </ButtonPrimary>*/}
                 
-
-
             </div>
         </div>
     )
