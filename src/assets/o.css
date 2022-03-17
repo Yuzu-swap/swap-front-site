@@ -2327,4 +2327,17 @@
 .s-modal-wrapper{
 	padding: 1px;
 	border-radius: 8px;
+	background: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4));
+}
+
+.s-modal-content{
+	background: #222529;
+	border: 2px solid #434649;
+	border-radius: inherit;
+	width: 100%;
+}
+
+.s-modal-contentin{
+	background: #222529;
+	border-radius: inherit;
 }

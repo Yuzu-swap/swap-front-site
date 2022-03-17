@@ -354,20 +354,27 @@ export const ButtonUnderLine = styled(Base)<{active : boolean}>`
 `
 
 
-export const ButtonXyuzuPercent = styled(Base)<{active : boolean}>`
-  background-color: ${({ theme }) => theme.red1};
-  border: 1px solid ${({ theme }) => theme.red1};
+export const ButtonXyuzuPercent = styled(Base)`
+
+  width: fit-content;
+  background: #222529;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 28px;
+  color: rgba(255, 255, 255, 0.7);
 
   &:hover {
-    background-color: ${({ theme }) => darken(0.05, theme.red1)};
+    background-color: ${({ theme }) => darken(0.05, '#222529')};
   }
-  ${({active})=>(
-    active?
-    `font-weight: 600;
-    `
-    :``
-  )
-  } 
+  &:disabled{
+
+    color: #ED4962;
+    &:hover {
+      background-color:  #222529;
+    }
+  }
   
 `
 

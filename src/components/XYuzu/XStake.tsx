@@ -7,7 +7,30 @@ import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import ArrowDownImg from '../../assets/newUI/arrowDown.png'
 import { Input as NumericalInput } from '../NumericalInput'
 import { ButtonLRTab, ButtonXyuzuPercent } from '../Button'
+import { TokenAddressMap, useDefaultTokenList, useUnsupportedTokenList } from '../../state/lists/hooks'
+import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool, AttenuationReward, ROUTER_ADDRESS, ZOO_ZAP_ADDRESS, Pair, Currency, WETH } from '@liuxingfeiyu/zoo-sdk'
+import Decimal from 'decimal.js'
+import { useApproveCallback,ApprovalState } from 'hooks/useApproveCallback'
+import { DefaultChainId } from '../../constants/index'
+import { useActiveWeb3React } from '../../hooks'
+import Modal from '../Modal'
 
+type Props = {
+    show : boolean;
+};
+const Wrapper : React.FC<Props> = ({show , children})=>(
+    
+    show?
+    <div className="s-xyuzu-tab-wrapper" style={{width : "fit-content", marginRight : '20px'}}>
+        {children}
+    </div>
+    :
+    <div style={{width : "fit-content", padding: "1px", marginRight : '20px'}}>
+        {children}
+    </div>
+    
+)
 
 export function XStake(){
     const StyledBalanceMax = styled.button`
@@ -127,6 +150,39 @@ export function XStake(){
             stroke-width: 1.5px;
         }
     `
+
+    const [input, setInput] = useState<string>('0.0')
+    const [output, setOutput] = useState<string>('0.0')
+    const { account, chainId } = useActiveWeb3React()
+
+    const tokenlist = useAllTokens()
+
+    const yuzuToken : Token | null = useMemo(
+        ()=>{
+            let re = null
+            for(let item of Object.values(tokenlist)){
+                if(item.symbol == 'YUZU'){
+                    re = item
+                }
+            }
+            return re
+        }
+        ,
+        [tokenlist]
+    )
+
+    const inputToken  = useMemo(
+        ()=>{
+            const bigintAmount = new Decimal(parseFloat(input=='' ? '0' : input) * Math.pow( 10, yuzuToken?.decimals ||18 )).toFixed(0)
+            return yuzuToken ? new TokenAmount(yuzuToken, bigintAmount): null
+        }
+        ,[yuzuToken, input]
+    )
+    
+    const [approval, approveCallback] = useApproveCallback(inputToken||undefined, ZOO_ZAP_ADDRESS[chainId ?? DefaultChainId])
+
+    const [daynum , SetDaynum] = useState<number>(30);
+
     return (
         <div style={{marginTop: "40px", width:"100%"}}>
              <div className="s-zap-exchange" style={{width:"100%"}}>
@@ -139,8 +195,10 @@ export function XStake(){
                         <>
                            { <NumericalInput
                                 className="zap-input"
-                                value={123}
-                                onUserInput={()=>{}
+                                value={input}
+                                onUserInput={val => {
+                                    setInput(val)
+                                }
                                 }
                             />}
                             {(
@@ -163,8 +221,32 @@ export function XStake(){
                     <ZapTitle>Set Stake Time:</ZapTitle>
                     <ZapTitle>1 YUZU for 0.124 xYUZU</ZapTitle>
                 </Line>
-                <ButtonXyuzuPercent active={true}>123</ButtonXyuzuPercent>
-
+                <div style={{display: 'flex', marginTop: '20px'}}>
+                    <Wrapper show={daynum == 30}>
+                        <ButtonXyuzuPercent disabled={daynum == 30} onClick={()=>{SetDaynum(30)}}>30 D</ButtonXyuzuPercent>
+                    </Wrapper>
+                    <Wrapper show={daynum == 60}>
+                        <ButtonXyuzuPercent disabled={daynum == 60} onClick={()=>{SetDaynum(60)}}>60 D</ButtonXyuzuPercent>
+                    </Wrapper>
+                    <Wrapper show={daynum == 90}>
+                        <ButtonXyuzuPercent disabled={daynum == 90} onClick={()=>{SetDaynum(90)}}>90 D</ButtonXyuzuPercent>
+                    </Wrapper>
+                    <Wrapper show={daynum == 180}>
+                        <ButtonXyuzuPercent disabled={daynum == 180} onClick={()=>{SetDaynum(180)}}>180 D</ButtonXyuzuPercent>
+                    </Wrapper>
+                </div>
+                <Modal isOpen={true} onDismiss={() =>{}} maxHeight={200} minHeight={10}>
+                    <Line>
+                        
+                        
+                    </Line>
+                    <div className="s-xyuzu-tab-wrapper">
+                        
+                        <div className="s-modal-contentin">
+                            123
+                        </div>
+                    </div>
+                </Modal>
                 {/*<ButtonPrimary disabled={true}>
                     <TYPE.main mb="4px">{t('invalidassets')}</TYPE.main>
                                 </ButtonPrimary>*/}
