@@ -6,7 +6,7 @@ import { darken } from 'polished'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import ArrowDownImg from '../../assets/newUI/arrowDown.png'
 import { Input as NumericalInput } from '../NumericalInput'
-import { ButtonLRTab, ButtonXyuzuPercent } from '../Button'
+import { ButtonLRTab, ButtonXyuzuPercent, ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed  } from '../Button'
 import { TokenAddressMap, useDefaultTokenList, useUnsupportedTokenList } from '../../state/lists/hooks'
 import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens'
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool, AttenuationReward, ROUTER_ADDRESS, ZOO_ZAP_ADDRESS, Pair, Currency, WETH } from '@liuxingfeiyu/zoo-sdk'
@@ -15,6 +15,16 @@ import { useApproveCallback,ApprovalState } from 'hooks/useApproveCallback'
 import { DefaultChainId } from '../../constants/index'
 import { useActiveWeb3React } from '../../hooks'
 import Modal from '../Modal'
+import LockImg from '../../assets/newUI/lock.png'
+import CloseImg from '../../assets/newUI/xclose.png'
+import {useXYuzuConfig} from '../../data/XYuzu'
+import { useCurrencyBalance ,useCurrencyBalances } from '../../state/wallet/hooks'
+import { XYUZU_ADDRESS, blockNumPerS }  from '../../constants'
+import LoadingRings from 'components/Loader/rings'
+import { useTranslation } from 'react-i18next'
+import fixFloat from 'utils/fixFloat'
+import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
+import { useXYuzuStakeCallback } from '../../zooswap-hooks/useXYuzuCallback'
 
 type Props = {
     show : boolean;
@@ -151,21 +161,60 @@ export function XStake(){
         }
     `
 
+    const CloseLoge = styled.img`
+        :hover{
+            opacity : 0.7;
+        }
+        cursor : pointer;
+        height : 16px;
+    
+    `
+
+    const InModalTrans = styled.div`
+        display : flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    `
+
+    const ModalText1 = styled.span`
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFFFFF;
+        line-height: 21px;
+    `
+
+    const ModalTextNum = styled.span`
+        font-size: 20px;
+        font-weight: bold;
+        color: #FF526C;
+        line-height: 24px;
+    `
+
+    const { t } = useTranslation();
+
     const [input, setInput] = useState<string>('0.0')
     const [output, setOutput] = useState<string>('0.0')
     const { account, chainId } = useActiveWeb3React()
+    const toggleWalletModal = useWalletModalToggle()
 
     const tokenlist = useAllTokens()
 
-    const yuzuToken : Token | null = useMemo(
+    const [yuzuToken, xyuzuToken] : (Token | undefined) [] = useMemo(
         ()=>{
-            let re = null
+            let re = undefined
+            let re1 = new Token(
+                chainId ?? ChainId.OASISETH_MAIN,
+                XYUZU_ADDRESS,
+                18,
+                "XYUZU",
+                "XYUZU"
+            )
             for(let item of Object.values(tokenlist)){
                 if(item.symbol == 'YUZU'){
                     re = item
                 }
             }
-            return re
+            return [re, re1]
         }
         ,
         [tokenlist]
@@ -178,17 +227,72 @@ export function XStake(){
         }
         ,[yuzuToken, input]
     )
-    
-    const [approval, approveCallback] = useApproveCallback(inputToken||undefined, ZOO_ZAP_ADDRESS[chainId ?? DefaultChainId])
 
-    const [daynum , SetDaynum] = useState<number>(30);
+    const [approval, approveCallback] = useApproveCallback(inputToken||undefined, ZOO_ZAP_ADDRESS[chainId ?? DefaultChainId])
+    const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
+
+
+
+    // mark when a user has submitted an approval, reset onTokenSelection for input field
+    useEffect(() => {
+      if (approval === ApprovalState.PENDING) {
+        setApprovalSubmitted(true)
+      }
+    }, [approval, approvalSubmitted])
+
+    const yuzuBalances = useCurrencyBalances(account ?? undefined, 
+        [yuzuToken, xyuzuToken]
+    )
+
+    const onMax = useCallback(
+        ()=>{
+            setInput(yuzuBalances[0]?.toExact() ?? '0.0')
+        }
+        ,
+        [yuzuBalances]
+    )
+
+    const inputCheck = useMemo(
+        ()=>{
+            return parseFloat(input) > parseFloat(yuzuBalances[0]?.toExact() || '0') ? false : true
+        },[input]
+    )
+
+    const [daynum , SetDaynum] = useState<number>(0);
+
+
+    const [reviewModal, SetReviewModal] = useState<boolean>(false);
+
+
+    const xyuzuConfs = useXYuzuConfig()
+
+    const stakeDays = useMemo(
+        ()=>{
+            return xyuzuConfs?.map(
+                (conf)=>{
+                    let re = 0;
+                    re = (conf.blockCount as number)/( 60 * 60 * 24 / blockNumPerS )
+                    return re.toFixed(0)
+                }
+            )
+        },
+        [xyuzuConfs]
+    )
+
+    useEffect(()=>{
+        setOutput(fixFloat(Number(input) * ((xyuzuConfs &&  xyuzuConfs[daynum].ratio) ?? 0), 6) as string)
+    },
+    [input, daynum])
+    const XyuzuStake = useXYuzuStakeCallback(XYUZU_ADDRESS, inputToken?.raw ?? JSBI.BigInt(0) , (xyuzuConfs && xyuzuConfs[daynum].id) ?? 0)
+
+    console.log('11111111', stakeDays)
 
     return (
         <div style={{marginTop: "40px", width:"100%"}}>
              <div className="s-zap-exchange" style={{width:"100%"}}>
                 <Line>
                     <ZapTitle>Stake YUZU</ZapTitle>
-                    <ZapTitle>Balance:<BalanceValue> 123</BalanceValue></ZapTitle>
+                    <ZapTitle>Balance:<BalanceValue> {yuzuBalances[0]?.toSignificant(6)}</BalanceValue></ZapTitle>
                 </Line>
                 <div className="s-zap-input" style={{marginTop:"20px"}}>
                     <div className="s-zap-line">
@@ -202,7 +306,7 @@ export function XStake(){
                                 }
                             />}
                             {(
-                                <StyledBalanceMax style={{marginTop : 'auto', marginBottom : 'auto'}} onClick={()=>{}}>Max</StyledBalanceMax>
+                                <StyledBalanceMax style={{marginTop : 'auto', marginBottom : 'auto'}} onClick={onMax}>Max</StyledBalanceMax>
                             )}
                         </>
                     </div>
@@ -210,41 +314,94 @@ export function XStake(){
                 <img src={ArrowDownImg} style={{marginTop:"10px", marginBottom:"10px"}} height={'24px'}/>
                 <Line>
                     <ZapTitle>To xYUZU</ZapTitle>
-                    <ZapTitle>Balance:<BalanceValue> 123</BalanceValue></ZapTitle>
+                    <ZapTitle>Balance:<BalanceValue> {yuzuBalances[1]?.toSignificant(6)}</BalanceValue></ZapTitle>
                 </Line>
                 <div className="s-zap-output"  style={{marginTop:"20px", marginBottom:"10px"}} >
                     <Line>
-                        <Text2>{123}</Text2>
+                        <Text2>{output}</Text2>
                     </Line>
                 </div>
                 <Line>
                     <ZapTitle>Set Stake Time:</ZapTitle>
-                    <ZapTitle>1 YUZU for 0.124 xYUZU</ZapTitle>
+                    <ZapTitle>1 YUZU for {(xyuzuConfs &&  xyuzuConfs[daynum].ratio) ?? 0} xYUZU</ZapTitle>
                 </Line>
-                <div style={{display: 'flex', marginTop: '20px'}}>
-                    <Wrapper show={daynum == 30}>
-                        <ButtonXyuzuPercent disabled={daynum == 30} onClick={()=>{SetDaynum(30)}}>30 D</ButtonXyuzuPercent>
+                <div style={{display: 'flex', marginTop: '20px', marginBottom: '20px'}}>
+                    <Wrapper show={daynum == 0}>
+                        <ButtonXyuzuPercent disabled={daynum == 0} onClick={()=>{SetDaynum(0)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
                     </Wrapper>
-                    <Wrapper show={daynum == 60}>
-                        <ButtonXyuzuPercent disabled={daynum == 60} onClick={()=>{SetDaynum(60)}}>60 D</ButtonXyuzuPercent>
+                    <Wrapper show={daynum == 1}>
+                        <ButtonXyuzuPercent disabled={daynum == 1} onClick={()=>{SetDaynum(1)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
                     </Wrapper>
-                    <Wrapper show={daynum == 90}>
-                        <ButtonXyuzuPercent disabled={daynum == 90} onClick={()=>{SetDaynum(90)}}>90 D</ButtonXyuzuPercent>
+                    <Wrapper show={daynum == 2}>
+                        <ButtonXyuzuPercent disabled={daynum == 2} onClick={()=>{SetDaynum(2)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
                     </Wrapper>
-                    <Wrapper show={daynum == 180}>
-                        <ButtonXyuzuPercent disabled={daynum == 180} onClick={()=>{SetDaynum(180)}}>180 D</ButtonXyuzuPercent>
+                    <Wrapper show={daynum == 3}>
+                        <ButtonXyuzuPercent disabled={daynum == 3} onClick={()=>{SetDaynum(3)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
                     </Wrapper>
                 </div>
-                <Modal isOpen={true} onDismiss={() =>{}} maxHeight={200} minHeight={10}>
-                    <Line>
-                        
-                        
-                    </Line>
-                    <div className="s-xyuzu-tab-wrapper">
-                        
-                        <div className="s-modal-contentin">
-                            123
+                {!account ?<ButtonLight onClick={toggleWalletModal}>{t('connectwallet')}</ButtonLight>
+                : 
+                    approval === ApprovalState.NOT_APPROVED || approval === ApprovalState.PENDING?
+                    <ButtonConfirmed
+                        onClick={approveCallback}
+                        disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                        altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
+                        >
+                        {approval === ApprovalState.PENDING ? (
+                            <AutoRow gap="6px" justify="center">
+                            Approving <Loader stroke="white" />
+                            </AutoRow>
+                        ) : (
+                            'Approve ' + 'YUZU'
+                        )}
+                    </ButtonConfirmed>
+                    :
+                    <ButtonPrimary disabled={!inputCheck} onClick={
+                        ()=>{
+                            SetReviewModal(true)
+                    }}>
+                        STAKE
+                    </ButtonPrimary>
+                                 
+                }
+                <Modal isOpen={reviewModal} onDismiss={() =>{}} maxHeight={200} minHeight={10}>
+                    <div style={{display:'flex', flexDirection:'column', width:"100%", padding:"20px"}}>
+                        <Line>
+                            <ZapTitle>Review</ZapTitle>
+                            <CloseLoge src={CloseImg} onClick={()=>SetReviewModal(false)}/>
+                        </Line>
+                        <div className="s-xyuzu-tab-wrapper">
+                            <div className="s-modal-contentin" style={{display: 'flex', padding : '20px'}}>
+                                <img src={LockImg} width={'73px'}/>
+                                <InModalTrans>
+                                    <ModalTextNum> {input} </ModalTextNum>
+                                    <img src={ArrowDownImg} height={'24px'} width={'24px'}/>
+                                    <ModalTextNum> {output} </ModalTextNum>
+                                </InModalTrans>
+                                
+                            </div>
+                            
                         </div>
+
+                        <ZapTitle style={{fontSize : '16px'}}>Stake Time: {stakeDays && stakeDays[daynum]} D</ZapTitle>
+                        <ZapTitle style={{fontSize : '16px'}}>Notice: cannot unstake before stake time end.</ZapTitle>
+                        <ButtonPrimary disabled={false} onClick={()=>{
+                            XyuzuStake()
+                            SetReviewModal(false)
+                        }}>
+                            CONFIRM STAKE
+                        </ButtonPrimary>
+                    </div>
+                </Modal>
+
+                <Modal isOpen={false} onDismiss={()=>{}} maxHeight={100}>
+                    <div className="s-modal-content">
+                    <div className="s-modal-loading">
+                        <div className="s-modal-loading-img">
+                        <LoadingRings />
+                        </div>
+                        <h2>{t('loading')}</h2>
+                    </div>
                     </div>
                 </Modal>
                 {/*<ButtonPrimary disabled={true}>

@@ -19,6 +19,7 @@ import ERC20_ABI from '../constants/abis/erc20.json'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import UNISOCKS_ABI from '../constants/abis/unisocks.json'
 import WETH_ABI from '../constants/abis/weth.json'
+import {abi as XYUZU_ABI } from '../constants/abis/YUZUStake.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
@@ -101,6 +102,10 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 
 export function useTokenWrapper(address?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(address, TokenWrapper_ABI, withSignerIfPossible)
+}
+
+export function useXYuzuContract(address?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(address, XYUZU_ABI, withSignerIfPossible)
 }
 
 export function useMulticallContract(): Contract | null {

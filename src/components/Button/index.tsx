@@ -327,25 +327,23 @@ export const ButtonUnderLine = styled(Base)<{active : boolean}>`
   outline: none;
   cursor: pointer;
   text-decoration: none;
-  color: ${({ theme }) => theme.bg2};
+  color: #FF526C;
   font-size: 18px;
   width: fit-content;
-  margin: 0 12px;
+  margin: 0 12px 0 0px;
   font-weight: 400;
   height: 36px;
   background: none;
+  border-radius: 0px;
   
   &:hover {
     font-weight: 600;
   }
   ${({active})=>(
     active?
-    `font-weight: 600;
-    background: url(${reatBanner});
-    background-repeat: no-repeat;
-    background-position-x: 50%;
-    background-position-y: 32px;
-    background-size: 80% 10%;`
+    `
+      border-bottom: 4px solid #FF526C;
+    `
     :``
   )
 
@@ -374,6 +372,29 @@ export const ButtonXyuzuPercent = styled(Base)`
     &:hover {
       background-color:  #222529;
     }
+  }
+  
+`
+
+export const ButtonXyuzuCard = styled(Base)`
+  padding : 8px 16px;
+
+  width: fit-content;
+  background: linear-gradient(138deg, #ED4962 0%, #F98F81 100%);
+  border-radius: 6px;
+
+  font-size: 20px;
+  font-weight: bold;
+  color: #FFFFFF;
+  line-height: 24px;
+
+  &:hover {
+    background-color: darken(0.05, linear-gradient(138deg, #ED4962 0%, #F98F81 100%));
+  }
+  &:disabled{
+
+    background: #767676;
+    color: rgba(255, 255, 255, 0.6);
   }
   
 `

@@ -54,3 +54,16 @@ export function transToThousandth(str : String){
         return temp
     }
 }
+
+export function showAddress(str: string){
+    if(str.length < 10){
+        return str
+    }
+    else{
+        let re = ''
+        re += str.slice(0,6)
+        re += "..."
+        re += str.slice(str.length-5)
+        return re
+    }
+}

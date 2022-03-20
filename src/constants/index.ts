@@ -398,3 +398,8 @@ export const APIHost = process.env.REACT_APP_APIHOST
 export const UserRatioOfReward : number = 0.7
 
 export const BLACKHOLE_ADDRESS : string = '0x00b9dCA177aa3DB6F344A455d9E0511a6Aa7ad8D';
+
+
+export const XYUZU_ADDRESS : string = '0x8397Bede9f19eb281e878EA11fa27cA664568AAB';
+
+export const blockNumPerS : number = 6;

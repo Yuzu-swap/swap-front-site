@@ -38,7 +38,8 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, maxW
     width: 50vw;
     overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
     overflow-x: hidden;
-    background: none;
+    background: #222529;
+	  border: 2px solid #434649;
     align-self: ${({ mobile }) => (mobile ? 'flex-end' : 'center')};
 
     ${({ maxWidth }) =>
@@ -131,11 +132,9 @@ export default function Modal({
                 maxWidth={maxWidth}
                 mobile={isMobile}
               >
-                <div className="s-modal-content">
                   {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
                   {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
                   {children}
-                </div>
               </StyledDialogContent>
             </StyledDialogOverlay>
           )

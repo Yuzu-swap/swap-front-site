@@ -2299,9 +2299,8 @@
 .s-xyuzu-header-text1{
 	font-size: 26px;
 	font-weight: 400;
-	color: #FFFFFF;
+	color: rgba(255, 255, 255, 0.6);
 	line-height: 30px;
-	opacity: 0.6;
 }
 
 .s-xyuzu-header-text2{
@@ -2330,7 +2329,7 @@
 	background: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4));
 }
 
-.s-modal-content{
+.s-modal-content11{
 	background: #222529;
 	border: 2px solid #434649;
 	border-radius: inherit;
@@ -2340,4 +2339,11 @@
 .s-modal-contentin{
 	background: #222529;
 	border-radius: inherit;
+}
+
+
+.s-xyuzu-unstake-tab{
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
