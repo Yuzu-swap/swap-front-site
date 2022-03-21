@@ -5,6 +5,7 @@
 .s-modal-content{
 	width:100%;
 	padding:1rem;
+	text-align: center;
 }
 .s-ModalContentWrapper,
 .s-modal-main,
@@ -785,6 +786,7 @@
 	padding: 5px;
 	outline: none;
 	color: #FFFFFF;
+	text-decoration: none;
 }
 .s-top-link-button:hover{
 	background-color: #EDEEF2;

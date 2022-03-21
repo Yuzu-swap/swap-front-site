@@ -25,6 +25,9 @@ import { useTranslation } from 'react-i18next'
 import fixFloat from 'utils/fixFloat'
 import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
 import { useXYuzuStakeCallback } from '../../zooswap-hooks/useXYuzuCallback'
+import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
+import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
+import { TransactionDetails } from '../../state/transactions/reducer'
 
 type Props = {
     show : boolean;
@@ -41,6 +44,22 @@ const Wrapper : React.FC<Props> = ({show , children})=>(
     </div>
     
 )
+
+
+export const ZapTitle = styled.div`
+    text-align: left;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 24px;
+`
+
+export const ModalText1 = styled.span`
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFFFFF;
+    line-height: 21px;
+`
 
 export function XStake(){
     const StyledBalanceMax = styled.button`
@@ -78,13 +97,7 @@ export function XStake(){
         font-size: 14px;
         margin-bottom: 20px;
     `
-    const ZapTitle = styled.div`
-        text-align: left;
-        font-size: 20px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 0.6);
-        line-height: 24px;
-    `
+
     const BalanceValue = styled.span`
         color: rgba(255, 255, 255, 1);
     `
@@ -171,17 +184,14 @@ export function XStake(){
     `
 
     const InModalTrans = styled.div`
+        margin-left: 10px
+        width: 100%;
         display : flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: space-between;
     `
 
-    const ModalText1 = styled.span`
-        font-size: 18px;
-        font-weight: bold;
-        color: #FFFFFF;
-        line-height: 21px;
-    `
+
 
     const ModalTextNum = styled.span`
         font-size: 20px;
@@ -203,7 +213,7 @@ export function XStake(){
         ()=>{
             let re = undefined
             let re1 = new Token(
-                chainId ?? ChainId.OASISETH_MAIN,
+                chainId ?? DefaultChainId,
                 XYUZU_ADDRESS,
                 18,
                 "XYUZU",
@@ -230,6 +240,17 @@ export function XStake(){
 
     const [approval, approveCallback] = useApproveCallback(inputToken||undefined, ZOO_ZAP_ADDRESS[chainId ?? DefaultChainId])
     const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
+
+    function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
+        return b.addedTime - a.addedTime
+      }
+    const allTransactions = useAllTransactions()
+    const sortedRecentTransactions = useMemo(() => {
+      const txs = Object.values(allTransactions)
+      return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
+    }, [allTransactions])
+    const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && tx.summary.includes('Xyuzu Stake')).map(tx => tx.hash)
+    const hasPendingTransactions = !!pending.length
 
 
 
@@ -283,9 +304,34 @@ export function XStake(){
         setOutput(fixFloat(Number(input) * ((xyuzuConfs &&  xyuzuConfs[daynum].ratio) ?? 0), 6) as string)
     },
     [input, daynum])
+
     const XyuzuStake = useXYuzuStakeCallback(XYUZU_ADDRESS, inputToken?.raw ?? JSBI.BigInt(0) , (xyuzuConfs && xyuzuConfs[daynum].id) ?? 0)
 
-    console.log('11111111', stakeDays)
+    async function addCurrency(token : Token) {
+        const eRequest = window.ethereum?.request
+        if(eRequest && token){
+          await eRequest({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: token.address,
+              symbol: token.symbol,
+              decimals: token.decimals,
+            },
+          },
+          })
+          .then((success: any) => {
+            if (success) {
+              console.log('successfully added to wallet!')
+            } else {
+              throw new Error('Something went wrong.')
+            }
+          })
+          .catch(console.error)
+    
+        }
+      }
 
     return (
         <div style={{marginTop: "40px", width:"100%"}}>
@@ -313,7 +359,7 @@ export function XStake(){
                 </div>
                 <img src={ArrowDownImg} style={{marginTop:"10px", marginBottom:"10px"}} height={'24px'}/>
                 <Line>
-                    <ZapTitle>To xYUZU</ZapTitle>
+                    <ZapTitle>To xYUZU <AddQuestionNoCHelper text={'Add to Wallet'} onClick={()=>xyuzuToken && addCurrency(xyuzuToken)}/></ZapTitle>
                     <ZapTitle>Balance:<BalanceValue> {yuzuBalances[1]?.toSignificant(6)}</BalanceValue></ZapTitle>
                 </Line>
                 <div className="s-zap-output"  style={{marginTop:"20px", marginBottom:"10px"}} >
@@ -370,43 +416,44 @@ export function XStake(){
                             <ZapTitle>Review</ZapTitle>
                             <CloseLoge src={CloseImg} onClick={()=>SetReviewModal(false)}/>
                         </Line>
-                        <div className="s-xyuzu-tab-wrapper">
+                        <div className="s-xyuzu-tab-wrapper" style={{marginTop:"10px"}}>
                             <div className="s-modal-contentin" style={{display: 'flex', padding : '20px'}}>
                                 <img src={LockImg} width={'73px'}/>
                                 <InModalTrans>
-                                    <ModalTextNum> {input} </ModalTextNum>
-                                    <img src={ArrowDownImg} height={'24px'} width={'24px'}/>
-                                    <ModalTextNum> {output} </ModalTextNum>
+                                    <Line><ModalTextNum> {input} </ModalTextNum><ModalText1>YUZU</ModalText1></Line>
+                                        <img src={ArrowDownImg} height={'24px'} width={'24px'}/>
+                                    <Line><ModalTextNum> {output} </ModalTextNum> <ModalText1>xYUZU</ModalText1></Line>
                                 </InModalTrans>
                                 
                             </div>
-                            
                         </div>
-
-                        <ZapTitle style={{fontSize : '16px'}}>Stake Time: {stakeDays && stakeDays[daynum]} D</ZapTitle>
-                        <ZapTitle style={{fontSize : '16px'}}>Notice: cannot unstake before stake time end.</ZapTitle>
+                        <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Stake Time: {stakeDays && stakeDays[daynum]} D</ZapTitle>
+                        <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Notice: cannot unstake before stake time end.</ZapTitle>
                         <ButtonPrimary disabled={false} onClick={()=>{
                             XyuzuStake()
                             SetReviewModal(false)
-                        }}>
+                        }}
+                        style={{marginTop:"20px"}}
+                        >
                             CONFIRM STAKE
                         </ButtonPrimary>
                     </div>
                 </Modal>
 
-                <Modal isOpen={false} onDismiss={()=>{}} maxHeight={100}>
+                <Modal isOpen={hasPendingTransactions} onDismiss={()=>{}} maxHeight={100}>
                     <div className="s-modal-content">
-                    <div className="s-modal-loading">
-                        <div className="s-modal-loading-img">
-                        <LoadingRings />
+                        <div className="s-modal-loading">
+                            <div className="s-modal-loading-img">
+                                <LoadingRings/>
+                            </div>
+                            <ModalText1>Waiting for Confirmation</ModalText1>
+                            <ZapTitle style={{display: 'inline-block', marginTop:'20px', textAlign: 'center'}}>Stake {input} YUZU for {output} xYUZU for {stakeDays && stakeDays[daynum]} days</ZapTitle>
+                            <ZapTitle style={{display: 'inline-block', marginTop:'10px', marginBottom: '10px',fontSize:'16px', opacity:'0.4'}}>
+                                Confirm this transaction in your wallet
+                            </ZapTitle>
                         </div>
-                        <h2>{t('loading')}</h2>
-                    </div>
                     </div>
                 </Modal>
-                {/*<ButtonPrimary disabled={true}>
-                    <TYPE.main mb="4px">{t('invalidassets')}</TYPE.main>
-                                </ButtonPrimary>*/}
                 
             </div>
         </div>

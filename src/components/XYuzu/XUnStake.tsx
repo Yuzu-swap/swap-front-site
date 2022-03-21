@@ -12,7 +12,14 @@ import { XYUZU_ADDRESS, blockNumPerS, DefaultChainId }  from '../../constants'
 import { ButtonUnderLine, ButtonXyuzuPercent, ButtonXyuzuCard, ButtonLight, ButtonPrimary, ButtonConfirmed  } from '../Button'
 import {CHAIN_CONFIG} from '../Header'
 import { useActiveWeb3React } from '../../hooks'
-import { ChainId } from '@liuxingfeiyu/zoo-sdk'
+import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
+import { TransactionDetails } from '../../state/transactions/reducer'
+import { useCurrencyBalance ,useCurrencyBalances } from '../../state/wallet/hooks'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool, AttenuationReward, ROUTER_ADDRESS, ZOO_ZAP_ADDRESS, Pair, Currency, WETH } from '@liuxingfeiyu/zoo-sdk'
+import Modal from '../Modal'
+import LoadingRings from 'components/Loader/rings'
+import { ZapTitle, ModalText1 } from './XStake'
+
 
 enum UnstakeInfo{
     UNSTAKEING,
@@ -83,12 +90,16 @@ function TimeCount({endAt} : {endAt : number}){
     const TimeBLock = styled.div<{notZero : boolean}>`
     text-align: center;
     display: inline-block;
-    background: #333333;
+    background: #222529;
     border-radius: 4px;
-    border: 1px solid #F57C78;
-    line-height: 18px;
+    border: 1px solid #F8F8F8;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFFFFF;
+    line-height: 21px;
     color: ${({notZero})=>(notZero ? '#FFFFFF' :  '#D0D0D0')};
     min-width: 20px;
+    padding: 5px;
   `
     const now = Math.floor((new Date()).valueOf()/1000)
     const [timestamp,setTimeStamp] = useState(now)
@@ -134,12 +145,12 @@ function TimeCount({endAt} : {endAt : number}){
     let minStr = getTimeStr(min ?? 0)
     let secondStr = getTimeStr(second ??0)
     return (
-    <em>
-    <TimeBLock notZero={notZero}>{dayStr}</TimeBLock>:
-    <TimeBLock notZero={notZero}>{hourStr}</TimeBLock>:
-    <TimeBLock notZero={notZero}>{minStr}</TimeBLock>:
+    <>
+    <TimeBLock notZero={notZero}>{dayStr}</TimeBLock>{' : '}
+    <TimeBLock notZero={notZero}>{hourStr}</TimeBLock>{' : '}
+    <TimeBLock notZero={notZero}>{minStr}</TimeBLock>{' : '}
     <TimeBLock notZero={notZero}>{secondStr}</TimeBLock>
-    </em>
+    </>
     )
 }
 
@@ -168,7 +179,7 @@ function TimeOut({beginAt} : {beginAt : number}){
         let day,hour,min,second
         if (blockNumber&& blockNumber>0) {
         nextBlockTime = (blockNumber - beginAt)* 6
-        nextBlockTime -= (timestamp-lastBlockAt)
+        nextBlockTime += (timestamp-lastBlockAt)
         day = Math.floor(nextBlockTime/86400)
         hour = Math.floor((nextBlockTime-day*86400)/ 3600)
         min = Math.floor((nextBlockTime-day*86400-hour*3600)/60)
@@ -190,6 +201,7 @@ function TimeOut({beginAt} : {beginAt : number}){
     let secondStr = getTimeStr(second ??0)
     return (
     <Text2>
+        {' '}
         {day != 0 ? dayStr + 'd' : ''}
         {hour != 0 || day != 0 ? hourStr + 'h' : ''}
         {min != 0 || hour != 0 || day != 0 ? minStr + 'm' : ''}
@@ -211,9 +223,9 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                          {
                              blockNumber && blockNumber > data.stakeEnd ? 
                              <>
-                                <img src={CardClock} height={'20px'}/>
+                                <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
                                 <TimeOut beginAt={data.stakeEnd}/>
-                                <Text1>Timeout</Text1>
+                                <Text1> Timeout</Text1>
                             </>
                             :
                             null
@@ -234,7 +246,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                     </span>
                     <span>
                         <Text1>
-                            Stake Time Left:
+                            Stake Time Left:{' '}
                         </Text1>
                         <TimeCount endAt={data.stakeEnd}/>
                     </span>
@@ -275,9 +287,7 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                                 <Text1>
                                     Withdraw Time Left:
                                 </Text1>
-                                <TextNum>
-                                    {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))}
-                                </TextNum>
+                                <TimeCount endAt={data.unstakeEnd}/>
                             </>
                             :null
                         }               
@@ -361,7 +371,29 @@ function OrderList({status} : {status : UnstakeInfo}){
 }
 
 export function XUnStake(){
+    const { account, chainId } = useActiveWeb3React()
     const [unstakeInfo, SetUnstakeInfo] = useState<UnstakeInfo>(UnstakeInfo.UNSTAKEING)
+    const xyuzuToken = new Token(
+        chainId ?? DefaultChainId,
+        XYUZU_ADDRESS,
+        18,
+        "XYUZU",
+        "XYUZU"
+    )
+    const xyuzuBalance = useCurrencyBalances(account ?? undefined, 
+        [xyuzuToken]
+    )
+
+    function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
+        return b.addedTime - a.addedTime
+      }
+    const allTransactions = useAllTransactions()
+    const sortedRecentTransactions = useMemo(() => {
+      const txs = Object.values(allTransactions)
+      return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
+    }, [allTransactions])
+    const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && (tx.summary.includes('Xyuzu UnStake') || tx.summary.includes('Xyuzu WithDraw'))).map(tx => tx.hash)
+    const hasPendingTransactions = !!pending.length
 
     return (
         <div>
@@ -375,13 +407,23 @@ export function XUnStake(){
                     <ButtonUnderLine active={unstakeInfo == UnstakeInfo.COMPLETED} onClick={()=>SetUnstakeInfo(UnstakeInfo.COMPLETED)}>Completed</ButtonUnderLine>
                 </div>
                 <div className="s-xyuzu-header-text1" style={{fontSize:"24px"}}>
-                    Balance :
+                    xYUZU Balance:
                     <span className="s-xyuzu-header-number" style={{fontSize:"24px"}}>
-                        123
+                     {xyuzuBalance[0]?.toSignificant(6) ?? '0'}
                     </span>
                 </div>
             </div>
             <OrderList status={unstakeInfo}/>
+            <Modal isOpen={hasPendingTransactions} onDismiss={()=>{}} maxHeight={100}>
+                    <div className="s-modal-content">
+                        <div className="s-modal-loading">
+                            <div className="s-modal-loading-img">
+                                <LoadingRings/>
+                            </div>
+                            <ModalText1>Loading</ModalText1>
+                        </div>
+                    </div>
+            </Modal>
         </div>
     )
 }

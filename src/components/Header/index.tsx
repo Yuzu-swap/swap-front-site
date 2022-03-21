@@ -277,7 +277,7 @@ const StyledNavLink = styled(NavLink).attrs({
   }
 `
 
-const StyledNOutLink = styled.div`
+const StyledNOutLink = styled.div<{ isActive?: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: left;
   outline: none;
@@ -289,6 +289,9 @@ const StyledNOutLink = styled.div`
   margin: 0 12px;
   font-weight: 400;
   height: 36px;
+  ${({isActive}) =>
+    isActive? `font-weight: bold;` : ``
+  }
 `
 
 /*
@@ -516,6 +519,10 @@ export default function Header() {
   const [bopen, setBOpen] = useState<boolean>(false)
   useOnClickOutside(bnode, ()=>setBOpen(false))
 
+  const enode = useRef<HTMLDivElement>()
+  const [eopen, setEOpen] = useState<boolean>(false)
+  useOnClickOutside(enode, ()=>setEOpen(false))
+
   const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
 
   const [showUniBalanceModal, setShowUniBalanceModal] = useState(false)
@@ -568,12 +575,27 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
-          <StyledNavLink id={`tradingmining-nav-link`} to={'/tradingmining'}>
-            {t('tradingmining')}
-          </StyledNavLink>
-          <StyledNavLink id={`boardroom-nav-link`} to={'/liquiditymining'}>
-            {t('boardroom')}
-          </StyledNavLink>
+          <div ref={enode as any} style={{position:"relative"}}>
+            <StyledNOutLink id={`earn-nav-link`} onClick={()=>setEOpen(!eopen)}
+            isActive={
+              window.location.href.includes('tradingmining') ||
+              window.location.href.includes('liquiditymining') 
+          }
+            >
+              {t('earn')}
+              <img src={Arrow} height={"16px"} style={{margin:"5px 0 0 0"}}/>
+            </StyledNOutLink>
+            {eopen && (
+                <MenuFlyout className="s-top-links" style={{left: '12px'}}>
+                  <a className="s-top-link-button"  href='/#/tradingmining'>
+                    {t('tradingmining')}
+                  </a>
+                  <a className="s-top-link-button" href='/#/liquiditymining'>
+                    {t('boardroom')}
+                  </a>
+                </MenuFlyout>
+              )}
+          </div>
           <StyledNavLink id={`zap-nav-link`} to={'/xyuzu'}>
             {t('xyuzu')}
           </StyledNavLink>
@@ -581,20 +603,20 @@ export default function Header() {
             {t('zap')}
           </StyledNavLink>
           <div ref={bnode as any} style={{position:"relative"}}>
-            <StyledNOutLink id={`bridge-nav-link`} onClick={()=>setBOpen(true)}>
+            <StyledNOutLink id={`bridge-nav-link`} onClick={()=>setBOpen(!bopen)}>
               {t('bridge')}
               <img src={Arrow} height={"16px"} style={{margin:"5px 0 0 0"}}/>
             </StyledNOutLink>
             {bopen && (
-                <MenuFlyout className="s-top-links">
-                  <button className="s-top-link-button" onClick={()=>
+                <MenuFlyout className="s-top-links" style={{left: '12px', minWidth: '6rem'}}>
+                  <a className="s-top-link-button" onClick={()=>
                     window.open("https://wormholebridge.com/#/transfer")}>
-                    <span>Wormhole</span>
-                  </button>
-                  <button className="s-top-link-button" onClick={()=>
+                    Wormhole
+                  </a>
+                  <a className="s-top-link-button" onClick={()=>
                     window.open("https://cbridge.celer.network/#/transfer")}>
-                    <span>CBridge</span>
-                  </button>
+                    CBridge
+                  </a>
                 </MenuFlyout>
               )}
           </div>

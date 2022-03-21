@@ -38,7 +38,7 @@ export function useXYuzuStakeCallback(
       )
       .then((response: TransactionResponse) => {
         addTransaction(response, {
-          summary: 'Xyuzu Stake '}
+          summary: 'Xyuzu Stake'}
           )
       }).catch((error: Error) => {
         console.debug('Failed to Stake Xyuzu', error)
@@ -70,7 +70,7 @@ export function useXYuzuCallback(
       )
       .then((response: TransactionResponse) => {
         addTransaction(response, {
-          summary: 'Xyuzu UnStake '}
+          summary: 'Xyuzu UnStake'}
           )
       }).catch((error: Error) => {
         console.debug('Failed to UnStake Xyuzu', error)
@@ -89,7 +89,7 @@ export function useXYuzuCallback(
       )
       .then((response: TransactionResponse) => {
         addTransaction(response, {
-          summary: 'Xyuzu WithDraw '}
+          summary: 'Xyuzu WithDraw'}
           )
       }).catch((error: Error) => {
         console.debug('Failed to Stake Xyuzu', error)
