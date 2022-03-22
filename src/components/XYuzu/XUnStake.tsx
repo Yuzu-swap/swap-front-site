@@ -8,7 +8,7 @@ import { useXYuzuStakeCallback , useXYuzuCallback } from '../../zooswap-hooks/us
 import { useXYuzuOrders, XyuzuOrder } from '../../data/XYuzu'
 import { useBlockNumber } from 'state/application/hooks'
 import fixFloat, { getTimeStr,  transToThousandth, showAddress} from 'utils/fixFloat'
-import { XYUZU_ADDRESS, blockNumPerS, DefaultChainId }  from '../../constants'
+import { XYUZU_LIST, blockNumPerS, DefaultChainId }  from '../../constants'
 import { ButtonUnderLine, ButtonXyuzuPercent, ButtonXyuzuCard, ButtonLight, ButtonPrimary, ButtonConfirmed  } from '../Button'
 import {CHAIN_CONFIG} from '../Header'
 import { useActiveWeb3React } from '../../hooks'
@@ -19,6 +19,9 @@ import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool, Attenuati
 import Modal from '../Modal'
 import LoadingRings from 'components/Loader/rings'
 import { ZapTitle, ModalText1 } from './XStake'
+import CloseImg from '../../assets/newUI/xclose.png'
+import ArrowDownImg from '../../assets/newUI/arrowDown.png'
+import { margin } from 'polished'
 
 
 enum UnstakeInfo{
@@ -86,7 +89,10 @@ const Address = styled.a`
     line-height: 24px;
 `
 
-function TimeCount({endAt} : {endAt : number}){
+function TimeCount({endAt, type} : {endAt : number, type?: boolean}){
+    if (type == undefined){
+        type = true;
+    }
     const TimeBLock = styled.div<{notZero : boolean}>`
     text-align: center;
     display: inline-block;
@@ -145,12 +151,21 @@ function TimeCount({endAt} : {endAt : number}){
     let minStr = getTimeStr(min ?? 0)
     let secondStr = getTimeStr(second ??0)
     return (
-    <>
-    <TimeBLock notZero={notZero}>{dayStr}</TimeBLock>{' : '}
-    <TimeBLock notZero={notZero}>{hourStr}</TimeBLock>{' : '}
-    <TimeBLock notZero={notZero}>{minStr}</TimeBLock>{' : '}
-    <TimeBLock notZero={notZero}>{secondStr}</TimeBLock>
-    </>
+        type?
+            <>
+            <TimeBLock notZero={notZero}>{dayStr}</TimeBLock>{' : '}
+            <TimeBLock notZero={notZero}>{hourStr}</TimeBLock>{' : '}
+            <TimeBLock notZero={notZero}>{minStr}</TimeBLock>{' : '}
+            <TimeBLock notZero={notZero}>{secondStr}</TimeBLock>
+            </>
+        :
+        <Text2>
+            {' '}
+            {day != 0 ? dayStr + 'd' : ''}
+            {hour != 0 || day != 0 ? hourStr + 'h' : ''}
+            {min != 0 || hour != 0 || day != 0 ? minStr + 'm' : ''}
+            {second != 0  || min != 0 || hour != 0 || day != 0? secondStr + 's' : ''}
+        </Text2>
     )
 }
 
@@ -212,56 +227,114 @@ function TimeOut({beginAt} : {beginAt : number}){
 
 
 function UnStakeCard( {data} :{data : XyuzuOrder}){
+    const Line = styled.div`
+        display: flex;
+        justify-content: space-between;
+    `
+    const CloseLoge = styled.img`
+        :hover{
+            opacity : 0.7;
+        }
+        cursor : pointer;
+        height : 16px;
+    
+    `
+
+    const InModalTrans = styled.div`
+        margin-left: 10px
+        width: 100%;
+        display : flex;
+        flex-direction: column;
+        justify-content: space-between;
+    `
+
+
+
+    const ModalTextNum = styled.span`
+        font-size: 20px;
+        font-weight: bold;
+        color: #FF526C;
+        line-height: 24px;
+    `
     const blockNumber = useBlockNumber()
-    const [unstake, _] = useXYuzuCallback(XYUZU_ADDRESS, data.id)
+    const [show , setShow] = useState<boolean>(false)
+    const { account, chainId } = useActiveWeb3React()
+    const xyuzuToken = XYUZU_LIST[chainId ?? DefaultChainId]
+    const [unstake, _] = useXYuzuCallback(xyuzuToken?.address ?? '', data.id)
     return (
-        <CardWrapper>
-            <CardContent>
-                 <CardHeader>
-                     <img src={CardLock}/>
-                     <div style={{margin:'auto 0'}}>
-                         {
-                             blockNumber && blockNumber > data.stakeEnd ? 
-                             <>
-                                <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
-                                <TimeOut beginAt={data.stakeEnd}/>
-                                <Text1> Timeout</Text1>
-                            </>
-                            :
-                            null
-                         }
-                     </div>
-                </CardHeader>   
-                <CardRC>
-                    <span>
-                        <TextNum>
-                            {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
-                        </TextNum>
-                        <Text2>
-                            YUZU
-                        </Text2>
-                        <Text1>
-                            ({((data.stakeEnd - data.stakeAt)/( 60 * 60 * 24 / blockNumPerS)).toFixed(0)}D)
-                        </Text1>
-                    </span>
-                    <span>
-                        <Text1>
-                            Stake Time Left:{' '}
-                        </Text1>
-                        <TimeCount endAt={data.stakeEnd}/>
-                    </span>
-                    <ButtonXyuzuCard disabled={ !(blockNumber && blockNumber > data.stakeEnd)} onClick={unstake}>
-                        Unstake
-                    </ButtonXyuzuCard>
-                </CardRC>
-            </CardContent>
-        </CardWrapper>
+        <>
+            <CardWrapper>
+                <CardContent>
+                    <CardHeader>
+                        <img src={CardLock}/>
+                        <div style={{margin:'auto 0'}}>
+                            {
+                                blockNumber && blockNumber > data.stakeEnd ? 
+                                <>
+                                    <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
+                                    <TimeOut beginAt={data.stakeEnd}/>
+                                    <Text1> Timeout</Text1>
+                                </>
+                                :
+                                null
+                            }
+                        </div>
+                    </CardHeader>   
+                    <CardRC>
+                        <span>
+                            <TextNum>
+                                {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
+                            </TextNum>
+                            <Text2>
+                                YUZU
+                            </Text2>
+                            <Text1>
+                                ({((data.stakeEnd - data.stakeAt)/( 60 * 60 * 24 / blockNumPerS)).toFixed(0)}D)
+                            </Text1>
+                        </span>
+                        <span>
+                            <Text1>
+                                Stake Time Left:{' '}
+                            </Text1>
+                            <TimeCount endAt={data.stakeEnd}/>
+                        </span>
+                        <ButtonXyuzuCard disabled={ !(blockNumber && blockNumber > data.stakeEnd)} onClick={()=>setShow(true)}>
+                            Unstake
+                        </ButtonXyuzuCard>
+                    </CardRC>
+                </CardContent>
+            </CardWrapper>
+            <Modal isOpen={show} onDismiss={() =>{}} maxHeight={200} minHeight={10}>
+                    <div style={{display:'flex', flexDirection:'column', width:"100%", padding:"20px"}}>
+                        <Line>
+                            <ZapTitle>Review</ZapTitle>
+                            <CloseLoge src={CloseImg} onClick={()=>setShow(false)}/>
+                        </Line>
+                        <div className="s-xyuzu-tab-wrapper" style={{marginTop:"10px"}}>
+                            <div className="s-modal-contentin" style={{display: 'flex', padding : '20px'}}>
+                                <InModalTrans>
+                                    <Line><ModalTextNum> {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))} </ModalTextNum><ModalText1>YUZU</ModalText1></Line>
+                                        <img src={ArrowDownImg} height={'24px'} width={'24px'} style={{margin:'10px 0'}}/>
+                                    <Line><ModalTextNum> {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))} </ModalTextNum> <ModalText1>xYUZU</ModalText1></Line>
+                                </InModalTrans>
+                            </div>
+                        </div>
+                        <ButtonPrimary disabled={false} onClick={unstake}
+                        style={{marginTop:"20px"}}
+                        >
+                            CONFIRM UNSTAKE
+                        </ButtonPrimary>
+                    </div>
+            </Modal>
+        </>
     )
 }
 
 function WithDrawCard({data} :{data : XyuzuOrder}){
     const blockNumber = useBlockNumber()
-    const [_, withdraw] = useXYuzuCallback(XYUZU_ADDRESS, data.id)
+    const { account, chainId } = useActiveWeb3React()
+    const xyuzuToken = XYUZU_LIST[chainId ?? DefaultChainId]
+    const [_, withdraw] = useXYuzuCallback(xyuzuToken?.address ?? '', data.id)
     return (
         <CardWrapper>
             <CardContent>
@@ -287,7 +360,8 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                                 <Text1>
                                     Withdraw Time Left:
                                 </Text1>
-                                <TimeCount endAt={data.unstakeEnd}/>
+                                <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
+                                <TimeCount endAt={data.unstakeEnd} type={false}/>
                             </>
                             :null
                         }               
@@ -330,15 +404,24 @@ function CompleteCard({data} :{data : XyuzuOrder}){
                             {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))}
                         </TextNum>       
                     </span>
-                    <span>
+                    <span style={{display : 'grid', gridTemplateColumns: 'auto auto', gridTemplateRows: 'auto auto', textAlign: 'end', gridRowGap:'10px'}}>
                             <Text1>
-                                Hash:
+                                Unstake hash:&nbsp;
                             </Text1>
                             <Address 
                                 href={(CHAIN_CONFIG as any)[chainId ?? DefaultChainId].blockExplorerUrl + '/tx/' + data.unstakeHash}
                                 target='_blank'
                             >
                                 {showAddress(data.unstakeHash)}
+                            </Address>
+                            <Text1>
+                                Withdraw hash:&nbsp;
+                            </Text1>
+                            <Address 
+                                href={(CHAIN_CONFIG as any)[chainId ?? DefaultChainId].blockExplorerUrl + '/tx/' + data.withdrawHash}
+                                target='_blank'
+                            >
+                                {showAddress(data.withdrawHash)}
                             </Address>
                     </span>
                 </CardRC>     
@@ -373,13 +456,7 @@ function OrderList({status} : {status : UnstakeInfo}){
 export function XUnStake(){
     const { account, chainId } = useActiveWeb3React()
     const [unstakeInfo, SetUnstakeInfo] = useState<UnstakeInfo>(UnstakeInfo.UNSTAKEING)
-    const xyuzuToken = new Token(
-        chainId ?? DefaultChainId,
-        XYUZU_ADDRESS,
-        18,
-        "XYUZU",
-        "XYUZU"
-    )
+    const xyuzuToken = XYUZU_LIST[chainId ?? DefaultChainId]
     const xyuzuBalance = useCurrencyBalances(account ?? undefined, 
         [xyuzuToken]
     )

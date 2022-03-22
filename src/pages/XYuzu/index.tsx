@@ -3,6 +3,13 @@ import { ButtonLRTab, ButtonUnderLine } from 'components/Button'
 import { XStake } from 'components/XYuzu/XStake'
 import { XUnStake } from 'components/XYuzu/XUnStake'
 import { ReactChild, ReactNode } from 'hoist-non-react-statics/node_modules/@types/react'
+import { useCurrencyBalance ,useCurrencyBalances } from '../../state/wallet/hooks'
+import { XYUZU_LIST, blockNumPerS }  from '../../constants'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool, AttenuationReward, ROUTER_ADDRESS, ZOO_ZAP_ADDRESS, Pair, Currency, WETH } from '@liuxingfeiyu/zoo-sdk'
+import { DefaultChainId } from '../../constants/index'
+import { useActiveWeb3React } from '../../hooks'
+import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens'
+import fixFloat,{getTimeStr, transToThousandth} from 'utils/fixFloat'
 
 type Props = {
     show : boolean;
@@ -22,8 +29,28 @@ const Wrapper : React.FC<Props> = ({show , children})=>(
 )
 
 export function XYuzu(){
+    const { account, chainId } = useActiveWeb3React()
+
+    const tokenlist = useAllTokens()
     const [left , SetLeft] = useState<boolean>(true)
-    
+    const [yuzuToken, xyuzuToken] : (Token | undefined) [] = useMemo(
+        ()=>{
+            let re = undefined
+            let re1 = XYUZU_LIST[chainId ?? DefaultChainId]
+            for(let item of Object.values(tokenlist)){
+                if(item.symbol == 'YUZU'){
+                    re = item
+                }
+            }
+            return [re, re1]
+        }
+        ,
+        [tokenlist]
+    )
+
+    const yuzuBalances = useCurrencyBalances(xyuzuToken?.address ?? undefined, 
+        [yuzuToken]
+    )
 
 
     return(
@@ -41,7 +68,7 @@ export function XYuzu(){
                         YUZU TVL:
                     </span>
                     <span className="s-xyuzu-header-number">
-                        $123
+                        ${transToThousandth(yuzuBalances[0]?.toSignificant(6) ?? '0')}
                     </span>
                     <span className="s-xyuzu-header-text2" style={{marginLeft:"80px"}}>
                         xYUZU Circulation:

@@ -68,6 +68,7 @@ export class XyuzuOrder  {
     public readonly unstakeEnd!: number
     public readonly withdrawAt!: number
     public readonly unstakeHash!: string
+    public readonly withdrawHash!: string
     constructor(data: Partial<XyuzuOrder>){
         Object.assign(this, data);
     }
@@ -81,6 +82,7 @@ export function useXYuzuOrders(){
         const queryFunc = async () => {
           if(blockNumber&& blockNumber > 0){
             const yuzustakeOrders = await(await fetch(APIHost + "/yuzustake/orders?address=" + account)).json();
+            console.log("111111111", yuzustakeOrders)
             // tododo, 待处理 fix
             SetData(yuzustakeOrders.data)
           }
@@ -104,7 +106,8 @@ export function useXYuzuOrders(){
                     unstakeAt : order.unstakedAt,
                     unstakeEnd : order.unstakedEndBlockNumber,
                     withdrawAt : order.withdrawAt,
-                    unstakeHash : order.hash
+                    unstakeHash : order.unstakedHash,
+                    withdrawHash : order.withdrawHash
                     }
                 )
                 return t

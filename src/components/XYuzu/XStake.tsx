@@ -19,7 +19,7 @@ import LockImg from '../../assets/newUI/lock.png'
 import CloseImg from '../../assets/newUI/xclose.png'
 import {useXYuzuConfig} from '../../data/XYuzu'
 import { useCurrencyBalance ,useCurrencyBalances } from '../../state/wallet/hooks'
-import { XYUZU_ADDRESS, blockNumPerS }  from '../../constants'
+import { XYUZU_LIST, blockNumPerS }  from '../../constants'
 import LoadingRings from 'components/Loader/rings'
 import { useTranslation } from 'react-i18next'
 import fixFloat from 'utils/fixFloat'
@@ -212,13 +212,7 @@ export function XStake(){
     const [yuzuToken, xyuzuToken] : (Token | undefined) [] = useMemo(
         ()=>{
             let re = undefined
-            let re1 = new Token(
-                chainId ?? DefaultChainId,
-                XYUZU_ADDRESS,
-                18,
-                "XYUZU",
-                "XYUZU"
-            )
+            let re1 = XYUZU_LIST[chainId ?? DefaultChainId]
             for(let item of Object.values(tokenlist)){
                 if(item.symbol == 'YUZU'){
                     re = item
@@ -305,7 +299,7 @@ export function XStake(){
     },
     [input, daynum])
 
-    const XyuzuStake = useXYuzuStakeCallback(XYUZU_ADDRESS, inputToken?.raw ?? JSBI.BigInt(0) , (xyuzuConfs && xyuzuConfs[daynum].id) ?? 0)
+    const XyuzuStake = useXYuzuStakeCallback(xyuzuToken?.address ?? '', inputToken?.raw ?? JSBI.BigInt(0) , (xyuzuConfs && xyuzuConfs[daynum].id) ?? 0)
 
     async function addCurrency(token : Token) {
         const eRequest = window.ethereum?.request
