@@ -362,7 +362,7 @@ export function XStake(){
                     </Line>
                 </div>
                 <Line>
-                    <ZapTitle>Set Stake Time:</ZapTitle>
+                    <ZapTitle>Set Stake Time:<QuestionHelper text="Estimated Number of LPT You Will Get"/></ZapTitle>
                     <ZapTitle>1 YUZU for {(xyuzuConfs &&  xyuzuConfs[daynum].ratio) ?? 0} xYUZU</ZapTitle>
                 </Line>
                 <div style={{display: 'flex', marginTop: '20px', marginBottom: '20px'}}>

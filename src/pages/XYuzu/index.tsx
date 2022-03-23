@@ -31,8 +31,9 @@ const Wrapper : React.FC<Props> = ({show , children})=>(
 export function XYuzu(){
     const { account, chainId } = useActiveWeb3React()
 
-    const tokenlist = useAllTokens()
+    
     const [left , SetLeft] = useState<boolean>(true)
+    const tokenlist = useAllTokens()
     const [yuzuToken, xyuzuToken] : (Token | undefined) [] = useMemo(
         ()=>{
             let re = undefined
