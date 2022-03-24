@@ -88,10 +88,10 @@ export default function LpTokenListModal({
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight}>
       <ContentWrapper>
         <RowBetween style={{padding: "10px 20px"}}>
-          <Text fontWeight={500} fontSize={16}>
+          <Text fontWeight={500} fontSize={16}  color={"rgba(255, 255, 255, 0.6)"}>
             Select A LP Token
           </Text>
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon onClick={onDismiss} color={"rgba(255, 255, 255, 1)"} />
         </RowBetween>
           <div style={{ flex: '1' }}>
               <AutoSizer disableWidth>

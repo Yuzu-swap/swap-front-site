@@ -36,8 +36,8 @@ const Footer = styled.div`
   padding: 20px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  background-color: ${({ theme }) => theme.bg1};
-  border-top: 1px solid ${({ theme }) => theme.bg2};
+  background-color: #2C3035;
+  border-top: 1px solid #222529;
 `
 
 interface CurrencySearchProps {
@@ -163,10 +163,10 @@ export function CurrencySearch({
     <ContentWrapper>
       <PaddedColumn gap="16px">
         <RowBetween>
-          <Text fontWeight={500} fontSize={16}>
+          <Text fontWeight={500} fontSize={16} color={"rgba(255, 255, 255, 0.6)"}>
             {t('selectToken')}
           </Text>
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon color={'#FFFFFF'} onClick={onDismiss} />
         </RowBetween>
         <Row>
           <SearchInput
@@ -184,7 +184,11 @@ export function CurrencySearch({
           <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
         )}
       </PaddedColumn>
-      <Separator />
+      <RowBetween style={{padding :'12px 20px'}}>
+          <Text fontWeight={400} fontSize={20} color={"rgba(255, 255, 255, 1)"}>
+            list
+          </Text><Text></Text>
+      </RowBetween>
       {searchToken && !searchTokenIsAdded ? (
         <Column style={{ padding: '20px 0', height: '100%' }}>
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />

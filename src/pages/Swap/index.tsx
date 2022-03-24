@@ -303,7 +303,9 @@ export default function Swap() {
         onConfirm={handleConfirmTokenWarning}
       />
       <SwapPoolTabs active={'swap'} />
-      <Sloganer/>
+      <div id="page-homepage">
+        <Sloganer/>
+      </div>
       <AppBody>
         {/* <SwapHeader /> */}
         <Wrapper id="swap-page">

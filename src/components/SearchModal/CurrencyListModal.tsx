@@ -22,6 +22,7 @@ import Row, { RowBetween, RowFixed } from '../Row'
 import { CloseIcon, TYPE, ButtonText, IconWrapper } from '../../theme'
 import { Text } from 'rebass'
 import { useTranslation } from 'react-i18next'
+import { rgb } from 'wcag-contrast'
 
 const ContentWrapper = styled(Column)`
   width: 100%;
@@ -91,10 +92,10 @@ export default function CurrencyListModal({
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight}>
       <ContentWrapper>
         <RowBetween style={{padding: "10px 20px"}}>
-          <Text fontWeight={500} fontSize={16}>
+          <Text fontWeight={500} fontSize={16} color={'rgb(255, 255, 255, 0.6)'}>
             {t('selectToken')}
           </Text>
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon onClick={onDismiss} color={'#FFFFFF'} />
         </RowBetween>
           <div style={{ flex: '1' }}>
               <AutoSizer disableWidth>

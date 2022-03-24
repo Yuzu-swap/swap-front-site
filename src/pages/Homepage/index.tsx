@@ -303,8 +303,8 @@ export default function Swap() {
         onConfirm={handleConfirmTokenWarning}
       />
       <SwapPoolTabs active={'homepage'} />
-      <Sloganer/>
       <div id="page-homepage">
+        <Sloganer />
         <LiquidityPledge />         
         {/*<NoticeList />*/}
         <AuditOrgs />

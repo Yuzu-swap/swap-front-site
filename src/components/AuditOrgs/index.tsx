@@ -15,19 +15,22 @@ import titleR from '../../assets/newUI/titleRight.png'
 
 
 
-function Title(str : string){
+export function TitleShow({str}:{str : string}){
   const Tt = styled.div`
-    display : inline ;
+    margin-top: 20px;
     font-size: 30px;
     font-weight: bold;
     color: #FFFFFF;
+    height: 35px;
     line-height: 35px;
+    width: 100%;
+    text-align: center;
   `
   return(
     <Tt>
-      <img src={titleL} height={"10px"}/>
+      <img src={titleL} height={"10px"} style={{verticalAlign:'middle'}}/>
       {" " + str + " "}
-      <img src={titleR} height={"10px"}/>
+      <img src={titleR} height={"10px"} style={{verticalAlign:'middle'}}/>
     </Tt>
   )
 
@@ -39,7 +42,7 @@ export default function AuditOrgs(props: any) {
   let url = '/PeckShield-Audit-Report-YuzuSwap-v1.0_final.pdf';
   return (
     <div className="s-audit-orgs">
-      {Title(t('auditOrgName'))}
+      <TitleShow str={t('auditOrgName')}/>
       <p style={{color: '#FF0000'}}>This protocol is in beta, please use at your own risk.</p>
       <a href={url} target='_blank'>
         <img src={org0} />

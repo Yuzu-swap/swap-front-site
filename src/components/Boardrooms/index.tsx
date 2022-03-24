@@ -5,7 +5,7 @@ import QuestionHelper, {LightQuestionHelper}  from '../QuestionHelper'
 import { Box } from 'rebass/styled-components'
 import { Link } from 'react-router-dom'
 
-import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/Button'
+import { ButtonPrimaryNormal, ButtonSecondary, ButtonPrimary } from '../../components/Button'
 
 import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import FantomLogo from '../../assets/images/fantom-logo.png'
@@ -34,6 +34,7 @@ import fixFloat,{getTimeStr, transToThousandth} from 'utils/fixFloat'
 import { Decimal } from "decimal.js"
 import { UserRatioOfReward } from '../../constants'
 import isZero from 'utils/isZero'
+import { TitleShow } from 'components/AuditOrgs'
 
 
 
@@ -138,9 +139,9 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
           <span>APR<LightQuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/></span>
           <span>{fixFloat(Apr, 3)}%</span>
         </div>
-        <ResponsiveButtonSecondary  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/${pool.pid}/extselect/-1`}>
+        <ButtonPrimaryNormal  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/${pool.pid}/extselect/-1`}>
         {t('select')}
-        </ResponsiveButtonSecondary>
+        </ButtonPrimaryNormal>
                 
         {/* <div className="s-boardroom-select" onClick={onWithdraw}>withdraw</div> */}
         {/* <div className="s-boardroom-select" onClick={onHarvest}>harvest</div> */}
@@ -363,98 +364,100 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
   const { t } = useTranslation();
   return (
     <div className="s-doubleget-item">
-      <div className="s-doubleget-item-trans">
-      <Link to={jumpUrl}>
-      <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token0WithLogo} />
-      <span>&nbsp;&nbsp;</span>
-      <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token1WithLogo}  />
-      <span>&nbsp;&nbsp;</span>
-      { <h3 style={{display: 'inline-block', margin: '0px auto', verticalAlign: 'middle', lineHeight: '34px'}}>{pool.token0.symbol}{'-'}{pool.token1.symbol}</h3> }
-      </Link>
-      <RewardShow>
-        <img className="s-doubleget-icon" src={DoublegetIcon}/>
-        YUZU+{extSymbolInfo}
-      </RewardShow>
-      </div>
+      <div className="s-doubleget-item-con">
+        <div className="s-doubleget-item-trans">
+        <Link to={jumpUrl}>
+        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token0WithLogo} />
+        <span>&nbsp;&nbsp;</span>
+        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token1WithLogo}  />
+        <span>&nbsp;&nbsp;</span>
+        { <h3 style={{display: 'inline-block', margin: '0px auto', verticalAlign: 'middle', lineHeight: '34px', color: '#FFFFFF'}}>{pool.token0.symbol}{'-'}{pool.token1.symbol}</h3> }
+        </Link>
+        <RewardShow>
+          <img className="s-doubleget-icon" src={DoublegetIcon}/>
+          YUZU+{extSymbolInfo}
+        </RewardShow>
+        </div>
 
-      <div className="s-doubleget-item-details">
-      <div className="s-doubleget-item-detail">
-            {
-              isIfo ? 
-              <label>Initial Farm Offering :</label> 
-              :
-              minExtBlock != 0 ?
-              <label>Dual Yield Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
-              :
-              <label>Dual Yield 
-                {pool.tokenRewards && pool.tokenRewards[0].ifo?.desc ?
-                  <QuestionHelper text={pool.tokenRewards[0].ifo?.desc as string}/>
-                  :
-                  null
-                }
-              </label> 
-            }
-            
-            {
-              minExtBlock != 0 ?
-              TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)
-              :
-              isIfo?
-              <strong>{(pool.tokenRewards && pool.tokenRewards[0].ifo?.title)+ " " ?? ''} 
-              <img 
-                src={WebLinkJump} 
-                height={'15px'} 
-                style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
-                onClick={()=>{window.open(((pool.tokenRewards && pool.tokenRewards[0].ifo?.link) ?? "")as string)}}
-              />
-              </strong>
-              :
-              <strong>Permanent</strong>
-            }
-        </div>
-        <div className="s-doubleget-item-detail" style={{height: '80px'}}>
-            <label>{t('productionperblock')}:</label> 
-            <em>{ fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU 
-            {
-              extProdPerBlockInfo.map((value : String)=>{
-                return (<>
-                  <br/>
-                  {value}
-                </>)
-              })
-            }
-             </em>
-        </div>
+        <div className="s-doubleget-item-details">
         <div className="s-doubleget-item-detail">
-            <label>{t('totalLp')}:</label>
-            <em>{ transToThousandth(fixFloat(tvl, 4))} USDT</em>
+              {
+                isIfo ? 
+                <label>Initial Farm Offering :</label> 
+                :
+                minExtBlock != 0 ?
+                <label>Dual Yield Countdown <QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>:</label> 
+                :
+                <label>Dual Yield 
+                  {pool.tokenRewards && pool.tokenRewards[0].ifo?.desc ?
+                    <QuestionHelper text={pool.tokenRewards[0].ifo?.desc as string}/>
+                    :
+                    null
+                  }
+                </label> 
+              }
+              
+              {
+                minExtBlock != 0 ?
+                TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)
+                :
+                isIfo?
+                <strong>{(pool.tokenRewards && pool.tokenRewards[0].ifo?.title)+ " " ?? ''} 
+                <img 
+                  src={WebLinkJump} 
+                  height={'15px'} 
+                  style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
+                  onClick={()=>{window.open(((pool.tokenRewards && pool.tokenRewards[0].ifo?.link) ?? "")as string)}}
+                />
+                </strong>
+                :
+                <strong>Permanent</strong>
+              }
+          </div>
+          <div className="s-doubleget-item-detail" style={{height: '80px'}}>
+              <label>{t('productionperblock')}:</label> 
+              <em>{ fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU 
+              {
+                extProdPerBlockInfo.map((value : String)=>{
+                  return (<>
+                    <br/>
+                    {value}
+                  </>)
+                })
+              }
+              </em>
+          </div>
+          <div className="s-doubleget-item-detail">
+              <label>{t('totalLp')}:</label>
+              <em>{ transToThousandth(fixFloat(tvl, 4))} USDT</em>
+          </div>
+          <div className="s-doubleget-item-detail">
+              <label>{t('myStaked')}:</label> 
+              <em>{ fixFloat(myRatio * 100, 2)}%</em>
+          </div>
+          <div className="s-doubleget-item-detail" style={{height: '80px'}}>
+              <label>{t('myReward')} <QuestionHelper text={t('doublegetRewardHint')}/>:</label> 
+              <em>{ fixFloat(myReward, 4)} YUZU
+              {
+                extRewardInfo.map((value : String)=>{
+                  return (<>
+                    <br/>
+                    {value}
+                  </>)
+                })
+              }
+              </em>      
+          </div>
+          <div className="s-doubleget-item-detail">
+            <label>APR<QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/></label>
+            <em style={{color:'#FF526C'}}>{fixFloat(Apr, 3)}%</em>
+          </div>
         </div>
-        <div className="s-doubleget-item-detail">
-            <label>{t('myStaked')}:</label> 
-            <em>{ fixFloat(myRatio * 100, 2)}%</em>
+        <div style={{margin: "0px 10px 10px"}}>
+          <ButtonPrimaryNormal  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/-1/extselect/${pool.pid}`}>
+          {t('select')}
+          </ButtonPrimaryNormal>
         </div>
-        <div className="s-doubleget-item-detail" style={{height: '80px'}}>
-            <label>{t('myReward')} <QuestionHelper text={t('doublegetRewardHint')}/>:</label> 
-            <em>{ fixFloat(myReward, 4)} YUZU
-            {
-              extRewardInfo.map((value : String)=>{
-                return (<>
-                  <br/>
-                  {value}
-                </>)
-              })
-            }
-            </em>      
-        </div>
-      </div>
-      <div className="s-boardroom-apy" style={{margin: "0px 10px"}}>
-          <span>APR<LightQuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/></span>
-          <span>{fixFloat(Apr, 3)}%</span>
-      </div>
-      <div style={{margin: "0px 10px 10px"}}>
-        <ResponsiveButtonSecondary  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/-1/extselect/${pool.pid}`}>
-        {t('select')}
-        </ResponsiveButtonSecondary>
       </div>
     </div>
   )
@@ -486,13 +489,13 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   `
   return (
     <div>
-      <Titlew>Dual Yield</Titlew>
+      <TitleShow str={'DUAL YIELD'}/>
       <div className="s-trading-list">
         {extrooms.map((pool: ZooParkExt, i: number) => {
           return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>
         })}
       </div>
-      <Titleb>ALL FARMS</Titleb>
+      <TitleShow str={'ALL FARMS'}/>
       <div className="s-trading-list">
         {rooms.map((pool: StakePool, i: number) => {
           return <BoardItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (statics && statics.tvls&&statics.tvls[i])||0}/>

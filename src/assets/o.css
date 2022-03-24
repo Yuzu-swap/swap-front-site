@@ -329,10 +329,9 @@
 .s-doubleget-item-trans{
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-around;
+	justify-content: space-between;
 	text-align: center;
-	background: #FFFFFF;
-	padding:0.8rem 0 0.5rem;
+	padding:0.8rem 10px 0.5rem;
 }
 
 .s-doubleget-item-trans a{
@@ -411,6 +410,7 @@
 	height: 20px;
 	margin: auto 0px;
 	vertical-align: middle;
+	color: rgba(255, 255, 255, 0.6);
 }
 .s-doubleget-item-detail em{
 	display: inline-block;
@@ -420,21 +420,27 @@
 	height: fit-content;
 	margin-top: auto;
 	margin-bottom: auto;
+	font-weight: 400;
+	color: rgba(255, 255, 255, 1);
 }
 .s-doubleget-item-detail:nth-child(odd){
-	background-color: #f5f5f5;
+	background-color: #222529;
 }
 .s-doubleget-item{
 	width: 430px;
-	background: #FFFFFF;
-	box-shadow: 0px 14px 20px 4px rgba(237, 73, 98, 0.1);
+	padding: 1px;
 	border-radius: 8px;
-	margin:1rem 0.5rem 0;
-	border: 2px solid #F36E7F;
+	background: linear-gradient(2deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.4));
 	overflow: hidden;
-	padding: 20px 0px 0px;
+	margin:1rem 0.5rem 0;
+}
+
+.s-doubleget-item-con{
+	border-radius: inherit;
 	box-sizing: border-box;
 	text-align: center;
+	background: #2C3035;
+	height: 100%;
 }
 
 .s-doubleget-icon{
@@ -486,13 +492,12 @@
 	padding:5px 10px;
 }
 .s-boardroom-select{
-	border:1px solid #ED4962;
 	border-radius: 10px;
-	color:#ED4962;
+	color:#FFFFFF;
 	padding:5px 10px;
 	margin-top: 10px;
 	cursor: pointer;
-	font-weight: 500;
+	font-weight: bold;
 	font-size: 20px;
 }
 .s-boardroom-selected{
