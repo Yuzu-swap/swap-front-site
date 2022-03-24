@@ -373,7 +373,21 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
 function WithDrawCard({data} :{data : XyuzuOrder}){
     const blockNumber = useBlockNumber()
     const { account, chainId } = useActiveWeb3React()
-    const xyuzuToken = XYUZU_LIST[chainId ?? DefaultChainId]
+    const tokenlist = useAllTokens()
+    const [yuzuToken, xyuzuToken] : (Token | undefined) [] = useMemo(
+        ()=>{
+            let re = undefined
+            let re1 = XYUZU_LIST[chainId ?? DefaultChainId]
+            for(let item of Object.values(tokenlist)){
+                if(item.symbol == 'YUZU'){
+                    re = item
+                }
+            }
+            return [re, re1]
+        }
+        ,
+        [tokenlist]
+    )
     const [_, withdraw] = useXYuzuCallback(xyuzuToken?.address ?? '', data.id)
     return (
         <CardWrapper>
@@ -382,27 +396,34 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                      <img src={CardUnLock}/>
                 </CardHeader> 
                 <CardRC>
-                    <span>
-                        <TextNum>
-                            {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
-                        </TextNum>
-                        <Text2>
-                            YUZU
-                        </Text2>
-                        <Text1>
-                            ({((data.stakeEnd - data.stakeAt)/( 60 * 60 * 24 / blockNumPerS)).toFixed(0)}D)
-                        </Text1>
+                    <span  style={{display:'flex'}}>
+                        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
+                        <CardUnit>
+                            <TextNum style={{height : '35px', lineHeight: '35px'}}>
+                                {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
+                            </TextNum>
+                            <span style={{marginTop : '10px'}}>
+                                <Text2 style={{fontSize: '16px'}}>
+                                    YUZU
+                                </Text2>
+                                <Text1>
+                                    ({((data.stakeEnd - data.stakeAt)/( 60 * 60 * 24 / blockNumPerS)).toFixed(0)}D)
+                                </Text1>
+                            </span>
+                        </CardUnit>
                     </span>
                     <span>
                         {
                             blockNumber && blockNumber < data.unstakeEnd ? 
-                            <>
-                                <Text1>
-                                    Withdraw Time Left:
+                            <CardUnit>
+                                <span style={{height : '35px', lineHeight: '35px'}}>
+                                    <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
+                                    <TimeCount endAt={data.unstakeEnd} type={false}/>
+                                </span>
+                                <Text1 style={{marginTop : '10px'}}>
+                                    Withdraw Time Left
                                 </Text1>
-                                <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
-                                <TimeCount endAt={data.unstakeEnd} type={false}/>
-                            </>
+                            </CardUnit>
                             :null
                         }               
                     </span>
@@ -417,7 +438,21 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
 
 function CompleteCard({data} :{data : XyuzuOrder}){
     const { account, chainId } = useActiveWeb3React()
-
+    const tokenlist = useAllTokens()
+    const [yuzuToken, xyuzuToken] : (Token | undefined) [] = useMemo(
+        ()=>{
+            let re = undefined
+            let re1 = XYUZU_LIST[chainId ?? DefaultChainId]
+            for(let item of Object.values(tokenlist)){
+                if(item.symbol == 'YUZU'){
+                    re = item
+                }
+            }
+            return [re, re1]
+        }
+        ,
+        [tokenlist]
+    )
     return (
         <CardWrapper>
             <CardContent>
@@ -425,44 +460,53 @@ function CompleteCard({data} :{data : XyuzuOrder}){
                      <img src={CardOk}/>
                 </CardHeader>
                 <CardRC>
-                    <span>
-                        <TextNum>
-                            {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
-                        </TextNum>
-                        <Text2>
-                            YUZU
-                        </Text2>
-                        <Text1>
-                            ({((data.stakeEnd - data.stakeAt)/( 60 * 60 * 24 / blockNumPerS)).toFixed(0)}D)
-                        </Text1>
+                    <span  style={{display:'flex'}}>
+                        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
+                        <CardUnit>
+                            <TextNum style={{height : '35px', lineHeight: '35px'}}>
+                                {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
+                            </TextNum>
+                            <span style={{marginTop : '10px'}}>
+                                <Text2 style={{fontSize: '16px'}}>
+                                    YUZU
+                                </Text2>
+                                <Text1>
+                                    ({((data.stakeEnd - data.stakeAt)/( 60 * 60 * 24 / blockNumPerS)).toFixed(0)}D)
+                                </Text1>
+                            </span>
+                        </CardUnit>
                     </span>
                     <span>
-                        <Text1>
-                            Consumed xYUZU:
-                        </Text1>
-                        <TextNum>
-                            {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))}
-                        </TextNum>       
-                    </span>
-                    <span style={{display : 'grid', gridTemplateColumns: 'auto auto', gridTemplateRows: 'auto auto', textAlign: 'end', gridRowGap:'10px'}}>
-                            <Text1>
-                                Unstake hash:&nbsp;
+                        <CardUnit>
+                            <TextNum style={{height : '35px', lineHeight: '35px'}}>
+                                {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))}
+                            </TextNum>
+                            <Text1 style={{marginTop : '10px'}}>
+                                Consumed xYUZU
                             </Text1>
+                        </CardUnit>      
+                    </span>
+                    <span style={{display : 'grid', gridTemplateColumns: 'auto auto', gridTemplateRows: 'auto auto', textAlign:'start', gridRowGap:'15px', gridColumnGap:'10px'}}>
+                            
                             <Address 
                                 href={(CHAIN_CONFIG as any)[chainId ?? DefaultChainId].blockExplorerUrl + '/tx/' + data.unstakeHash}
                                 target='_blank'
                             >
                                 {showAddress(data.unstakeHash)}
                             </Address>
-                            <Text1>
-                                Withdraw hash:&nbsp;
-                            </Text1>
+                            
                             <Address 
                                 href={(CHAIN_CONFIG as any)[chainId ?? DefaultChainId].blockExplorerUrl + '/tx/' + data.withdrawHash}
                                 target='_blank'
                             >
                                 {showAddress(data.withdrawHash)}
                             </Address>
+                            <Text1>
+                                Unstake hash&nbsp;
+                            </Text1>
+                            <Text1>
+                                Withdraw hash&nbsp;
+                            </Text1>
                     </span>
                 </CardRC>     
             </CardContent>
