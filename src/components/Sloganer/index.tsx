@@ -20,7 +20,7 @@ import '../../assets/o.css';
 export default function Header() {
   const { t } = useTranslation();
   return (
-    <div className="s-banner">
+    <div className="s-banner" id="page-homepage">
       <span className="s-banner-title">
         YUZUSWAP
       </span>

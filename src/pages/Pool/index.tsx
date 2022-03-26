@@ -133,9 +133,9 @@ export default function Pool() {
   const { t } = useTranslation()
   return (
     <>
+      <Sloganer/>
       <PageWrapper>
         <SwapPoolTabs active={'pool'} />
-        <Sloganer />
         <VoteCard style={{ marginTop: '3rem', padding: '1rem 0', borderRadius: '8px 8px 0 0' }}>
           <CardSection>
             <AutoColumn gap="md">

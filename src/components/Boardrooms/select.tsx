@@ -46,16 +46,12 @@ const StyledCloseIcon = styled(X)`
     cursor: pointer;
   }
 
-  > * {
-    stroke: ${({ theme }) => theme.text1};
-  }
 `
 const ModalContentWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.2rem 0;
-  background-color: ${({ theme }) => theme.bg2};
   border-radius: 8px;
   width: 100%;
 `
@@ -183,6 +179,10 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   const { deposit, withdraw } = useZooParkCallback(isExt)
 
   const lastAp = useRef(approval);
+
+  const xyuzu : boolean = useMemo(()=>{
+    return pool && pool.token0.symbol == pool.token1.symbol
+  },[pool])
 
   useEffect(
     ()=>{
@@ -324,7 +324,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   }
 
   let btn = (
-    <div className="s-boardroom-select s-boardroom-stake-button" onClick={
+    <ButtonPrimaryNormal className="s-boardroom-select s-boardroom-stake-button" onClick={
       async () => {
         if (approval != ApprovalState.APPROVED) {
           await approveCallback(() => {
@@ -335,12 +335,19 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
           })
         }
       }
-    }>{t('authorization')}</div>);
+    }>{t('authorization')}</ButtonPrimaryNormal>);
 
   if (approval == ApprovalState.APPROVED) {
     btn = (<div className="s-boardroom-stake-inline">
-      <div className="s-boardroom-select s-boardroom-stake-button" onClick={async () => { setShowConfirmation(true); }}>{t('pledge')} LP <QuestionHelper text={t('pledgeTip')} /></div>
-      <div className="s-boardroom-select s-boardroom-stake-button" onClick={onWithdraw}  >{t('cancelPledge')}<QuestionHelper text={t('cancelPledgeTip')} /></div></div>
+      {
+        xyuzu?
+        <div className="s-xyuzu-tab-wrapper">
+          <div className="s-boardroom-select s-boardroom-stake-button s-boardroom-unwrap-button " onClick={async () => { setShowConfirmation(true);}}>Stake xYUZU <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
+        </div>
+        :
+        <ButtonPrimaryNormal className="s-boardroom-select s-boardroom-stake-button" onClick={async () => { setShowConfirmation(true); }}>{t('pledge')} LP <QuestionHelper text={t('pledgeTip')} /></ButtonPrimaryNormal>
+      }
+      <ButtonPrimaryNormal className="s-boardroom-select s-boardroom-stake-button" onClick={onWithdraw}  >{t('cancelPledge')}<QuestionHelper text={t('cancelPledgeTip')} /></ButtonPrimaryNormal></div>
     );
   }
   console.log("approve is ", approval)
@@ -385,7 +392,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
               : null
             }
           </div>
-          <div className="s-boardroom-select s-boardroom-tokens" onClick={async () => { await onHarvest() }}>{t('withdrawal')}</div>
+          <ButtonPrimaryNormal className="s-boardroom-select s-boardroom-tokens" onClick={async () => { await onHarvest() }}>{t('withdrawal')}</ButtonPrimaryNormal>
           {
               isExt && wrappedTokenRewards?
               wrappedTokenRewards.map(
@@ -394,7 +401,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
                     <div className="s-boardroom-unwrap">
                       <span>{value.token.symbol}</span>
                       <span>{fixFloatFloor(tokenAmountForshow(WrapperBalance[i], value.token.decimals),6)}</span>
-                      <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>Unwrap <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
+                      <div className="s-xyuzu-tab-wrapper">
+                        <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>Unwrap <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
+                      </div>
                     </div>
                   )
                 }
@@ -404,14 +413,24 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
         </div>
         <div className="s-boardroom-stake">
           <div className="s-boardroom-information-no-drak">
-            <div>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</div>
+            {
+              xyuzu?
+              <div>xYUZU Staked</div>
+              :
+              <div>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</div>
+            }
             <div className="s-boardroom-balance">{myStaked} </div>
           </div>
-          <div className="s-boardroom-information-no-drak">
-            <div style={{fontSize: "12px"}}>Corresponding num of tokens<br/>
-            {pool? pool.token0.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token0Balance, pool.token0.decimals)* myStakedPoolShareRatio , 4) :''}<br/>
-            {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</div>
+          {
+            xyuzu?
+            null
+            :
+            <div className="s-boardroom-information-no-drak">
+              <div style={{fontSize: "12px"}}>Corresponding num of tokens<br/>
+              {pool? pool.token0.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token0Balance, pool.token0.decimals)* myStakedPoolShareRatio , 4) :''}<br/>
+              {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</div>
           </div>
+          }
           {btn}
         </div>
       </div>
@@ -424,16 +443,21 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
           <ModalContentWrapper className="s-ModalContentWrapper">
             <RowBetween style={{ padding: '0.8rem' }}>
               <div style={{ textAlign: 'center', display: 'inline-block', width: '80%', paddingLeft: '2rem' }}>
-                <Text fontWeight={500} fontSize={20}>
+                <Text fontWeight={500} fontSize={20} color={'#FFF'}>
                 {t('pledge')}
               </Text>
               </div>
-              <StyledCloseIcon onClick={() => setShowConfirmation(false)} />
+              <StyledCloseIcon color={'#FFFFFF'} onClick={() => setShowConfirmation(false)} />
             </RowBetween>
           </ModalContentWrapper>
           <div className="s-modal-main">
             <div className="s-boardroom-max">
-              <h2>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP</h2>
+              <h2>{pool?
+                    xyuzu?
+                    pool.token0.symbol 
+                    :
+                    (pool.token0.symbol + '/' + pool.token1.symbol) + 'LP' : ''} 
+              </h2>
               <div className="s-modal-number">
                 <input type="number" value={pledgeValue} onChange={(e) => { setPledgeValue(e.target.value) }} />
                 <em onClick={() => setPledgeValue(myLpBalance.toString(10))}>MAX</em>
@@ -442,12 +466,15 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             <p className="s-boardroom-available">{myLpBalance.toString(10)} available</p>
           </div>
           <div className="s-modal-btns">
-            <ButtonGray padding="8px 16px" mt="0.5rem" onClick={() => setShowConfirmation(false)}>
-            {t('cancel')}
-          </ButtonGray>
-            <ButtonPrimary padding="8px 16px" mt="0.5rem" onClick={onDeposit}>
+
+          <div className="s-xyuzu-tab-wrapper" style={{width : '100%', margin: "0 1rem"}}>
+            <div className="s-boardroom-select s-boardroom-stake-button s-boardroom-unwrap-button"
+              style={{width : '100%', padding:"8px 16px", lineHeight:'44px'}}
+               onClick={() => setShowConfirmation(false)}>{t('cancel')}</div>
+          </div>
+            <ButtonPrimaryNormal padding="8px 16px" mt="0.5rem" onClick={onDeposit}>
             {t('confirm')}
-          </ButtonPrimary>
+          </ButtonPrimaryNormal>
           </div>
         </div>
       </Modal>
@@ -458,7 +485,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             <div className="s-modal-loading-img">
               <LoadingRings />
             </div>
-            <h2>{t('loading')}</h2>
+            <h2 color={'#FFF'}>{t('loading')}</h2>
           </div>
           <p className="s-boardroom-available">{WinOpt} {WinValue} {WinLabel} 
             {

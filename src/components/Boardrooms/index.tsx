@@ -103,6 +103,7 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
   },[blockNumber])*/
 
 
+
   const { t } = useTranslation();
   return (
     <div className="s-boardroom-item">
@@ -338,6 +339,9 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     return  JSBI.toNumber(pool.rewardConfig.getZooRewardBetween(blockNumber??0,(blockNumber??0)+24*3600/4))*pool.rewardEffect/1e18/10000
   },[blockNumber])*/
 
+  const xyuzu : boolean = useMemo(()=>{
+    return pool.token0.symbol == pool.token1.symbol
+  },[pool])
 
   const RewardShow = styled.div`
     background: rgba(237, 73, 98, 0.09);
@@ -369,9 +373,9 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         <Link to={jumpUrl}>
         <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token0WithLogo} />
         <span>&nbsp;&nbsp;</span>
-        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token1WithLogo}  />
+        {!xyuzu && <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle'}} currency={token1WithLogo}  />}
         <span>&nbsp;&nbsp;</span>
-        { <h3 style={{display: 'inline-block', margin: '0px auto', verticalAlign: 'middle', lineHeight: '34px', color: '#FFFFFF'}}>{pool.token0.symbol}{'-'}{pool.token1.symbol}</h3> }
+        { <h3 style={{display: 'inline-block', margin: '0px auto', verticalAlign: 'middle', lineHeight: '34px', color: '#FFFFFF'}}>{pool.token0.symbol}{!xyuzu && '-' + pool.token1.symbol}</h3> }
         </Link>
         <RewardShow>
           <img className="s-doubleget-icon" src={DoublegetIcon}/>
@@ -453,7 +457,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
             <em style={{color:'#FF526C'}}>{fixFloat(Apr, 3)}%</em>
           </div>
         </div>
-        <div style={{margin: "0px 10px 10px"}}>
+        <div className="s-doubleget-item-detail" style={{}}>
           <ButtonPrimaryNormal  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/-1/extselect/${pool.pid}`}>
           {t('select')}
           </ButtonPrimaryNormal>
