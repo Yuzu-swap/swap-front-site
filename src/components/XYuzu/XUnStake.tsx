@@ -363,7 +363,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                         }}
                         style={{marginTop:"20px"}}
                         >
-                            CONFIRM UNSTAKE
+                            CONFIRM REDEEM
                         </ButtonPrimary>
                     </div>
             </Modal>

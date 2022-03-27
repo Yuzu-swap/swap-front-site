@@ -421,7 +421,7 @@ export function XStake(){
                                 
                             </div>
                         </div>
-                        <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Stake Time: {stakeDays && stakeDays[daynum]} D</ZapTitle>
+                        <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Lock Time: {stakeDays && stakeDays[daynum]} D</ZapTitle>
                         <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Warning: You CANNOT unstake xYUZU before the countdown to zero.</ZapTitle>
                         <ButtonPrimary disabled={false} onClick={()=>{
                             XyuzuStake()
