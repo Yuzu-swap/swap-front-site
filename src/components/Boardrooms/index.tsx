@@ -12,7 +12,7 @@ import FantomLogo from '../../assets/images/fantom-logo.png'
 import Trans from '../../assets/newUI/trans.png'
 import DoublegetIcon from '../../assets/images/doubleget2.png'
 import WebLinkJump from '../../assets/images/web-link.png'
-import { DefaultChainId, ZOO_PARK_ADDRESS } from '../../constants'
+import { DefaultChainId, XYUZU_LIST, ZOO_PARK_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
 import { STAKING_REWARDS_INTERFACE } from 'constants/abis/staking-rewards'
 import { useMultipleContractSingleData } from 'state/multicall/hooks'
@@ -35,6 +35,7 @@ import { Decimal } from "decimal.js"
 import { UserRatioOfReward } from '../../constants'
 import isZero from 'utils/isZero'
 import { TitleShow } from 'components/AuditOrgs'
+import { useCurrencyBalance ,useCurrencyBalances } from '../../state/wallet/hooks'
 
 
 
@@ -184,20 +185,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
   const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 1
 
   const prodPerBlock:number = useMemo(()=>  tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)) * pool.rewardEffect / totalEffect ,[blockNumber, pool])
-  const Apr = useMemo(()=>{
-    let extprice = 0
-    if(pool.tokenRewards){
-      for(let i = 0; i < pool.tokenRewards.length;i++){
-        let num = tokenAmountForshow(pool.tokenRewards[i].PerblockReward, pool.tokenRewards[i].token.decimals)
-        let tokenExtPrice = prices[pool.tokenRewards[i].token.symbol || ""] || 1
-        extprice += num * tokenExtPrice
-      }
-    }
-    
-    return ((prodPerBlock * UserRatioOfReward * zooPrice+ extprice )* 10 * 60 * 24 * 365 * 100) / tvl
-  },
-  [blockNumber, prices, pool]
-  )
+  
 
   const extProdPerBlockInfo: String[] = useMemo(
     ()=>{
@@ -329,9 +317,8 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
   },[blockNumber])
 
   const allTokens = useAllTokens()
-  const [token0WithLogo,token1WithLogo] =useMemo( ()=>{
-    return [ allTokens[pool.token0.address],allTokens[pool.token1.address]]
-  },[pool.token0,pool.token1])
+  const { account, chainId } = useActiveWeb3React()
+  
 
   const jumpUrl = `/add/${pool?.token0.address}/${pool?.token1.address}`
   /*const dayProduce = useMemo(()=>{
@@ -342,6 +329,55 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
   const xyuzu : boolean = useMemo(()=>{
     return pool.token0.symbol == pool.token1.symbol
   },[pool])
+
+  const [token0WithLogo,token1WithLogo] =useMemo( ()=>{
+    let str =  xyuzu ? XYUZU_LIST[chainId ?? DefaultChainId] :  allTokens[pool.token0.address]
+    return [str ,allTokens[pool.token1.address]]
+  },[pool.token0,pool.token1])
+
+  const [yuzuToken, xyuzuToken] : (Token | undefined) [] = useMemo(
+    ()=>{
+        let re = undefined
+        let re1 = XYUZU_LIST[chainId ?? DefaultChainId]
+        for(let item of Object.values(allTokens)){
+            if(item.symbol == 'YUZU'){
+                re = item
+            }
+        }
+        return [re, re1]
+    }
+    ,
+    [allTokens]
+  )
+  const yuzuBalances = useCurrencyBalances(xyuzuToken?.address ?? undefined, 
+    [yuzuToken]
+  )
+
+  const tvlNum = useMemo(
+    ()=>{
+      console.log("test xyuzu boardroom----")
+      if(xyuzu){
+        return parseFloat(yuzuBalances[0]?.toSignificant(6) ?? "0") * zooPrice
+      }
+      return tvl
+    },[xyuzu, blockNumber, pool, tvl]
+  )
+
+  const Apr = useMemo(()=>{
+    let extprice = 0
+    if(pool.tokenRewards){
+      for(let i = 0; i < pool.tokenRewards.length;i++){
+        let num = tokenAmountForshow(pool.tokenRewards[i].PerblockReward, pool.tokenRewards[i].token.decimals)
+        let tokenExtPrice = prices[pool.tokenRewards[i].token.symbol || ""] || 1
+        extprice += num * tokenExtPrice
+      }
+    }
+    
+    return ((prodPerBlock * UserRatioOfReward * zooPrice+ extprice )* 10 * 60 * 24 * 365 * 100) / tvlNum
+  },
+  [blockNumber, prices, pool]
+  )
+
 
   const RewardShow = styled.div`
     background: rgba(237, 73, 98, 0.09);
@@ -433,7 +469,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
           </div>
           <div className="s-doubleget-item-detail">
               <label>{t('totalLp')}:</label>
-              <em>{ transToThousandth(fixFloat(tvl, 4))} USDT</em>
+              <em>{ transToThousandth(fixFloat(tvlNum, 4))} USDT</em>
           </div>
           <div className="s-doubleget-item-detail">
               <label>{t('myStaked')}:</label> 
