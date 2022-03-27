@@ -362,7 +362,7 @@ export function XStake(){
                     </Line>
                 </div>
                 <Line>
-                    <ZapTitle>Set Stake Time:<QuestionHelper text="Estimated Number of LPT You Will Get"/></ZapTitle>
+                    <ZapTitle>Set Stake Time:<QuestionHelper text="The countdown is based on the assumption that block time is 6s."/></ZapTitle>
                     <ZapTitle>1 YUZU for {(xyuzuConfs &&  xyuzuConfs[daynum].ratio) ?? 0} xYUZU</ZapTitle>
                 </Line>
                 <div style={{display: 'flex', marginTop: '20px', marginBottom: '20px'}}>
@@ -422,7 +422,7 @@ export function XStake(){
                             </div>
                         </div>
                         <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Stake Time: {stakeDays && stakeDays[daynum]} D</ZapTitle>
-                        <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Notice: cannot unstake before stake time end.</ZapTitle>
+                        <ZapTitle style={{fontSize : '16px', marginTop:"10px"}}>Warning: You CANNOT unstake xYUZU before the countdown to zero.</ZapTitle>
                         <ButtonPrimary disabled={false} onClick={()=>{
                             XyuzuStake()
                             SetReviewModal(false)

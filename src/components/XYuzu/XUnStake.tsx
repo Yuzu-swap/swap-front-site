@@ -24,7 +24,8 @@ import ArrowDownImg from '../../assets/newUI/arrowDown.png'
 import { margin } from 'polished'
 import CurrencyLogo from 'components/CurrencyLogo'
 import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens'
-
+import { useTranslation } from 'react-i18next'
+import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
 
 enum UnstakeInfo{
     UNSTAKEING,
@@ -544,6 +545,7 @@ export function XUnStake(){
     const xyuzuBalance = useCurrencyBalances(account ?? undefined, 
         [xyuzuToken]
     )
+    const {t} = useTranslation()
 
     function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
         return b.addedTime - a.addedTime
@@ -554,13 +556,23 @@ export function XUnStake(){
       return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
     }, [allTransactions])
     const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && (tx.summary.includes('Xyuzu UnStake') || tx.summary.includes('Xyuzu WithDraw'))).map(tx => tx.hash)
+    const loadingStr = useMemo(()=>{
+        if(sortedRecentTransactions && sortedRecentTransactions[0]?.summary && sortedRecentTransactions[0]?.summary.includes('Xyuzu UnStake')){
+            return "Unstaking xYUZU"
+        }
+        if(sortedRecentTransactions && sortedRecentTransactions[0]?.summary && sortedRecentTransactions[0]?.summary.includes('Xyuzu WithDraw')){
+            return "Withdrawing YUZU"
+        }
+        return "Loading"
+
+    },[sortedRecentTransactions])
     const hasPendingTransactions = !!pending.length
 
     return (
         <div>
-            <div className="s-xyuzu-header-text1" style={{marginTop:"20px", fontSize:"20px"}}>
-                Rules descirption:After the pledge time expirse, you can use xyuzu to redeem yuzu. There will be a certain delay time after redemption, depending on how long after the redemption time is exceeded
-            </div>
+            <div className="s-xyuzu-header-text1" style={{marginTop:"20px", fontSize:"20px", position: "relative"}}>
+                {t("unstakeRules")}<QuestionHelper text={t("unstakeRulesQ")}/>
+           </div>
             <div className="s-xyuzu-unstake-tab" style={{marginTop:"20px"}}>
                 <div style={{display:"flex"}}>
                     <ButtonUnderLine active={unstakeInfo == UnstakeInfo.UNSTAKEING} onClick={()=>SetUnstakeInfo(UnstakeInfo.UNSTAKEING)}>Unstaking</ButtonUnderLine>
@@ -581,7 +593,7 @@ export function XUnStake(){
                             <div className="s-modal-loading-img">
                                 <LoadingRings/>
                             </div>
-                            <ModalText1>Loading</ModalText1>
+                            <ModalText1>{loadingStr}</ModalText1>
                         </div>
                     </div>
             </Modal>

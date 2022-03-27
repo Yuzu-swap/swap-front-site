@@ -180,5 +180,9 @@
   "xyuzu": "xYUZU",
   "earn" : "Earn",
   "doublegetRewardHint": "The number of non-YUZU rewards you see is estimated, it is influenced by others' stake/unstake activities, so it may decrease. But if you withdraw the rewards now, the number of rewards you see will be the number you receive. ",
-  "unwrapExtRewardHint": "wLUNA is an interim token pegged with LUNA, you can always unwrap it to get LUNA at 1:1 ratio, we highly suggest that you should unwrap LUNA once you receive the rewards. Warning: unwrapping wLUNA less than 0.000001 will get 0 LUNA."
+  "unwrapExtRewardHint": "wLUNA is an interim token pegged with LUNA, you can always unwrap it to get LUNA at 1:1 ratio, we highly suggest that you should unwrap LUNA once you receive the rewards. Warning: unwrapping wLUNA less than 0.000001 will get 0 LUNA.",
+  "xyuzuhint" : "Stake xYUZU in Single Token Staking to mine both YUZU and ROSE at the same time.",
+  "xyuzuhintQ" : "The same amount of xYUZU as minted will be burnt to redeem YUZU at the redemption.",
+  "unstakeRules" : "When unstake countdown returns to zero, you can unstake xYUZU to redeem YUZU. But if you donot redeem in time, there will be a cool-down period before you can actually withdraw YUZU.",
+  "unstakeRulesQ" : "For instance, one locks YUZU for 90 days to mint xYUZU, he waited till the 100th day to redeem, then he will have to wait till the 110th day to be able to withdraw YUZU. The cool-down period will be no longer than the lock-up period."
 }
