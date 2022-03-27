@@ -447,7 +447,10 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
                   src={WebLinkJump} 
                   height={'15px'} 
                   style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
-                  onClick={()=>{window.location.href= "/#/xyuzu"}}
+                  onClick={()=>{
+                    window.location.href= "#"
+                    window.location.href= "/#/xyuzu"
+                  }}
                 />
                 </strong>
                 :
