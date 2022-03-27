@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next'
 import { useSingleCallResult } from '../../state/multicall/hooks'
 import { useTokenContract, useXYuzuContract } from 'hooks/useContract'
 import { tokenAmountForshow } from 'utils/ZoosSwap'
+import { useSelector } from 'react-redux'
+import { AppDispatch, AppState } from '../../state'
 
 type Props = {
     show : boolean;
@@ -35,7 +37,7 @@ const Wrapper : React.FC<Props> = ({show , children})=>(
 
 export function XYuzu(){
     const { account, chainId } = useActiveWeb3React()
-
+    const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 1
     const {t} = useTranslation()
     const [left , SetLeft] = useState<boolean>(true)
     const tokenlist = useAllTokens()
@@ -60,8 +62,8 @@ export function XYuzu(){
 
     const xyuzuCon = useXYuzuContract(xyuzuToken?.address)
     const circul = useSingleCallResult(xyuzuCon, "totalSupply", []).result 
-    console.log("test circul ------", circul)
     const circulShow = transToThousandth(fixFloat(tokenAmountForshow(circul ?? '0', xyuzuToken?.decimals), 3))
+    console.log("test xyuzu yuzu balance", yuzuBalances[0]?.toSignificant(6), " yuzuPrice", zooPrice)
 
     return(
         <div className="s-xyuzu-body">
@@ -78,13 +80,13 @@ export function XYuzu(){
                         YUZU TVL:
                     </span>
                     <span className="s-xyuzu-header-number">
-                        ${transToThousandth(yuzuBalances[0]?.toSignificant(6) ?? '0')}
+                        &nbsp;&nbsp;${transToThousandth(fixFloat(parseFloat(yuzuBalances[0]?.toSignificant(6) ?? '0') * zooPrice, 3))}
                     </span>
                     <span className="s-xyuzu-header-text2" style={{marginLeft:"80px"}}>
                         xYUZU Circulation:
                     </span>
                     <span className="s-xyuzu-header-number">
-                        {circulShow}
+                        &nbsp;&nbsp;{circulShow}
                     </span>
                 </div>
             </div>

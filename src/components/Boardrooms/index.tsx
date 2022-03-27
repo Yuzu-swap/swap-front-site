@@ -353,7 +353,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     [yuzuToken]
   )
 
-  const tvlNum = useMemo(
+  /*const tvlNum = useMemo(
     ()=>{
       console.log("test xyuzu boardroom----")
       if(xyuzu){
@@ -361,7 +361,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
       }
       return tvl
     },[xyuzu, blockNumber, pool, tvl]
-  )
+  )*/
 
   const Apr = useMemo(()=>{
     let extprice = 0
@@ -373,7 +373,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
       }
     }
     
-    return ((prodPerBlock * UserRatioOfReward * zooPrice+ extprice )* 10 * 60 * 24 * 365 * 100) / tvlNum
+    return ((prodPerBlock * UserRatioOfReward * zooPrice+ extprice )* 10 * 60 * 24 * 365 * 100) / tvl
   },
   [blockNumber, prices, pool]
   )
@@ -469,7 +469,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
           </div>
           <div className="s-doubleget-item-detail">
               <label>{t('totalLp')}:</label>
-              <em>{ transToThousandth(fixFloat(tvlNum, 4))} USDT</em>
+              <em>{ transToThousandth(fixFloat(tvl, 4))} USDT</em>
           </div>
           <div className="s-doubleget-item-detail">
               <label>{t('myStaked')}:</label> 
