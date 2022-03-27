@@ -74,6 +74,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
   const [poolList, statics] = useMyAllStakePoolList()
   const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
+  console.log("test111111", poolExtList)
 
 
   const winLabals = {

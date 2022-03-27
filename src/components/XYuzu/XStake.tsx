@@ -232,7 +232,7 @@ export function XStake(){
         ,[yuzuToken, input]
     )
 
-    const [approval, approveCallback] = useApproveCallback(inputToken||undefined, ZOO_ZAP_ADDRESS[chainId ?? DefaultChainId])
+    const [approval, approveCallback] = useApproveCallback(inputToken||undefined, XYUZU_LIST[chainId ?? DefaultChainId]?.address)
     const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
 
     function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
