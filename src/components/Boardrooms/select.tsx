@@ -343,7 +343,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
       {
         xyuzu?
         <div className="s-xyuzu-tab-wrapper">
-          <div className="s-boardroom-select s-boardroom-stake-button s-boardroom-unwrap-button " onClick={async () => { setShowConfirmation(true);}}>Stake xYUZU <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
+          <div className="s-boardroom-select s-boardroom-stake-button s-boardroom-unwrap-button " onClick={async () => { setShowConfirmation(true);}}>Stake xYUZU <QuestionHelper text={t('pledgeTip')} /></div>
         </div>
         :
         <ButtonPrimaryNormal className="s-boardroom-select s-boardroom-stake-button" onClick={async () => { setShowConfirmation(true); }}>{t('pledge')} LP <QuestionHelper text={t('pledgeTip')} /></ButtonPrimaryNormal>
@@ -365,7 +365,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
       <Sloganer />
       <div className="s-boardroom-selected">
         <div className="s-boardroom-account">
-          <div className="s-boardroom-information">
+          <div className="s-boardroom-information" style={{position: 'relative'}}>
             {
               isExt? <p style={{margin: '10px auto'}}>{t('myReward')}
               <QuestionHelper text={

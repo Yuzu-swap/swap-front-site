@@ -331,7 +331,7 @@ export function XStake(){
         <div style={{marginTop: "40px", width:"100%"}}>
              <div className="s-zap-exchange" style={{width:"100%"}}>
                 <Line>
-                    <ZapTitle>Stake YUZU</ZapTitle>
+                    <ZapTitle>Lock YUZU</ZapTitle>
                     <ZapTitle>Balance:<BalanceValue> {yuzuBalances[0]?.toSignificant(6)}</BalanceValue></ZapTitle>
                 </Line>
                 <div className="s-zap-input" style={{marginTop:"20px"}}>
@@ -362,7 +362,7 @@ export function XStake(){
                     </Line>
                 </div>
                 <Line>
-                    <ZapTitle>Set Stake Time:<QuestionHelper text="The countdown is based on the assumption that block time is 6s."/></ZapTitle>
+                    <ZapTitle>Set Lock Time:<QuestionHelper text="The countdown is based on the assumption that block time is 6s."/></ZapTitle>
                     <ZapTitle>1 YUZU for {(xyuzuConfs &&  xyuzuConfs[daynum].ratio) ?? 0} xYUZU</ZapTitle>
                 </Line>
                 <div style={{display: 'flex', marginTop: '20px', marginBottom: '20px'}}>
@@ -400,7 +400,7 @@ export function XStake(){
                         ()=>{
                             SetReviewModal(true)
                     }}>
-                        STAKE
+                        LOCK
                     </ButtonPrimary>
                                  
                 }
@@ -429,7 +429,7 @@ export function XStake(){
                         }}
                         style={{marginTop:"20px"}}
                         >
-                            CONFIRM STAKE
+                            CONFIRM Lock
                         </ButtonPrimary>
                     </div>
                 </Modal>
@@ -441,7 +441,7 @@ export function XStake(){
                                 <LoadingRings/>
                             </div>
                             <ModalText1>Waiting for Confirmation</ModalText1>
-                            <ZapTitle style={{display: 'inline-block', marginTop:'20px', textAlign: 'center'}}>Stake {input} YUZU for {output} xYUZU for {stakeDays && stakeDays[daynum]} days</ZapTitle>
+                            <ZapTitle style={{display: 'inline-block', marginTop:'20px', textAlign: 'center'}}>Lock {input} YUZU for {output} xYUZU for {stakeDays && stakeDays[daynum]} days</ZapTitle>
                             <ZapTitle style={{display: 'inline-block', marginTop:'10px', marginBottom: '10px',fontSize:'16px', opacity:'0.4'}}>
                                 Confirm this transaction in your wallet
                             </ZapTitle>

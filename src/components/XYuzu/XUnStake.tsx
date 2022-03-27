@@ -294,7 +294,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                                 <>
                                     <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
                                     <TimeOut beginAt={data.stakeEnd}/>
-                                    <Text1> Timeout</Text1>
+                                    <Text1> Cooldown</Text1>
                                 </>
                                 :
                                 null
@@ -322,7 +322,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                             <CardUnit>
                                 <TimeCount endAt={data.stakeEnd}/>
                                 <Text1 style={{marginTop : '10px'}}>
-                                    Stake Time Left
+                                    Countdown
                                 </Text1>
                             </CardUnit>
                         </span>
@@ -332,12 +332,12 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                                     {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))}
                                 </Text2>
                                 <Text1 style={{marginTop : '10px'}}>
-                                    Need xYUZU
+                                    xYUZU needed
                                 </Text1>
                             </CardUnit>
                         </span>
                         <ButtonXyuzuCard disabled={ !(blockNumber && blockNumber > data.stakeEnd)} onClick={()=>setShow(true)}>
-                            Unstake
+                            Redeem
                         </ButtonXyuzuCard>
                     </CardRC>
                 </CardContent>
@@ -555,12 +555,12 @@ export function XUnStake(){
       const txs = Object.values(allTransactions)
       return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
     }, [allTransactions])
-    const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && (tx.summary.includes('Xyuzu UnStake') || tx.summary.includes('Xyuzu WithDraw'))).map(tx => tx.hash)
+    const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && (tx.summary.includes('xYUZU UnStake') || tx.summary.includes('xYUZU WithDraw'))).map(tx => tx.hash)
     const loadingStr = useMemo(()=>{
-        if(sortedRecentTransactions && sortedRecentTransactions[0]?.summary && sortedRecentTransactions[0]?.summary.includes('Xyuzu UnStake')){
+        if(sortedRecentTransactions && sortedRecentTransactions[0]?.summary && sortedRecentTransactions[0]?.summary.includes('xYUZU UnStake')){
             return "Unstaking xYUZU"
         }
-        if(sortedRecentTransactions && sortedRecentTransactions[0]?.summary && sortedRecentTransactions[0]?.summary.includes('Xyuzu WithDraw')){
+        if(sortedRecentTransactions && sortedRecentTransactions[0]?.summary && sortedRecentTransactions[0]?.summary.includes('xYUZU WithDraw')){
             return "Withdrawing YUZU"
         }
         return "Loading"

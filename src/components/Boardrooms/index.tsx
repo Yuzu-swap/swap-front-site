@@ -422,6 +422,9 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         <div className="s-doubleget-item-details">
         <div className="s-doubleget-item-detail">
               {
+                xyuzu?
+                <label>Single Token Staking :</label> 
+                :
                 isIfo ? 
                 <label>Initial Farm Offering :</label> 
                 :
@@ -438,11 +441,21 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
               }
               
               {
+                xyuzu?
+                <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>xYUZU
+                <img 
+                  src={WebLinkJump} 
+                  height={'15px'} 
+                  style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
+                  onClick={()=>{window.location.href= "/#/xyuzu"}}
+                />
+                </strong>
+                :
                 minExtBlock != 0 ?
                 TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)
                 :
                 isIfo?
-                <strong>{(pool.tokenRewards && pool.tokenRewards[0].ifo?.title)+ " " ?? ''} 
+                <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>{(pool.tokenRewards && pool.tokenRewards[0].ifo?.title)+ " " ?? ''} 
                 <img 
                   src={WebLinkJump} 
                   height={'15px'} 
@@ -451,7 +464,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
                 />
                 </strong>
                 :
-                <strong>Permanent</strong>
+                <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>Permanent</strong>
               }
           </div>
           <div className="s-doubleget-item-detail" style={{height: '80px'}}>

@@ -17,6 +17,8 @@ import { useTokenContract, useXYuzuContract } from 'hooks/useContract'
 import { tokenAmountForshow } from 'utils/ZoosSwap'
 import { useSelector } from 'react-redux'
 import { AppDispatch, AppState } from '../../state'
+import { useMyAllStakePoolList,useMyAllYuzuParkExtList } from 'data/ZooPark'
+
 
 type Props = {
     show : boolean;
@@ -63,7 +65,22 @@ export function XYuzu(){
     const xyuzuCon = useXYuzuContract(xyuzuToken?.address)
     const circul = useSingleCallResult(xyuzuCon, "totalSupply", []).result 
     const circulShow = transToThousandth(fixFloat(tokenAmountForshow(circul ?? '0', xyuzuToken?.decimals), 3))
-    console.log("test xyuzu yuzu balance", yuzuBalances[0]?.toSignificant(6), " yuzuPrice", zooPrice)
+    const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
+    const xyuzuIndex = useMemo(
+        ()=>{
+            let re = 0
+            if(!poolExtList){
+                return re
+            }
+            for(let i = 0; i<poolExtList.length; i++){
+                if(poolExtList[i].token0.address == poolExtList[i].token1.address){
+                    re = poolExtList[i].pid
+                }
+            }
+            return re
+
+        },[poolExtList]
+    )
 
     return(
         <div className="s-xyuzu-body">
@@ -73,7 +90,8 @@ export function XYuzu(){
                     <span className="s-banner-title">YUZU for xYUZU</span>
                 </div>
                 <div className="s-xyuzu-header-text1" style={{marginTop:"20px", position:"relative"}}>
-                {t("xyuzuhint")}<QuestionHelper text={t("xyuzuhintQ")}/>
+                Stake xYUZU in <a style={{cursor:'pointer', textDecoration: 'none'}} href={"/#/liquiditymining/select/-1/extselect/"+ xyuzuIndex}>Single Token Staking</a> to mine both YUZU and ROSE at the same time.
+                <QuestionHelper text={t("xyuzuhintQ")}/>
                 </div>
                 <div style={{marginTop:"20px"}}>
                     <span className="s-xyuzu-header-text2">
