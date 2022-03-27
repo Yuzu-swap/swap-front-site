@@ -37,7 +37,6 @@ export function useXYuzuStakeCallback(
       .stake( BigNumber.from(amount.toString()), cid
       )
       .then((response: TransactionResponse) => {
-        console.log("xyuzu stake cid :" + cid)
         addTransaction(response, {
           summary: 'Xyuzu Stake'}
           )

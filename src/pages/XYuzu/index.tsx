@@ -12,6 +12,9 @@ import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } f
 import fixFloat,{getTimeStr, transToThousandth} from 'utils/fixFloat'
 import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
 import { useTranslation } from 'react-i18next'
+import { useSingleCallResult } from '../../state/multicall/hooks'
+import { useTokenContract, useXYuzuContract } from 'hooks/useContract'
+import { tokenAmountForshow } from 'utils/ZoosSwap'
 
 type Props = {
     show : boolean;
@@ -55,6 +58,10 @@ export function XYuzu(){
         [yuzuToken]
     )
 
+    const xyuzuCon = useXYuzuContract(xyuzuToken?.address)
+    const circul = useSingleCallResult(xyuzuCon, "totalSupply", []).result 
+    console.log("test circul ------", circul)
+    const circulShow = transToThousandth(fixFloat(tokenAmountForshow(circul ?? '0', xyuzuToken?.decimals), 3))
 
     return(
         <div className="s-xyuzu-body">
@@ -77,7 +84,7 @@ export function XYuzu(){
                         xYUZU Circulation:
                     </span>
                     <span className="s-xyuzu-header-number">
-                        $123
+                        {circulShow}
                     </span>
                 </div>
             </div>
