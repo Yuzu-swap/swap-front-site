@@ -37,6 +37,7 @@ export function useXYuzuStakeCallback(
       .stake( BigNumber.from(amount.toString()), cid
       )
       .then((response: TransactionResponse) => {
+        console.log("xyuzu stake cid :" + cid)
         addTransaction(response, {
           summary: 'Xyuzu Stake'}
           )
@@ -44,7 +45,7 @@ export function useXYuzuStakeCallback(
         console.debug('Failed to Stake Xyuzu', error)
         throw error
       })
-  }, [amount, address, tokenContract, addTransaction])
+  }, [amount, address, tokenContract, addTransaction, cid])
 
   return stake
 }
@@ -76,7 +77,7 @@ export function useXYuzuCallback(
         console.debug('Failed to UnStake Xyuzu', error)
         throw error
       })
-  }, [ address, tokenContract, addTransaction])
+  }, [ address, tokenContract, addTransaction, oid])
 
   const withdraw = useCallback(async (): Promise<void> => {
     
