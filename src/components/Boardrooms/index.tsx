@@ -108,45 +108,43 @@ export function BoardItem({pool,key,totalEffect,tvl}:{ pool: StakePool ,key:numb
   const { t } = useTranslation();
   return (
     <div className="s-boardroom-item">
-      <div className="s-trading-item-trans">
-      <CurrencyLogo currency={token0WithLogo} />
-      <Link to={jumpUrl}>
-        <img src={ Trans } alt="" className="s-trading-trans" />
-        <CurrencyLogo currency={token1WithLogo}  /><br/>
-        { <h2>{pool.token0.symbol}{'-'}{pool.token1.symbol}</h2> }
-      </Link>
-      </div>
+      <div className="s-boardroom-item-con">
+        <div className="s-trading-item-trans">
+          <CurrencyLogo currency={token0WithLogo} />
+          <Link to={jumpUrl}>
+            <img src={ Trans } alt="" className="s-trading-trans" />
+            <CurrencyLogo currency={token1WithLogo}  /><br/>
+            <h3>{pool.token0.symbol}{'-'}{pool.token1.symbol}</h3>
+          </Link>
+        </div>
 
-      <div className="s-boardroom-item-details">
-        <div className="s-boardroom-detail">
-          {/* <p>{pool.lpAddress}</p> */}
-          <BoardRoomDetail>
-            <p>{t('productionperblock')}:</p> 
-            <p>{ fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU</p>
-          </BoardRoomDetail>
-          <BoardRoomDetail>
-            <p>{t('totalLp')}:</p>
-            <p>{ transToThousandth(fixFloat(tvl, 4))} USDT</p>
-          </BoardRoomDetail>
-          <BoardRoomDetail>
-            <p>{t('myStaked')}:</p> 
-            <p>{ fixFloat(myRatio * 100, 2)}%</p>
-          </BoardRoomDetail>
-          <BoardRoomDetail>
-            <p>{t('myReward')}:</p> 
-            <p>{ fixFloat(myReward, 4)} YUZU</p>
-          </BoardRoomDetail>          
+        <div className="s-boardroom-item-details">
+          <div className="s-boardroom-detail">
+            <BoardRoomDetail>
+              <p>{t('productionperblock')}:</p> 
+              <p style={{color: '#FFFFFF'}}>{ fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU</p>
+            </BoardRoomDetail>
+            <BoardRoomDetail>
+              <p>{t('totalLp')}:</p>
+              <p style={{color: '#FFFFFF'}}>{ transToThousandth(fixFloat(tvl, 4))} USDT</p>
+            </BoardRoomDetail>
+            <BoardRoomDetail>
+              <p>{t('myStaked')}:</p> 
+              <p style={{color: '#FFFFFF'}}>{ fixFloat(myRatio * 100, 2)}%</p>
+            </BoardRoomDetail>
+            <BoardRoomDetail>
+              <p>{t('myReward')}:</p> 
+              <p style={{color: '#FFFFFF'}}>{ fixFloat(myReward, 4)} YUZU</p>
+            </BoardRoomDetail> 
+            <BoardRoomDetail>
+              <p>APR<QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>：</p>
+              <p style={{color: '#FF526C'}}>{fixFloat(Apr, 3)}%</p>
+            </BoardRoomDetail>         
+          </div>
+          <ButtonPrimaryNormal  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/${pool.pid}/extselect/-1`}>
+            {t('select')}
+          </ButtonPrimaryNormal>
         </div>
-        <div className="s-boardroom-apy">
-          <span>APR<LightQuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/></span>
-          <span>{fixFloat(Apr, 3)}%</span>
-        </div>
-        <ButtonPrimaryNormal  className="s-boardroom-select" as={Link} padding="6px 18px" to={`/liquiditymining/select/${pool.pid}/extselect/-1`}>
-        {t('select')}
-        </ButtonPrimaryNormal>
-                
-        {/* <div className="s-boardroom-select" onClick={onWithdraw}>withdraw</div> */}
-        {/* <div className="s-boardroom-select" onClick={onHarvest}>harvest</div> */}
       </div>
     </div>
   )
@@ -505,7 +503,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
               </em>      
           </div>
           <div className="s-doubleget-item-detail">
-            <label>APR<QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/></label>
+            <label>APR<QuestionHelper text={'This number is estimated given the assumption that each block time is 6s.'}/>：</label>
             <em style={{color:'#FF526C'}}>{fixFloat(Apr, 3)}%</em>
           </div>
         </div>

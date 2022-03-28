@@ -308,7 +308,7 @@ export default function Swap() {
       </div>
       <AppBody>
         {/* <SwapHeader /> */}
-        <Wrapper id="swap-page">
+        <Wrapper id="swap-page" style={{background: '#2C3035', borderRadius: '8px', border:'1px solid rgba(255, 255, 255, 0.2)'}}>
           <ConfirmSwapModal
             isOpen={showConfirm}
             trade={trade}

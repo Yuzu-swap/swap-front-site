@@ -70,7 +70,7 @@ export default function Header({statics,poolList}:{poolList:TradePool[],statics:
   const { t } = useTranslation();
   //<Web3Withdrawal onClick={toggleWithdrawalRewardModal}>
   return (
-    <div className="s-banner s-tradingmining-banner">
+    <div className="s-banner s-tradingmining-banner" style={{color : '#FFFFFF'}}>
       <p className="s-tradingmining-text">{t('totalTransactionAmount')}：${transToThousandth(statics.totalSwapVolume?.toFixed(3)) }</p>
       <p className="s-tradingmining-text">{t('currentIndividualWithdrawableRewards')}：{ transToThousandth(tokenAmountForshow(myReward).toFixed(3))} YUZU</p>
       <Web3Withdrawal onClick={withdrawAll}>
