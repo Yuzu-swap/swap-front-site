@@ -136,35 +136,41 @@ export default function Pool() {
       <Sloganer/>
       <PageWrapper>
         <SwapPoolTabs active={'pool'} />
-        <VoteCard style={{ marginTop: '3rem', padding: '1rem 0', borderRadius: '8px 8px 0 0' }}>
-          <CardSection>
-            <AutoColumn gap="md">
-              <RowBetween>
-                <TYPE.white fontWeight={600} color={theme.text6}>
-                  {t('liquidityProviderRewards')}
-                </TYPE.white>
-              </RowBetween>
-              <RowBetween>
-                <TYPE.white fontSize={14} color={theme.text9}>
-                  {t('liquidityProviderRewardsMemo')}
-                </TYPE.white>
-              </RowBetween>
-              {/* <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
-                target="_blank"
-                href="https://uniswap.org/docs/v2/core-concepts/pools/"
-              >
-                <TYPE.white fontSize={14}>Read more about providing liquidity</TYPE.white>
-              </ExternalLink> */}
-            </AutoColumn>
-          </CardSection>
-        </VoteCard>
+        <div 
+        style={{background:'linear-gradient(360deg, rgba(255, 255, 255, 0), rgba(255, 82, 108, 0.6))',
+         padding: '1px 1px 0 1px', 
+         borderRadius: '8px 8px 0 0',
+         marginTop: '3rem'}}>
+          <VoteCard style={{  padding: '1rem 0', borderRadius: '8px 8px 0 0' , background: '#222529'}}>
+            <CardSection>
+              <AutoColumn gap="md">
+                <RowBetween>
+                  <TYPE.white fontSize={20} fontWeight={600} color={"#FFF"}>
+                    {t('liquidityProviderRewards')}
+                  </TYPE.white>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.white fontSize={16} color={'rgba(255, 255, 255, 0.6)'}>
+                    {t('liquidityProviderRewardsMemo')}
+                  </TYPE.white>
+                </RowBetween>
+                {/* <ExternalLink
+                  style={{ color: 'white', textDecoration: 'underline' }}
+                  target="_blank"
+                  href="https://uniswap.org/docs/v2/core-concepts/pools/"
+                >
+                  <TYPE.white fontSize={14}>Read more about providing liquidity</TYPE.white>
+                </ExternalLink> */}
+              </AutoColumn>
+            </CardSection>
+          </VoteCard>
+        </div>
 
-        <AutoColumn gap="md" justify="center" style={{ backgroundColor: '#F8F8F8', borderRadius: '0 0 8px 8px', boxShadow: '0px 14px 20px 4px rgba(237, 73, 98, 0.1)' }}>
+        <AutoColumn gap="md" justify="center" style={{ backgroundColor: '#2C3035', borderRadius: '0 0 8px 8px' }}>
           <AutoColumn gap="md" style={{ width: '100%' }}>
-            <TitleRow style={{ padding: '1rem 1rem', backgroundColor: '#f5f5f5' }}>
+            <TitleRow style={{ padding: '1rem 1rem', backgroundColor: '#2C3035' }}>
               <HideSmall>
-                <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>
+                <TYPE.mediumHeader color={'#FFF'} style={{ justifySelf: 'flex-start' }}>
                   {t('yourWorkingCapital')}
                 </TYPE.mediumHeader>
               </HideSmall>
@@ -229,7 +235,7 @@ export default function Pool() {
             )}
 
             <AutoColumn justify={'center'} gap="md">
-              <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+              <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }} color={'rgba(255, 255, 255, 0.6)'}>
                 {hasV1Liquidity ?  t('uniswapLiquidity') : t('dontSeeLiquidity') } {' '}
                 <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
                   {hasV1Liquidity ? 'Migrate now.' :  t('import') }

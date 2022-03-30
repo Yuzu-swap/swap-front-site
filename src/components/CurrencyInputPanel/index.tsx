@@ -19,6 +19,8 @@ const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
   padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};
+  background: #F5F5F5;
+  border-radius: 8px;
 `
 
 const CurrencySelect = styled.button<{ selected: boolean }>`
@@ -48,7 +50,7 @@ const LabelRow = styled.div`
   color: ${({ theme }) => theme.text1};
   font-size: 0.75rem;
   line-height: 1rem;
-  padding: 0.75rem 1rem 0 1rem;
+  padding: 0.75rem 0rem 0 0rem;
   span:hover {
     cursor: pointer;
     color: ${({ theme }) => darken(0.2, theme.text2)};
@@ -88,7 +90,6 @@ const Container = styled.div<{
   border-radius: ${({ hideInput }) => (hideInput ? '8px' : '6px')};
   border-radius: ${({ cornerRadiusTopNone }) => cornerRadiusTopNone && '0 0 6px 6px'};
   border-radius: ${({ cornerRadiusBottomNone }) => cornerRadiusBottomNone && '6px 6px 0 0'};
-  border: 1px solid #EDEDED;
   background-color: ${({ theme }) => theme.bg1};
   background-color: ${({ containerBackground }) => containerBackground};
 `
@@ -191,21 +192,21 @@ export default function CurrencyInputPanel({
         containerBackground={containerBackground}
       >
         {!hideInput && (
-          <LabelRow>
+          <LabelRow style={{marginBottom:'12px'}}>
             <RowBetween>
-              <TYPE.body color= '#666666' fontWeight={500} fontSize={14}>
+              <TYPE.body color= 'rgba(255, 255, 255, 0.6)' fontWeight={500} fontSize={16}>
                 {label}
               </TYPE.body>
               {account && (
                 <TYPE.body
                   onClick={onMax}
-                  color={theme.text3}
+                  color='rgba(255, 255, 255, 0.6)'
                   fontWeight={500}
-                  fontSize={14}
+                  fontSize={16}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
                   {!hideBalance && !!currency && selectedCurrencyBalance
-                    ? (customBalanceText ?? 'Balance: ') + selectedCurrencyBalance?.toSignificant(6)
+                    ? <span>{(customBalanceText ?? 'Balance:')} &nbsp; <span style={{color:'#FFFFFF'}}> {selectedCurrencyBalance?.toSignificant(6)}</span></span>
                     : ' -'}
                 </TYPE.body>
               )}

@@ -35,7 +35,7 @@ export const SectionBreak = styled.div`
 `
 
 export const BottomGrouping = styled.div`
-  margin-top: 1rem;
+  margin-top: 2rem;
 `
 
 export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
@@ -52,9 +52,8 @@ export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
 export const StyledBalanceMaxMini = styled.button`
   height: 22px;
   width: 22px;
-  background-color: ${({ theme }) => theme.bg2};
   border: none;
-  border-radius: 50%;
+  background: #2C3035;
   padding: 0.2rem;
   font-size: 0.875rem;
   font-weight: 400;
@@ -67,11 +66,10 @@ export const StyledBalanceMaxMini = styled.button`
   float: right;
 
   :hover {
-    background-color: ${({ theme }) => theme.bg3};
+    opacity: 0.6;
   }
   :focus {
-    background-color: ${({ theme }) => theme.bg3};
-    outline: none;
+
   }
 `
 
@@ -143,12 +141,13 @@ export function SwapCallbackError({ error }: { error: string }) {
   )
 }
 
-export const SwapShowAcceptChanges = styled(AutoColumn)`
-  background-color: ${({ theme }) => transparentize(0.9, theme.primary1)};
+export const SwapShowAcceptChanges = styled(AutoColumn)` 
+  background: rgba(237, 73, 98, 0.05);
   color: ${({ theme }) => theme.primary1};
   padding: 0.5rem;
   border-radius: ${({ theme }) => theme.borderRadius};
   margin-top: 8px;
+  border: 1px solid #ED4962;
 `
 export const Separator = styled.div`
   width: 100%;

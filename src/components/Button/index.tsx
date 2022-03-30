@@ -62,7 +62,7 @@ export const ButtonPrimary = styled(Base)`
   &:disabled {
     pointer-events: none;
     background: ${({ theme, altDisabledStyle, disabled }) =>
-      altDisabledStyle ? (disabled ? '#D0D0D0' : theme.primary1) : '#D0D0D0'};
+      altDisabledStyle ? (disabled ? '#767676' : theme.primary1) : '#767676'};
     color: ${({ theme, altDisabledStyle, disabled }) =>
       altDisabledStyle ? (disabled ? theme.text8 : 'white') : theme.text8};
     cursor: auto;

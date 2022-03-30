@@ -6,6 +6,7 @@ import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import { StyledBalanceMaxMini } from './styleds'
 import { useActiveWeb3React } from '../../hooks'
+import  ExchangeIcon from '../../assets/newUI/exchange.png'
 
 interface TradePriceProps {
   price?: Price
@@ -35,7 +36,7 @@ export default function TradePrice({ price, showInverted, setShowInverted }: Tra
         <>
           {formattedPrice ?? '-'} {label}
           <StyledBalanceMaxMini onClick={() => setShowInverted(!showInverted)}>
-            <Repeat size={14} />
+            <img src={ExchangeIcon} height={'16px'}/>
           </StyledBalanceMaxMini>
         </>
       ) : (

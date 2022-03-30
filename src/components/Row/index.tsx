@@ -43,4 +43,12 @@ export const RowFixed = styled(Row)<{ gap?: string; justify?: string }>`
   margin: ${({ gap }) => gap && `-${gap}`};
 `
 
+export const SplitRow = styled.div`
+  height: 0px;
+  width : 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+`
+
+
 export default Row
