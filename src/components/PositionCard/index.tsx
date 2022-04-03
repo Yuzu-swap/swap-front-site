@@ -2,6 +2,7 @@ import { JSBI, Pair, Percent, TokenAmount } from '@liuxingfeiyu/zoo-sdk'
 import { darken } from 'polished'
 import React, { useMemo, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'react-feather'
+import ChevronDownImg from '../../assets/newUI/chevronDown.png'
 import { Link } from 'react-router-dom'
 import { Text } from 'rebass'
 import styled from 'styled-components'
@@ -42,7 +43,7 @@ export const HoverCard = styled(Card)`
 const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
   /* border: 1px solid ${({ theme }) => theme.text4}; */
   background: #2C3035;
-  border-radius: 6px;
+  border-radius: 8px;
   width: unset;
   border: none;
   
@@ -229,12 +230,12 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                 {showMore ? (
                   <>
                     {t('manage')}
-                    <ChevronUp size="20" style={{ marginLeft: '10px' }} />
+                    <img src={ChevronDownImg} width="16px" style={{ marginLeft: '10px', transform:' rotate(180deg)' }} />
                   </>
                 ) : (
                   <>
                     {t('manage')}
-                    <ChevronDown size="20" style={{ marginLeft: '10px' }} />
+                    <img src={ChevronDownImg} width="16px" style={{ marginLeft: '10px' }} />
                   </>
                 )}
               </ButtonEmpty>
@@ -244,10 +245,10 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
           {showMore && (
             <AutoColumn gap="8px">
               <FixedHeightRow>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500} color={'rgba(255, 255, 255, 0.6)'}>
                 {t('myLpBalance')}:
                 </Text>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500} color='#FFF'>
                   {userPoolBalance ? stringFix(userPoolBalance.toSignificant(4), 4) : '-'}
                 </Text>
               </FixedHeightRow>
@@ -263,13 +264,13 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               )}
               <FixedHeightRow>
                 <RowFixed>
-                  <Text fontSize={16} fontWeight={500}>
+                  <Text fontSize={16} fontWeight={500} color={'rgba(255, 255, 255, 0.6)'}>
                     {currency0?.getSymbol(chainId)}:
                   </Text>
                 </RowFixed>
                 {token0Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
+                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'} color='#FFF'>
                       {stringFix(token0Deposited?.toSignificant(6), 6)}
                     </Text>
                     <CurrencyLogo size="20px" style={{ marginLeft: '8px' }} currency={currency0} />
@@ -281,13 +282,13 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
 
               <FixedHeightRow>
                 <RowFixed>
-                  <Text fontSize={16} fontWeight={500}>
+                  <Text fontSize={16} fontWeight={500} color={'rgba(255, 255, 255, 0.6)'}>
                     {currency1?.getSymbol(chainId)}:
                   </Text>
                 </RowFixed>
                 {token1Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
+                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'} color='#FFF'>
                       {stringFix(token1Deposited?.toSignificant(6), 6)}
                     </Text>
                     <CurrencyLogo size="20px" style={{ marginLeft: '8px' }} currency={currency1} />
@@ -298,10 +299,10 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               </FixedHeightRow>
 
               <FixedHeightRow>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500} color={'rgba(255, 255, 255, 0.6)'}>
                 {t('poolTokenPercentage')}:
                 </Text>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500} color='#FFF'>
                   {poolTokenPercentage
                     ? (poolTokenPercentage.toFixed(2) === '0.00' ? '<0.01' : poolTokenPercentage.toFixed(2)) + '%'
                     : '-'}

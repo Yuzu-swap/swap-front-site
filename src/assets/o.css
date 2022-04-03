@@ -683,10 +683,9 @@
 	background-size: 100% 100%;
 }
 .s-header-create{
-	justify-content: flex-start;
+	justify-content: space-around;
 }
 .s-header-create-title {
-	margin-left: 7rem;
 }
 .s-header-idenicon{
 	background: url(./newUI/dot.png);

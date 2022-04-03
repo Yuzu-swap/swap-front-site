@@ -25,45 +25,45 @@ export function ConfirmAddModalBottom({
 }) {
   const { chainId } = useActiveWeb3React()
   return (
-    <>
+    <div style={{background:'#2C3035', borderTop:'1px solid rgba(255, 255, 255, 0.2)', padding: ' 20px'}}>
       <RowBetween>
-        <TYPE.body>{currencies[Field.CURRENCY_A]?.getSymbol(chainId)} Deposited</TYPE.body>
+        <TYPE.darkWhite>{currencies[Field.CURRENCY_A]?.getSymbol(chainId)} Deposited</TYPE.darkWhite>
         <RowFixed>
           <CurrencyLogo currency={currencies[Field.CURRENCY_A]} style={{ marginRight: '8px' }} />
-          <TYPE.body>{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</TYPE.body>
+          <TYPE.white>{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</TYPE.white>
         </RowFixed>
       </RowBetween>
       <RowBetween>
-        <TYPE.body>{currencies[Field.CURRENCY_B]?.getSymbol(chainId)} Deposited</TYPE.body>
+        <TYPE.darkWhite>{currencies[Field.CURRENCY_B]?.getSymbol(chainId)} Deposited</TYPE.darkWhite>
         <RowFixed>
           <CurrencyLogo currency={currencies[Field.CURRENCY_B]} style={{ marginRight: '8px' }} />
-          <TYPE.body>{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</TYPE.body>
+          <TYPE.white>{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</TYPE.white>
         </RowFixed>
       </RowBetween>
       <RowBetween>
-        <TYPE.body>Rates</TYPE.body>
-        <TYPE.body>
+        <TYPE.darkWhite>Rates</TYPE.darkWhite>
+        <TYPE.white>
           {`1 ${currencies[Field.CURRENCY_A]?.getSymbol(chainId)} = ${price?.toSignificant(4)} ${currencies[
             Field.CURRENCY_B
           ]?.getSymbol(chainId)}`}
-        </TYPE.body>
+        </TYPE.white>
       </RowBetween>
       <RowBetween style={{ justifyContent: 'flex-end' }}>
-        <TYPE.body>
+        <TYPE.white>
           {`1 ${currencies[Field.CURRENCY_B]?.getSymbol(chainId)} = ${price?.invert().toSignificant(4)} ${currencies[
             Field.CURRENCY_A
           ]?.getSymbol(chainId)}`}
-        </TYPE.body>
+        </TYPE.white>
       </RowBetween>
       <RowBetween>
-        <TYPE.body>Share of Pool:</TYPE.body>
-        <TYPE.body>{noLiquidity ? '100' : poolTokenPercentage?.toSignificant(4)}%</TYPE.body>
+        <TYPE.darkWhite>Share of Pool:</TYPE.darkWhite>
+        <TYPE.white>{noLiquidity ? '100' : poolTokenPercentage?.toSignificant(4)}%</TYPE.white>
       </RowBetween>
       <ButtonPrimary style={{ margin: '20px 0 0 0' }} onClick={onAdd}>
         <Text fontWeight={500} fontSize={20}>
           {noLiquidity ? 'Create Pool & Supply' : 'Confirm Supply'}
         </Text>
       </ButtonPrimary>
-    </>
+    </div>
   )
 }

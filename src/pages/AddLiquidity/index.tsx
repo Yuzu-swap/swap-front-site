@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import { Text } from 'rebass'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import { BlueCard, LightCard } from '../../components/Card'
-import { AutoColumn, ColumnCenter } from '../../components/Column'
+import Column , { AutoColumn, ColumnCenter } from '../../components/Column'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
@@ -264,29 +264,29 @@ export default function AddLiquidity({
         </LightCard>
       </AutoColumn>
     ) : (
-      <AutoColumn gap="20px">
-        <RowFlat style={{ marginTop: '20px' }}>
-          <Text fontSize="48px" fontWeight={500} lineHeight="42px" marginRight={10}>
-            {liquidityMinted?.toSignificant(6)}
-          </Text>
+      <AutoColumn gap="0px" style={{border:'1px solid rgba(255, 255, 255, 0.2)', borderRadius:' 8px', background:'#222529', margin:'20px 0px'}}>
+        <RowFlat style={{ marginTop: '20px' , padding: '0px 16px'}}>
           <DoubleCurrencyLogo
             currency0={currencies[Field.CURRENCY_A]}
             currency1={currencies[Field.CURRENCY_B]}
-            size={30}
+            size={24}
           />
+          <Text fontSize="20px" fontWeight={500} lineHeight="24px" marginRight={10} color='#FF526C'>
+            &nbsp;&nbsp;{liquidityMinted?.toSignificant(6)}
+          </Text>
         </RowFlat>
-        <Row>
-          <Text fontSize="24px">
+        <Row style={{ padding: '10px 16px', borderBottom:'1px solid rgba(255, 255, 255, 0.2)'}}>
+          <Text fontSize="24px" color="#FFF">
             {currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
               '/' +
               currencies[Field.CURRENCY_B]?.getSymbol(chainId) +
               ' Pool Tokens'}
           </Text>
         </Row>
-        <TYPE.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>
+        <TYPE.white fontSize={16} textAlign="left" padding={'5px 16px 10px'} color="rgba(255, 255, 255, 0.6)">
           {`Output is estimated. If the price changes by more than ${allowedSlippage /
             100}% your transaction will revert.`}
-        </TYPE.italic>
+        </TYPE.white>
       </AutoColumn>
     )
   }
@@ -399,6 +399,7 @@ export default function AddLiquidity({
       <Sloganer/>
       { confirmPop }
       <AppBody>
+        <div style={{background:'#2C3035', border:'1px solid rgba(255, 255, 255, 0.2)', borderRadius:'8px'}}>
         <AddRemoveTabs creating={isCreate} adding={true} />
         { Liquidity1st }
         <Wrapper>
@@ -418,7 +419,7 @@ export default function AddLiquidity({
             )}
             pendingText={pendingText}
           />
-          <AutoColumn gap="20px">
+          <AutoColumn gap="10px">
             {/* {noLiquidity ||
               (isCreate ? (
                 <ColumnCenter>
@@ -459,12 +460,12 @@ export default function AddLiquidity({
               showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
               currency={currencies[Field.CURRENCY_A]}
               id="add-liquidity-input-tokena"
-              containerBackground={'#F5F5F5'}
+              containerBackground={'#2C3035'}
               showCommonBases
             />
-            <ColumnCenter>
+            <Column style={{width: '100%', marginTop: '10px', marginBottom:'-10px'}}>
               <Plus size="16" color={theme.text2} />
-            </ColumnCenter>
+            </Column>
             <CurrencyInputPanel
               value={formattedAmounts[Field.CURRENCY_B]}
               onUserInput={onFieldBInput}
@@ -475,18 +476,18 @@ export default function AddLiquidity({
               showMaxButton={!atMaxAmounts[Field.CURRENCY_B]}
               currency={currencies[Field.CURRENCY_B]}
               id="add-liquidity-input-tokenb"
-              containerBackground={'#F5F5F5'}
+              containerBackground={'#2C3035'}
               showCommonBases
             />
             {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
               <>
-                <LightCard padding="0px" borderRadius={'20px'}>
-                  <RowBetween padding="1rem">
-                    <TYPE.subHeader fontWeight={500} fontSize={14}>
+                <LightCard padding="0px" borderRadius={'8px'}  style={{background:'#222529', border:'1px solid rgba(255, 255, 255, 0.2)', margin: '10px 0px'}}>
+                  <RowBetween padding="0.5rem" style={{borderBottom: '1px solid rgba(255, 255, 255, 0.2)'}}>
+                    <TYPE.subHeader fontWeight={500} fontSize={14} color="rgba(255, 255, 255, 0.6)">
                       {noLiquidity ? 'Initial prices' : 'Prices'} and pool share
                     </TYPE.subHeader>
                   </RowBetween>{' '}
-                  <LightCard padding="1rem" borderRadius={'20px'}>
+                  <LightCard padding="1rem" borderRadius={'0 0 8px 8px'} style={{background:'#222529'}}>
                     <PoolPriceBar
                       currencies={currencies}
                       poolTokenPercentage={poolTokenPercentage}
@@ -555,6 +556,7 @@ export default function AddLiquidity({
             )}
           </AutoColumn>
         </Wrapper>
+        </div>
       </AppBody>
       {!addIsUnsupported ? (
         pair && !noLiquidity && pairState !== PairState.INVALID ? (

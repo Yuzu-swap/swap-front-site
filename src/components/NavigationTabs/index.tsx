@@ -15,7 +15,7 @@ import { resetMintState } from 'state/mint/actions'
 const Tabs = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
-  border-radius: 3rem;
+  border-radius: inherit;
   justify-content: space-evenly;
 `
 
@@ -50,10 +50,11 @@ const StyledNavLink = styled(NavLink).attrs({
 const ActiveText = styled.div`
   font-weight: 500;
   font-size: 20px;
+  color: #FFF;
 `
 
 const StyledArrowLeft = styled(ArrowLeft)`
-  color: ${({ theme }) => theme.text1};
+  color: #FFF;
 `
 
 export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' | 'homepage' | 'tradingmining' | 'boardroom' }) {
@@ -98,13 +99,14 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
   const { t } = useTranslation();
   
   return (
-    <Tabs>
-      <RowBetween style={{ padding: '1rem 1rem 0 1rem' }} className="s-header-create">
+    <Tabs style={{borderBottom:' 1px solid rgba(255, 255, 255, 0.2)', borderBottomLeftRadius:' 0px', borderBottomRightRadius:' 0px', paddingBottom:'10px'}}>
+      <RowBetween style={{ padding: '1rem 1rem 0 1rem' , position: 'relative'}} className="s-header-create">
         <HistoryLink
           to="/pool"
           onClick={() => {
             adding && dispatch(resetMintState())
           }}
+          style={{position: 'absolute', left:'15px'}}
         >
           <StyledArrowLeft />
         </HistoryLink>
