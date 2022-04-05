@@ -100,7 +100,7 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
   
   return (
     <Tabs style={{borderBottom:' 1px solid rgba(255, 255, 255, 0.2)', borderBottomLeftRadius:' 0px', borderBottomRightRadius:' 0px', paddingBottom:'10px'}}>
-      <Row style={{ padding: '1rem 1rem 0 1rem' , position: 'relative'}} className="s-header-create">
+      <Row  justify='space-around' style={{ padding: '1rem 1rem 0 1rem' , position: 'relative'}} className="s-header-create">
         <HistoryLink
           to="/pool"
           onClick={() => {
