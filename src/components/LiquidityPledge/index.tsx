@@ -80,11 +80,6 @@ export function Pledge(props: any){
           <span>${zooPrice.toFixed(3)}</span>
           <span>${transToThousandth(autobuyCurr.toFixed(3))}</span>
           <span>${transToThousandth(tradeOneDay.toFixed(3))}</span>
-          <span 
-          style={{ cursor: "pointer"}}
-          onClick={()=>{window.open((CHAIN_CONFIG as any)[DefaultChainId].blockExplorerUrl +'address/' +BLACKHOLE_ADDRESS + '/transactions'
-              )}}>
-            {yuzuShow} YUZU</span>
           <span className="s-pledge-item-timer">
             <em>{day}</em>:
             <em>{hour}</em>:
@@ -96,7 +91,6 @@ export function Pledge(props: any){
           <span>{t('homepageCurrentPrice')}</span>
           <span>{t('homepagetoBeRepurchasedAmount')} </span>
           <span>{t('homepage24Hours')} </span>
-          <span>{t('homepageRepurchasedAmount')} </span>
           <span  className="s-pledge-item-timer">{t('homepageHalvingCountdown')} </span>
         </div>
       </div>
@@ -128,7 +122,7 @@ export function PledgeDown(props: any){
 
   const yuzuTokenCon = useTokenContract(yuzuToken?.address ?? '', false)
   const blackholeRe = useSingleCallResult(yuzuTokenCon, "balanceOf", [BLACKHOLE_ADDRESS]).result 
-  const yuzuShow =  transToThousandth(fixFloat(tokenAmountForshow(blackholeRe ?? '0', yuzuToken?.decimals), 3))
+  const yuzuShow =  transToThousandth(fixFloat(tokenAmountForshow(blackholeRe ?? '0', yuzuToken?.decimals), 0))
 
   const cirnum = parseFloat(totalSupply?.toFixed(0) ?? '0') - tokenAmountForshow(blackholeRe ?? '0', yuzuToken?.decimals)
   const cirShow = transToThousandth(fixFloat( cirnum , 0))
@@ -144,9 +138,13 @@ export function PledgeDown(props: any){
       <div className="s-pledge-item-in">
         <div className="s-pledge-item-numbers">
           <span>${capShow}</span>
-          <span>{mintShow} &nbsp;YUZU </span>
-          <span>{yuzuShow} &nbsp;YUZU </span>
-          <span> {cirShow} &nbsp;YUZU </span>
+          <span>{mintShow}&nbsp;YUZU </span>
+          <span
+            style={{ cursor: "pointer"}}
+            onClick={()=>{window.open((CHAIN_CONFIG as any)[DefaultChainId].blockExplorerUrl +'address/' +BLACKHOLE_ADDRESS + '/transactions'
+                )}}
+          >{yuzuShow}&nbsp;YUZU </span>
+          <span> {cirShow}&nbsp;YUZU </span>
           <span> {rewardPerBlock}&nbsp;YUZU </span>
         </div>
         <div className="s-pledge-item-title">
