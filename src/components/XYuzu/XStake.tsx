@@ -32,7 +32,7 @@ import { TransactionDetails } from '../../state/transactions/reducer'
 type Props = {
     show : boolean;
 };
-const Wrapper : React.FC<Props> = ({show , children})=>(
+export const Wrapper : React.FC<Props> = ({show , children})=>(
     
     show?
     <div className="s-xyuzu-tab-wrapper" style={{width : "fit-content", marginRight : '20px'}}>
@@ -329,7 +329,7 @@ export function XStake(){
 
     return (
         <div style={{marginTop: "40px", width:"100%"}}>
-             <div className="s-zap-exchange" style={{width:"100%"}}>
+             <div className="s-zap-exchange" style={{width:"100%", padding : '20px'}}>
                 <Line>
                     <ZapTitle>Lock YUZU</ZapTitle>
                     <ZapTitle>Balance:<BalanceValue> {yuzuBalances[0]?.toSignificant(6)}</BalanceValue></ZapTitle>

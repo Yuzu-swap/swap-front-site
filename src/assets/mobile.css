@@ -108,3 +108,7 @@ html,body{
 	height: 0px;
 	overflow: hidden;
 }
+
+.w-mobile .s-xyuzu-body{
+	width: 100%;
+}

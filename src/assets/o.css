@@ -134,7 +134,7 @@
 .s-pledge-item-title{
 	font-weight: 400;
 	font-size: 16px;
-	color: #FFFFFF;
+	color: rgba(255, 255, 255, 0.4);
 	line-height: 19px;
 	display: flex;
 	justify-content: space-between;
@@ -2255,7 +2255,6 @@
 
 .s-zap-exchange{
 	width: 428px;
-	padding: 20px;
 	position: relative;
 	height: fit-content;
 	background: #2C3035;
@@ -2264,9 +2263,7 @@
 }
 
 .s-zap-input{
-	background: #F5F5F5;
 	border-radius: 6px;
-	padding: 10px;
 }
 .s-zap-output{
 	background: #222529;
@@ -2278,6 +2275,15 @@
 .s-zap-line{
 	display: flex;
 	justify-content: space-between;
+	background: #F5F5F5;
+	padding: 15px;
+	border-radius: 8px;
+}
+
+.s-zap-line1{
+	background: #222529;
+	padding: 15px;
+	border-radius: 8px;
 }
 
 .s-xyuzu-body{
