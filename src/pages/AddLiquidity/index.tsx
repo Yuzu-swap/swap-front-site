@@ -479,7 +479,7 @@ export default function AddLiquidity({
               containerBackground={'#2C3035'}
               showCommonBases
             />
-            {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
+            {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID ?
               <>
                 <LightCard padding="0px" borderRadius={'8px'}  style={{background:'#222529', border:'1px solid rgba(255, 255, 255, 0.2)', margin: '10px 0px'}}>
                   <RowBetween padding="0.5rem" style={{borderBottom: '1px solid rgba(255, 255, 255, 0.2)'}}>
@@ -487,7 +487,7 @@ export default function AddLiquidity({
                       {noLiquidity ? 'Initial prices' : 'Prices'} and pool share
                     </TYPE.subHeader>
                   </RowBetween>{' '}
-                  <LightCard padding="1rem" borderRadius={'0 0 8px 8px'} style={{background:'#222529'}}>
+                  <LightCard padding="1rem" borderRadius={'0 0 8px 8px'} style={{background:'#222529' ,border : 'none'}}>
                     <PoolPriceBar
                       currencies={currencies}
                       poolTokenPercentage={poolTokenPercentage}
@@ -497,7 +497,9 @@ export default function AddLiquidity({
                   </LightCard>
                 </LightCard>
               </>
-            )}
+              :
+              <div style={{margin : '5px 0px'}}/>
+            }
 
             {addIsUnsupported ? (
               <ButtonPrimary disabled={true}>

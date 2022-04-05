@@ -137,8 +137,10 @@ export default function Pool() {
       <PageWrapper>
         <SwapPoolTabs active={'pool'} />
         <div 
-        style={{background:'linear-gradient(360deg, rgba(255, 255, 255, 0), rgba(255, 82, 108, 0.6))',
-         padding: '1px 1px 0 1px', 
+        style={{background:'linear-gradient(360deg, rgba(255, 255, 255, 0), rgba(255, 82, 108, 0.6)) border-box',
+         border: '1px solid', 
+         borderBottom: 'none',
+         borderColor: '#0000',
          borderRadius: '8px 8px 0 0',
          marginTop: '3rem'}}>
           <VoteCard style={{  padding: '1rem 0', borderRadius: '8px 8px 0 0' , background: '#222529'}}>

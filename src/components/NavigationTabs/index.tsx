@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { NavLink, Link as HistoryLink } from 'react-router-dom'
 
 import { ArrowLeft } from 'react-feather'
-import { RowBetween } from '../Row'
+import Row, { RowBetween } from '../Row'
 // import QuestionHelper from '../QuestionHelper'
 import Settings from '../Settings'
 import { useDispatch } from 'react-redux'
@@ -100,7 +100,7 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
   
   return (
     <Tabs style={{borderBottom:' 1px solid rgba(255, 255, 255, 0.2)', borderBottomLeftRadius:' 0px', borderBottomRightRadius:' 0px', paddingBottom:'10px'}}>
-      <RowBetween style={{ padding: '1rem 1rem 0 1rem' , position: 'relative'}} className="s-header-create">
+      <Row style={{ padding: '1rem 1rem 0 1rem' , position: 'relative'}} className="s-header-create">
         <HistoryLink
           to="/pool"
           onClick={() => {
@@ -111,7 +111,7 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
           <StyledArrowLeft />
         </HistoryLink>
         <ActiveText className="s-header-create-title">{creating ? t('createFlowPool'): adding ? t('addPoolLiquidity') : t('removePoolLiquidity')}</ActiveText>
-      </RowBetween>
+      </Row>
     </Tabs>
   )
 }

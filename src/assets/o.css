@@ -119,9 +119,9 @@
 }
 
 .s-pledge-item{
-	background: linear-gradient(360deg, rgba(255, 255, 255, 0), rgba(255, 82, 108, 0.6));
+	background: linear-gradient(360deg, rgba(255, 255, 255, 0), rgba(255, 82, 108, 0.6)) border-box;
 	border-radius: 8px;
-	padding: 1px;
+	border: 1px solid #0000;
 	margin:2rem 1rem 2rem;
 }
 .s-pledge-item-in{
@@ -327,6 +327,7 @@
 	transform: scale(1.8,1);
 }
 .s-trading-item-trans{
+	position: relative;
 	text-align: center;
 	background: #2C3035;
 	height: 86px;
@@ -2345,15 +2346,15 @@
 }
 
 .s-xyuzu-tab-wrapper{
-	padding: 1px;
-	background: linear-gradient(138deg, #ED4962 0%, #F98F81 100%);;
+	border: 1px solid #0000;
+	background: linear-gradient(138deg, #ED4962 0%, #F98F81 100%) border-box;
 	border-radius: 8px;
 }
 
 .s-modal-wrapper{
-	padding: 1px;
+	border: 1px solid #0000;
 	border-radius: 8px;
-	background: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4));
+	background: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)) border-box;
 }
 
 .s-modal-content11{
