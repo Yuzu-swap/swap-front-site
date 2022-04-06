@@ -1,7 +1,7 @@
 import { JSBI, Pair, Percent, TokenAmount } from '@liuxingfeiyu/zoo-sdk'
 import { darken } from 'polished'
 import React, { useMemo, useState } from 'react'
-import { ChevronDown, ChevronUp } from 'react-feather'
+import { Bold, ChevronDown, ChevronUp } from 'react-feather'
 import ChevronDownImg from '../../assets/newUI/chevronDown.png'
 import { Link } from 'react-router-dom'
 import { Text } from 'rebass'
@@ -95,40 +95,40 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
           <AutoColumn gap="12px">
             <FixedHeightRow>
               <RowFixed>
-                <Text fontWeight={500} fontSize={16}>
+                <Text fontWeight={'bold'} fontSize={16} color="#FFF">
                   Your position
                 </Text>
               </RowFixed>
             </FixedHeightRow>
-            <FixedHeightRow onClick={() => setShowMore(!showMore)}>
-              <RowFixed>
-                <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} />
-                <Text fontWeight={500} fontSize={20}>
-                  {currency0.getSymbol(chainId)}/{currency1.getSymbol(chainId)}
-                </Text>
-              </RowFixed>
-              <RowFixed>
-                <Text fontWeight={500} fontSize={20}>
-                  {userPoolBalance ? stringFix(userPoolBalance.toSignificant(4), 4) : '-'}
-                </Text>
-              </RowFixed>
-            </FixedHeightRow>
             <AutoColumn gap="4px">
+              <FixedHeightRow onClick={() => setShowMore(!showMore)}>
+                <RowFixed>
+                  <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} />
+                  <Text fontWeight={500} fontSize={16} color="rgba(255, 255, 255, 0.6)">
+                    {currency0.getSymbol(chainId)}/{currency1.getSymbol(chainId)}
+                  </Text>
+                </RowFixed>
+                <RowFixed>
+                  <Text fontWeight={500} fontSize={16} color="#FFF">
+                    {userPoolBalance ? stringFix(userPoolBalance.toSignificant(4), 4) : '-'}
+                  </Text>
+                </RowFixed>
+              </FixedHeightRow>
               <FixedHeightRow>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500}  color="rgba(255, 255, 255, 0.6)">
                   Your pool share:
                 </Text>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500} color="#FFF">
                   {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
                 </Text>
               </FixedHeightRow>
               <FixedHeightRow>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500}  color="rgba(255, 255, 255, 0.6)">
                   {currency0.getSymbol(chainId)}:
                 </Text>
                 {token0Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
+                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'} color="#FFF">
                       {token0Deposited?.toSignificant(6)}
                     </Text>
                   </RowFixed>
@@ -137,12 +137,12 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
                 )}
               </FixedHeightRow>
               <FixedHeightRow>
-                <Text fontSize={16} fontWeight={500}>
+                <Text fontSize={16} fontWeight={500}  color="rgba(255, 255, 255, 0.6)">
                   {currency1.getSymbol(chainId)}:
                 </Text>
                 {token1Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
+                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'} color="#FFF">
                       {token1Deposited?.toSignificant(6)}
                     </Text>
                   </RowFixed>
@@ -155,7 +155,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
         </GreyCard>
       ) : (
         <LightCard>
-          <TYPE.subHeader style={{ textAlign: 'center' }}>
+          <TYPE.subHeader color='#fff' style={{ textAlign: 'center' }}>
             <span role="img" aria-label="wizard-icon">
               ⭐️
             </span>{' '}

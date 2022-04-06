@@ -10,7 +10,7 @@ import { AutoRow } from '../Row'
 import CurrencyLogo from '../CurrencyLogo'
 
 const BaseWrapper = styled.div<{ disable?: boolean }>`
-  border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.bg3)};
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   display: flex;
   padding: 6px;
@@ -18,10 +18,10 @@ const BaseWrapper = styled.div<{ disable?: boolean }>`
   align-items: center;
   :hover {
     cursor: ${({ disable }) => !disable && 'pointer'};
-    background-color: ${({ theme, disable }) => !disable && theme.bg2};
+    border: 1px solid rgba(255, 255, 255, 1);
   }
 
-  background-color: ${({ theme, disable }) => disable && theme.bg3};
+  background-color: ${({ theme, disable }) => disable && '#222529'};
   opacity: ${({ disable }) => disable && '0.4'};
 `
 
@@ -39,7 +39,7 @@ export default function CommonBases({
   return (
     <AutoColumn gap="md">
       <AutoRow>
-        <Text fontWeight={500} fontSize={14}>
+        <Text fontWeight={500} fontSize={16} color={'#FFF'}>
           Common bases
         </Text>
         <QuestionHelper text="These tokens are commonly paired with other tokens." />
@@ -54,7 +54,7 @@ export default function CommonBases({
           disable={selectedCurrency === nativeToken}
         >
           <CurrencyLogo currency={nativeToken} style={{ marginRight: 8 }} />
-          <Text fontWeight={500} fontSize={16}>
+          <Text fontWeight={500} fontSize={16} color="rgba(255, 255, 255, 0.6)">
             {Currency.getNativeCurrencySymbol(chainId)}
           </Text>
         </BaseWrapper>
@@ -63,7 +63,7 @@ export default function CommonBases({
           return (
             <BaseWrapper onClick={() => !selected && onSelect(token)} disable={selected} key={token.address}>
               <CurrencyLogo currency={token} style={{ marginRight: 8 }} />
-              <Text fontWeight={500} fontSize={16}>
+              <Text fontWeight={500} fontSize={16} color="rgba(255, 255, 255, 0.6)">
                 {token.getSymbol(chainId)}
               </Text>
             </BaseWrapper>

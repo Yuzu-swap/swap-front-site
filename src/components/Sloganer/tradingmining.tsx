@@ -41,14 +41,28 @@ import { useTranslation } from 'react-i18next'
 import { transToThousandth } from 'utils/fixFloat'
 
 const Web3Withdrawal = styled(ButtonSecondary)<{ faded?: boolean }>`
-  background-color: ${({ theme }) => theme.white};
+  background: linear-gradient(138deg, #ED4962 0%, #F98F81 100%);
   border: none;
   font-weight: 500;
   width: 168px;
+  margin-top: 10px;
   &:hover, &:focus{
     border:none;
     opacity: 1;
   }
+`
+const TitleText =  styled.span`
+  font-size: 30px;
+  font-weight: bold;
+  color: #FF526C;
+  line-height: 36px;
+`
+
+const TitleNumber = styled.span`
+  font-size: 30px;
+  font-weight: bold;
+  color: #FFFFFF;
+  line-height: 36px;
 `
 
 export default function Header({statics,poolList}:{poolList:TradePool[],statics:any}) {
@@ -70,11 +84,14 @@ export default function Header({statics,poolList}:{poolList:TradePool[],statics:
   const { t } = useTranslation();
   //<Web3Withdrawal onClick={toggleWithdrawalRewardModal}>
   return (
-    <div className="s-banner s-tradingmining-banner" style={{color : '#FFFFFF'}}>
-      <p className="s-tradingmining-text">{t('totalTransactionAmount')}：${transToThousandth(statics.totalSwapVolume?.toFixed(3)) }</p>
-      <p className="s-tradingmining-text">{t('currentIndividualWithdrawableRewards')}：{ transToThousandth(tokenAmountForshow(myReward).toFixed(3))} YUZU</p>
+    <div className="s-banner s-tradingmining-banner" >
+      <p><TitleText className="s-tradingmining-text">{t('totalTransactionAmount')}：</TitleText>
+      <TitleNumber>${transToThousandth(statics.totalSwapVolume?.toFixed(3)) }</TitleNumber></p>
+
+      <p><TitleText className="s-tradingmining-text">{t('currentIndividualWithdrawableRewards')}：</TitleText>
+      <TitleNumber>{ transToThousandth(tokenAmountForshow(myReward).toFixed(3))} YUZU</TitleNumber></p>
       <Web3Withdrawal onClick={withdrawAll}>
-        <Text>{t('withdrawalRewards')}</Text>
+        <Text color="#FFF" fontSize={24} fontWeight='bold' >{t('withdrawalRewards')}</Text>
       </Web3Withdrawal>
       <WithdrawalRewardModal isOpen={showVoteModal}/>
     </div>

@@ -15,6 +15,7 @@ import LoadingRings from 'components/Loader/rings'
 import { getExplorerLink } from '../../utils'
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
+import ConfirmImg from '../../assets/newUI/confirm.png'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -80,18 +81,18 @@ function TransactionSubmittedContent({
       <Section>
         <RowBetween>
           <div />
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon onClick={onDismiss} color={'#FFF'} />
         </RowBetween>
         <ConfirmedIcon>
-          <ArrowUpCircle strokeWidth={0.5} size={90} color={theme.primary1} />
+          <img src={ConfirmImg} width='64px'/>
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
-          <Text fontWeight={500} fontSize={20}>
+          <Text fontWeight={500} fontSize={24} color='#FFF'>
             Transaction Submitted
           </Text>
           {chainId && hash && (
             <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
-              <Text fontWeight={500} fontSize={14} color={theme.primary1}>
+              <Text fontWeight={500} fontSize={20} color={theme.primary1}>
                 View on explorer
               </Text>
             </ExternalLink>

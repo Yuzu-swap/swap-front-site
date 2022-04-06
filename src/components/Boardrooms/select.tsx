@@ -486,12 +486,12 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             <div className="s-modal-loading-img">
               <LoadingRings />
             </div>
-            <h2 color={'#FFF'}>{t('loading')}</h2>
+            <h2 style={{color:'#FFF'}}>{t('loading')}</h2>
           </div>
-          <p className="s-boardroom-available">{WinOpt} {WinValue} {WinLabel} 
+          <p className="s-boardroom-available" style={{color:'rgba(255, 255, 255, 0.6)'}}>{WinOpt} {WinValue} {WinLabel} 
             {
               winExtInfo.map((value)=>{
-                return<p> {value} </p>
+                return<p style={{color:'rgba(255, 255, 255, 0.6)'}}> {value} </p>
               }
               )
             }

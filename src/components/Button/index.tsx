@@ -46,18 +46,18 @@ const sheen = keyframes`{
 export const ButtonPrimary = styled(Base)`
   /* background-color: ${({ theme }) => theme.primary1}; */
   overflow:hidden;
-  background: linear-gradient(to right, #ED4962 , #ED4962);
+  background: linear-gradient(to right, #ED4962 , #F98F81);
   background-origin: border-box;
   color: white;
   &:focus {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primary1)};
     /*background: ${({ theme }) => darken(0.05, theme.primary1)};*/
-    background: linear-gradient(to right, #ED4962 , #ED4962);
+    background: linear-gradient(to right, #ED4962 , #F98F81);
   }
   &:active {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.primary1)};
     /*background: ${({ theme }) => darken(0.1, theme.primary1)};*/
-    background: linear-gradient(to right, #ED4962 , #ED4962);
+    background: linear-gradient(to right, #ED4962 , #F98F81);
   }
   &:disabled {
     pointer-events: none;

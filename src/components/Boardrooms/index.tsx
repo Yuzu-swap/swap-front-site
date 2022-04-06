@@ -378,14 +378,13 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
 
 
   const RewardShow = styled.div`
-    background: rgba(237, 73, 98, 0.09);
-    border: 1px solid #ED4962;
-    border-radius: 5px;
-    color: #ED4962;
+    color: #FFF;
     text-align: center;
     display: inline-block;
     vertical-align: middle;
     line-height: 34px;
+    background: #2C3035;
+    border-radius: 8px;
   `
 
   const TimeBLock = styled.div<{notZero : boolean}>`
@@ -411,10 +410,12 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         <span>&nbsp;&nbsp;</span>
         { <h3 style={{display: 'inline-block', margin: '0px auto', verticalAlign: 'middle', lineHeight: '34px', color: '#FFFFFF'}}>{pool.token0.symbol}{!xyuzu && '-' + pool.token1.symbol}</h3> }
         </Link>
-        <RewardShow>
-          <img className="s-doubleget-icon" src={DoublegetIcon}/>
-          YUZU+{extSymbolInfo}
-        </RewardShow>
+        <div className="s-xyuzu-tab-wrapper">
+          <RewardShow >
+            <img className="s-doubleget-icon" src={DoublegetIcon}/>
+            YUZU&nbsp;+&nbsp;{extSymbolInfo}&nbsp;
+          </RewardShow>
+        </div>
         </div>
 
         <div className="s-doubleget-item-details">
