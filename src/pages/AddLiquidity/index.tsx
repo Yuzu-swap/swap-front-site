@@ -250,7 +250,7 @@ export default function AddLiquidity({
       <AutoColumn gap="20px">
         <LightCard mt="20px" borderRadius="20px">
           <RowFlat>
-            <Text fontSize="48px" fontWeight={500} lineHeight="42px" marginRight={10}>
+            <Text fontSize="48px" fontWeight={500} lineHeight="42px" marginRight={10} color="#FFF">
               {currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
                 '/' +
                 currencies[Field.CURRENCY_B]?.getSymbol(chainId)}

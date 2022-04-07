@@ -192,6 +192,25 @@ export const ButtonSecondary = styled(Base)`
   }
 `
 
+export const ButtonSecondarySimply = styled(Base)`
+  border: 1px solid ${({ theme }) => theme.primary1};
+  color: ${({ theme }) => theme.primary1};
+  background-color: transparent;
+  font-size: 16px;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  padding: ${({ padding }) => (padding ? padding : '10px')};
+
+  &:focus {
+    opacity:0.8;
+  }
+  &:hover {
+    opacity:0.8;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+`
+
 export const ButtonPink = styled(Base)`
   background-color: ${({ theme }) => theme.primary1};
   color: white;
@@ -236,7 +255,7 @@ export const ButtonUNIGradient = styled(ButtonPrimary)`
 
 export const ButtonOutlined = styled(Base)`
   border: 1px solid ${({ theme }) => theme.bg2};
-  background-color: transparent;
+  background-color: #F5F5F5;
   color: ${({ theme }) => theme.text1};
 
   &:focus {
@@ -314,6 +333,7 @@ export const ButtonLRTab = styled(Base)`
   font-weight: 400;
   opacity: 0.6;
   color: #FFFFFF;
+  height: 100%;
   &:disabled {
     font-weight: bold;
     opacity: 1;

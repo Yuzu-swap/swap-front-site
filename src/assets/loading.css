@@ -13,9 +13,9 @@
   top: 0;
   bottom: 0;
   left: 0;
-  right: 0;
-  padding: 5%;
+  right: 0;  
 }	
+/*padding: 5%;*/
 .s-circular {
   -webkit-animation: rotate 2s linear infinite;
           animation: rotate 2s linear infinite;

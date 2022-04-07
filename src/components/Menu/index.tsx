@@ -40,7 +40,7 @@ const StyledMenu = styled.div`
 
 const MenuFlyout = styled.span`
   border-radius: ${({ theme }) => theme.borderRadius};
-
+  overflow: hidden;
   ${({ theme }) => theme.mediaWidth.upToMedium`
     top: -15rem !important;
     :after{
@@ -53,9 +53,9 @@ const MenuFlyout = styled.span`
 const MenuItem = styled(ExternalLink)`
   flex: 1;
   padding: 0.5rem 0.5rem;
-  color: ${({ theme }) => theme.text1};
+  color: #FFF;
+  background: #222529;
   :hover {
-    color: ${({ theme }) => theme.text1};
     cursor: pointer;
     text-decoration: none;
     opacity:0.8;
@@ -114,6 +114,9 @@ export default function Menu() {
           </MenuItem>
           <MenuItem id="link" href="https://dexscreener.com/oasisemerald/yuzuswap">
             <span className="dexscreener">Info</span>
+          </MenuItem>
+          <MenuItem id="link" href="https://coinmarketcap.com/currencies/yuzuswap/">
+            <span className="cmc">Cmc</span>
           </MenuItem>
           {/* {account && (
             <ButtonPrimary onClick={openClaimModal} padding="8px 16px" width="100%" borderradius="20px" mt="0.5rem">

@@ -19,7 +19,7 @@ import FortmaticIcon from '../../assets/images/fortmaticIcon.png'
 import PortisIcon from '../../assets/images/portisIcon.png'
 import TorusIcon from '../../assets/images/torusIcon.png'
 import Identicon from '../Identicon'
-import { ButtonSecondary } from '../Button'
+import { ButtonSecondary,  ButtonSecondarySimply } from '../Button'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { ExternalLink, LinkStyledButton, TYPE } from '../../theme'
 
@@ -27,7 +27,7 @@ const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
   padding: 1rem 1rem;
   font-weight: 500;
-  color: ${props => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
+  color: rgba(255, 255, 255, 0.6);
   ${({ theme }) => theme.mediaWidth.upToMedium`
     padding: 1rem;
   `};
@@ -55,11 +55,12 @@ const UpperSection = styled.div`
 
 const InfoCard = styled.div`
   padding: 1rem;
-  border: 1px solid ${({ theme }) => theme.bg3};
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   position: relative;
   display: grid;
   grid-row-gap: 12px;
+  background-color: ${({ theme }) => theme.bg8};
   margin-bottom: 20px;
 `
 
@@ -77,7 +78,7 @@ const AccountGroupingRow = styled.div`
 `
 
 const AccountSection = styled.div`
-  background-color: ${({ theme }) => theme.bg1};
+  background-color: ${({ theme }) => theme.bg9};
   padding: 0rem 1rem;
   ${({ theme }) => theme.mediaWidth.upToMedium`padding: 0rem 1rem 1.5rem 1rem;`};
 `
@@ -99,14 +100,13 @@ const LowerSection = styled.div`
   padding: 1.5rem;
   flex-grow: 1;
   overflow: auto;
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme }) => theme.bg9};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-
   h5 {
     margin: 0;
     font-weight: 400;
-    color: ${({ theme }) => theme.text3};
+    color: #FFF;
   }
 `
 
@@ -115,7 +115,7 @@ const AccountControl = styled.div`
   justify-content: space-between;
   min-width: 0;
   width: 100%;
-
+  color: #FF526C;
   font-weight: 500;
   font-size: 1.25rem;
 
@@ -154,6 +154,7 @@ const CloseIcon = styled.div`
 `
 
 const CloseColor = styled(Close)`
+  color: rgba(255, 255, 255, 0.6);
   path {
     stroke: ${({ theme }) => theme.text4};
   }
@@ -161,9 +162,9 @@ const CloseColor = styled(Close)`
 
 const WalletName = styled.div`
   width: initial;
-  font-size: 0.825rem;
+  font-size: 18px;
   font-weight: 500;
-  color: ${({ theme }) => theme.text3};
+  color: ${({ theme }) => theme.text2};
 `
 
 const IconWrapper = styled.div<{ size?: number }>`
@@ -185,7 +186,7 @@ const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
 `
 
-const WalletAction = styled(ButtonSecondary)`
+const WalletAction = styled(ButtonSecondarySimply)`
   width: fit-content;
   font-weight: 400;
   margin-left: 8px;
@@ -402,7 +403,7 @@ export default function AccountDetails({
       {!!pendingTransactions.length || !!confirmedTransactions.length ? (
         <LowerSection>
           <AutoRow mb={'1rem'} style={{ justifyContent: 'space-between' }}>
-            <TYPE.body>Recent Transactions</TYPE.body>
+            <TYPE.body color={'#FFF'}>Recent Transactions</TYPE.body>
             <LinkStyledButton onClick={clearAllTransactionsCallback}>(clear all)</LinkStyledButton>
           </AutoRow>
           {renderTransactions(pendingTransactions)}
@@ -410,7 +411,7 @@ export default function AccountDetails({
         </LowerSection>
       ) : (
         <LowerSection>
-          <TYPE.body color={theme.text1}>Your transactions will appear here...</TYPE.body>
+          <TYPE.body color={'rgba(255, 255, 255, 0.6)'}>Your transactions will appear here...</TYPE.body>
         </LowerSection>
       )}
     </>

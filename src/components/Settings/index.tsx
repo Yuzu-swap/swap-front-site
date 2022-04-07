@@ -12,7 +12,7 @@ import {
   useUserSingleHopOnly
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
-import { ButtonError } from '../Button'
+import { ButtonError, ButtonPrimary } from '../Button'
 import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import QuestionHelper from '../QuestionHelper'
@@ -42,7 +42,7 @@ const StyledCloseIcon = styled(X)`
   }
 
   > * {
-    stroke: ${({ theme }) => theme.text1};
+    stroke: ${({ theme }) => theme.text2};
   }
 `
 
@@ -76,10 +76,9 @@ const StyledMenu = styled.div`
 
 const MenuFlyout = styled.span`
   min-width: 20.125rem;
-  background-color: ${({ theme }) => theme.bg2};
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
-    0px 24px 32px rgba(0, 0, 0, 0.01);
+  background-color: ${({ theme }) => theme.bg8};
   border-radius: ${({ theme }) => theme.borderRadius};
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   flex-direction: column;
   font-size: 1rem;
@@ -98,7 +97,8 @@ const MenuFlyout = styled.span`
 const Break = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.bg3};
+  background-color: ${({ theme }) => theme.bg1};
+  opacity: 0.2;
 `
 
 const ModalContentWrapper = styled.div`
@@ -106,7 +106,7 @@ const ModalContentWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem 0;
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme }) => theme.bg9};
   border-radius: 20px;
 `
 
@@ -138,22 +138,21 @@ export default function SettingsTab() {
           <AutoColumn gap="lg">
             <RowBetween style={{ padding: '0 2rem' }}>
               <div />
-              <Text fontWeight={500} fontSize={20}>
+              <Text fontWeight={500} fontSize={20} color={'rgba(255, 255, 255, 0.6)'}>
                 Are you sure?
               </Text>
-              <StyledCloseIcon onClick={() => setShowConfirmation(false)} />
+              <StyledCloseIcon color="rgba(255, 255, 255, 0.6)" onClick={() => setShowConfirmation(false)} />
             </RowBetween>
             <Break />
             <AutoColumn gap="lg" style={{ padding: '0 2rem' }}>
-              <Text fontWeight={400} fontSize={16}>
+              <Text fontWeight={300} fontSize={16} color={theme.text8}>
                 Expert mode turns off the confirm transaction prompt and allows high slippage trades that often result
                 in bad rates and lost funds.
               </Text>
-              <Text fontWeight={400} fontSize={14}>
+              <Text fontWeight={300} fontSize={14} color={theme.text8}>
                 ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.
               </Text>
-              <ButtonError
-                error={true}
+              <ButtonPrimary
                 padding={'12px'}
                 onClick={() => {
                   if (window.prompt(`Please type the word "confirm" to enable expert mode.`) === 'confirm') {
@@ -162,10 +161,10 @@ export default function SettingsTab() {
                   }
                 }}
               >
-                <Text fontSize={16} fontWeight={500} id="confirm-expert-mode">
+                <Text fontSize={18} fontWeight={500} id="confirm-expert-mode">
                   Turn On Expert Mode
                 </Text>
-              </ButtonError>
+              </ButtonPrimary>
             </AutoColumn>
           </AutoColumn>
         </ModalContentWrapper>
@@ -175,7 +174,7 @@ export default function SettingsTab() {
       {open && (
         <MenuFlyout className="s-debugger">
           <AutoColumn gap="md" style={{ padding: '1rem' }}>
-            <Text fontWeight={600} fontSize={14} color={theme.text1}>
+            <Text fontWeight={600} fontSize={14} color={theme.text8}>
               {t('transactionSetting')}
             </Text>
             <TransactionSettings
@@ -184,7 +183,7 @@ export default function SettingsTab() {
               deadline={ttl}
               setDeadline={setTtl}
             />
-            <Text fontWeight={600} fontSize={14} color={theme.text1}>
+            <Text fontWeight={600} fontSize={14} color={theme.text2}>
               {t('interfaceSetting')}
             </Text>
             <RowBetween>

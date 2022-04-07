@@ -36,8 +36,9 @@ const CloseIcon = styled.div`
 `
 
 const CloseColor = styled(Close)`
+  color: ${({ theme }) => theme.text2};
   path {
-    stroke: ${({ theme }) => theme.text4};
+    stroke: ${({ theme }) => theme.text2};
   }
 `
 
@@ -64,11 +65,11 @@ const HeaderRow = styled.div`
 `
 
 const ContentWrapper = styled.div`
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme }) => theme.bg9};
   padding: 0.5rem 2rem 2rem 2rem;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  border-top: 1px solid #e9e5e5;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 
   div{
     margin: 30px 0 0 0;
@@ -110,7 +111,7 @@ const Blurb = styled.div`
 `
 
 const HoverText = styled.div`
-  color: ${({ theme }) => theme.black}
+  color: ${({ theme }) => theme.text2};
   text-align: center;
   width: 100%;
   :hover {
@@ -135,11 +136,11 @@ export default function TradingGroupModal({ isOpen, handleCurrencySelect }: Trad
             <HoverText>Trade at your own risk!</HoverText>
           </HeaderRow>
           <ContentWrapper>
-            <TYPE.body fontWeight={400}>
+            <TYPE.body fontWeight={400} color="#FFF">
               Anyone can create a token, including creating fake versions of existing tokens that claim to represent
               projects.
             </TYPE.body>
-            <TYPE.body fontWeight={600} >
+            <TYPE.body fontWeight={600} color="#FFF">
               If you purchase this token, you may not be able to sell it back.
             </TYPE.body>
 

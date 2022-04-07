@@ -289,10 +289,10 @@
 	margin:0 auto;
 }
 .s-trading-item{
-	background: linear-gradient(2deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.4));
+	background: linear-gradient(2deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.4)) border-box;
 	border-radius: 8px;
 	margin:1rem 0.5rem;
-	padding: 1px;
+	border: 1px solid #0000;
 	overflow: hidden;
 }
 
@@ -737,7 +737,6 @@
 }
 .s-top-links {
 	min-width: 8.125rem;
-	padding: 1px;
 	display: flex;
 	flex-direction: column;
 	font-size: 1rem;
@@ -746,8 +745,8 @@
 	right: 0rem;
 	z-index: 100;
 	border-radius: 6px;
-	border: 1px solid;
-	background-image: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4));
+	border: 1px solid #0000;
+	background: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)) border-box;
 }
 /*.s-top-links::after{
 	content: ' ';
@@ -773,30 +772,42 @@
 	background-image:url(./newUI/about.png);
 }
 .s-top-links .docs{
-	background-image:url(./newUI/yuque.svg);
-	background-size: auto 80%;
+	background-size: contain;
+	background-image:url(./newUI/yuque.png);
+	background-size: 20px 20px;
+}
+.s-top-links .cmc{
+	background-size: contain;
+	background-image:url(./newUI/cmc.png);
+	background-size: 20px 20px;
 }
 .s-top-links .medium{
 	background-image:url(./newUI/medium.png);
 }
 .s-top-links .code{
 	background-image:url(./newUI/github.png);
+	background-size: 20px 20px;
 }
 .s-top-links .twitter{
 	background-image:url(./newUI/twitter.png);
+	background-size: 20px 20px;
 }
 .s-top-links .discord{
 	background-image:url(./newUI/discord.png);
+	background-size: 20px 20px;
 }
 .s-top-links .analytics{
 	background-image:url(./newUI/trends.png);
 }
 .s-top-links .telegram{
+	background-size: contain;
 	background-image:url(./newUI/telegram.png);
+	background-size: 20px 20px;
 }
 .s-top-links .dexscreener{
 	background-size: contain;
 	background-image:url(./newUI/dexscreener.png);
+	background-size: 20px 20px;
 }
 .s-top-link-button{
 	background: #222529;
@@ -2372,6 +2383,15 @@
 
 .s-xyuzu-unstake-tab{
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.s-xyuzu-cardrc{
+	display: flex;
+    padding: 20px 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 }

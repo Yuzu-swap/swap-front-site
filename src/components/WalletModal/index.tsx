@@ -31,8 +31,9 @@ const CloseIcon = styled.div`
 `
 
 const CloseColor = styled(Close)`
+  color: rgba(255, 255, 255, 0.6);
   path {
-    stroke: ${({ theme }) => theme.text4};
+    stroke: #FFF;
   }
 `
 
@@ -54,7 +55,7 @@ const HeaderRow = styled.div`
 `
 
 const ContentWrapper = styled.div`
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme }) => theme.bg9};
   padding: 2rem;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -107,6 +108,7 @@ const HoverText = styled.div`
   :hover {
     cursor: pointer;
   }
+  color: rgba(255, 255, 255, 0.6);
 `
 
 const WALLET_VIEWS = {
@@ -352,7 +354,7 @@ export default function WalletModal({
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
             <Blurb>
-              <span>New to Ethereum? &nbsp;</span>{' '}
+              <span style={{color:"rgba(255, 255, 255, 0.6)"}}>New to Ethereum? &nbsp;</span>{' '}
               <ExternalLink href="https://ethereum.org/wallets/">Learn more about wallets</ExternalLink>
             </Blurb>
           )}

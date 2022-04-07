@@ -109,6 +109,10 @@ html,body{
 	overflow: hidden;
 }
 
-.w-mobile .s-xyuzu-body{
+.s-mobile .s-xyuzu-body{
 	width: 100%;
+}
+
+.s-mobile .s-xyuzu-cardrc{
+	flex-direction: column;
 }

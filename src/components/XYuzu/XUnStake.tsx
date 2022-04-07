@@ -301,7 +301,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                             }
                         </div>
                     </CardHeader>   
-                    <CardRC>
+                    <div className='s-xyuzu-cardrc'>
                         <span  style={{display:'flex'}}>
                             <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
                             <CardUnit>
@@ -339,7 +339,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                         <ButtonXyuzuCard disabled={ !(blockNumber && blockNumber > data.stakeEnd)} onClick={()=>setShow(true)}>
                             Redeem
                         </ButtonXyuzuCard>
-                    </CardRC>
+                    </div>
                 </CardContent>
             </CardWrapper>
             <Modal isOpen={show} onDismiss={() =>{}} maxHeight={200} minHeight={10}>
@@ -396,7 +396,7 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                  <CardHeader>
                      <img src={CardUnLock}/>
                 </CardHeader> 
-                <CardRC>
+                <div className='s-xyuzu-cardrc'>
                     <span  style={{display:'flex'}}>
                         <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
                         <CardUnit>
@@ -431,7 +431,7 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                     <ButtonXyuzuCard disabled={ !(blockNumber && blockNumber > data.unstakeEnd)} onClick={withdraw}>
                         Withdraw
                     </ButtonXyuzuCard>
-                </CardRC>  
+                </div>  
             </CardContent>
         </CardWrapper>
     )
@@ -460,7 +460,7 @@ function CompleteCard({data} :{data : XyuzuOrder}){
                  <CardHeader>
                      <img src={CardOk}/>
                 </CardHeader>
-                <CardRC>
+                <div className='s-xyuzu-cardrc'>
                     <span  style={{display:'flex'}}>
                         <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
                         <CardUnit>
@@ -509,7 +509,7 @@ function CompleteCard({data} :{data : XyuzuOrder}){
                                 Withdraw hash&nbsp;
                             </Text1>
                     </span>
-                </CardRC>     
+                </div>     
             </CardContent>
         </CardWrapper>
     )

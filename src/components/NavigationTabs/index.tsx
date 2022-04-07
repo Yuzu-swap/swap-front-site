@@ -82,9 +82,13 @@ export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' | 'homepage' 
 
 export function FindPoolTabs() {
   return (
-    <Tabs>
-      <RowBetween style={{ padding: '1rem 1rem 0 1rem' }} className="s-header-create">
-        <HistoryLink to="/pool">
+    <Tabs style={{borderBottom:' 1px solid rgba(255, 255, 255, 0.2)'
+      , borderBottomLeftRadius:' 0px', borderBottomRightRadius:' 0px', paddingBottom:'10px'
+      , background: '#2C3035'}}>
+      <RowBetween style={{ padding: '1rem 1rem 0 1rem' , position: 'relative'}} className="s-header-create">
+        <HistoryLink to="/pool"
+          style={{position: 'absolute', left:'15px'}}
+        >
           <StyledArrowLeft />
         </HistoryLink>
         <ActiveText className="s-header-create-title">Import Pool</ActiveText>
