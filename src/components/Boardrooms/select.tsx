@@ -420,25 +420,27 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
             }
         </div>
         <div className="s-boardroom-stake">
-          <div className="s-boardroom-information-no-drak">
+          <div className="s-boardroom-information-dark">
+            <div className="s-boardroom-information-no-drak">
+              {
+                xyuzu?
+                <div>xYUZU Staked</div>
+                :
+                <div>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</div>
+              }
+              <div className="s-boardroom-balance">{myStaked} </div>
+            </div>
             {
               xyuzu?
-              <div>xYUZU Staked</div>
+              null
               :
-              <div>{pool? (pool.token0.symbol + '/' + pool.token1.symbol) : ''} LP Staked</div>
+              <div className="s-boardroom-information-no-drak">
+                <div style={{fontSize: "12px"}}>Corresponding num of tokens<br/>
+                {pool? pool.token0.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token0Balance, pool.token0.decimals)* myStakedPoolShareRatio , 4) :''}<br/>
+                {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</div>
+              </div>
             }
-            <div className="s-boardroom-balance">{myStaked} </div>
           </div>
-          {
-            xyuzu?
-            null
-            :
-            <div className="s-boardroom-information-no-drak">
-              <div style={{fontSize: "12px"}}>Corresponding num of tokens<br/>
-              {pool? pool.token0.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token0Balance, pool.token0.decimals)* myStakedPoolShareRatio , 4) :''}<br/>
-              {pool? pool.token1.symbol + ' ' +  fixFloatFloor(tokenAmountForshow(pool.token1Balance, pool.token1.decimals)* myStakedPoolShareRatio , 4) :''}</div>
-          </div>
-          }
           {btn}
         </div>
       </div>
