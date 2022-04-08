@@ -325,7 +325,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   }
 
   let btn = (
-    <ButtonPrimaryNormal className="s-boardroom-select s-boardroom-stake-button" onClick={
+    <ButtonPrimaryNormal className="s-boardroom-select s-boardroom-stake-button" 
+      style={{width:'100%'}}
+      onClick={
       async () => {
         if (approval != ApprovalState.APPROVED) {
           await approveCallback(() => {
@@ -368,9 +370,13 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
           <div className="s-boardroom-information" style={{position: 'relative'}}>
             {
               isExt? <p style={{margin: '10px auto'}}>{t('myReward')}
-              <QuestionHelper text={
-                t('doublegetRewardHint')
-              } /></p> 
+              <span style={{position: 'absolute'}}>
+              <QuestionHelper 
+                text={
+                t('doublegetRewardHint')} />
+              </span>
+                
+                </p> 
               : <p>{t('myReward')}</p>
             }
             <p className="s-boardroom-balance">
@@ -399,11 +405,12 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
               wrappedTokenRewards.map(
                 (value: TokenReward, i : number)=>{
                   return (
-                    <div className="s-boardroom-unwrap">
-                      <span>{value.token.symbol}</span>
-                      <span>{fixFloatFloor(tokenAmountForshow(WrapperBalance[i], value.token.decimals),6)}</span>
-                      <div className="s-xyuzu-tab-wrapper">
-                        <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>Unwrap <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
+                    <div className="s-xyuzu-tab-wrapper" style={{marginTop:'15px'}}>
+                      <div className="s-boardroom-unwrap">
+                        <span
+                          style={{marginLeft:'5px'}}
+                        >{value.token.symbol}:{fixFloatFloor(tokenAmountForshow(WrapperBalance[i], value.token.decimals),6)}</span>
+                          <div className="s-boardroom-unwrap-button " onClick={()=>{onUnwrap(i)}}>Unwrap <QuestionHelper text={t('unwrapExtRewardHint')} /></div>
                       </div>
                     </div>
                   )

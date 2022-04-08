@@ -143,7 +143,9 @@ export default function SingleCurrencySelected(props: RouteComponentProps<{ pid:
   }
 
   let btn = (
-    <div className="s-boardroom-select s-boardroom-stake-button" onClick={
+    <div className="s-boardroom-select s-boardroom-stake-button"
+      style={{width:'100%'}}
+      onClick={
       async () => {
         if (approval != ApprovalState.APPROVED) {
           await approveCallback(() => {

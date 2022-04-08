@@ -529,8 +529,8 @@
 	display: inline-block;
 }
 .s-boardroom-tokens{
-	padding: 16px 0;
-	margin: 20px auto;
+	padding: 10px 0;
+	margin: 15px auto 0px;
 }
 
 .s-boardroom-information{
@@ -555,7 +555,7 @@
 .s-boardroom-stake{
 	display: flex;
 	flex-direction: column;
-	justify-content: space-around;
+	justify-content: space-between;
 	vertical-align: top;
 	width: 340px;
 	margin: 1rem 20px;
@@ -577,6 +577,8 @@
 	justify-content: space-between;
 	align-items: center;
 	color: #FFF;
+	border-radius: inherit;
+	background-color: #222529;
 }
 
 .s-boardroom-unwrap-button{
@@ -588,6 +590,9 @@
 	cursor: pointer;
 	font-weight: 500;
 	font-size: 20px;
+}
+.s-boardroom-unwrap-button:hover{
+	opacity: 0.8;
 }
 
 .s-boardroom-balance{
@@ -972,8 +977,7 @@
 }
 .s-boardroom-select.s-boardroom-stake-button{
 	width: 145px;
-	height: 60px;
-	padding: 16px 0px;
+	padding: 10px 0px;
 	margin: 0px auto
 }
 
