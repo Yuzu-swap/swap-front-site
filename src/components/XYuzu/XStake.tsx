@@ -370,13 +370,13 @@ export function XStake(){
                         <ButtonXyuzuPercent disabled={daynum == 0} onClick={()=>{SetDaynum(0)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
                     </Wrapper>
                     <Wrapper show={daynum == 1}>
-                        <ButtonXyuzuPercent disabled={daynum == 1} onClick={()=>{SetDaynum(1)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
+                        <ButtonXyuzuPercent disabled={daynum == 1} onClick={()=>{SetDaynum(1)}}>{stakeDays && stakeDays[1]} D</ButtonXyuzuPercent>
                     </Wrapper>
                     <Wrapper show={daynum == 2}>
-                        <ButtonXyuzuPercent disabled={daynum == 2} onClick={()=>{SetDaynum(2)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
+                        <ButtonXyuzuPercent disabled={daynum == 2} onClick={()=>{SetDaynum(2)}}>{stakeDays && stakeDays[2]} D</ButtonXyuzuPercent>
                     </Wrapper>
                     <Wrapper show={daynum == 3}>
-                        <ButtonXyuzuPercent disabled={daynum == 3} onClick={()=>{SetDaynum(3)}}>{stakeDays && stakeDays[0]} D</ButtonXyuzuPercent>
+                        <ButtonXyuzuPercent disabled={daynum == 3} onClick={()=>{SetDaynum(3)}}>{stakeDays && stakeDays[3]} D</ButtonXyuzuPercent>
                     </Wrapper>
                 </div>
                 {!account ?<ButtonLight onClick={toggleWalletModal}>{t('connectwallet')}</ButtonLight>
