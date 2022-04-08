@@ -361,51 +361,52 @@ export default function RemoveLiquidity({
 
   function modalHeader() {
     return (
-      <AutoColumn gap={'md'} style={{ marginTop: '20px' }}>
-        <RowBetween align="flex-end">
-          <Text fontSize={24} fontWeight={500}>
-            {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
-          </Text>
-          <RowFixed gap="4px">
-            <CurrencyLogo currency={currencyA} size={'24px'} />
-            <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
-              {currencyA?.getSymbol(chainId)}
+      <AutoColumn gap={'0px'} style={{ marginTop: '20px', border:'1px solid rgba(255, 255, 255, 0.2)', borderRadius:' 8px', background:'#222529' }}>
+        <div style={{ padding: '10px 16px', borderBottom:'1px solid rgba(255, 255, 255, 0.2)'}}>
+          <RowBetween align="flex-end" >
+            <Text fontSize={24} fontWeight={500} color="#FFF">
+              {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
             </Text>
+            <RowFixed gap="4px">
+              <CurrencyLogo currency={currencyA} size={'24px'} />
+              <Text fontSize={24} fontWeight={500}  color="#FFF" style={{ marginLeft: '10px' }}>
+                {currencyA?.getSymbol(chainId)}
+              </Text>
+            </RowFixed>
+          </RowBetween>
+          <RowFixed>
+            <Plus size="16" color={theme.text2} />
           </RowFixed>
-        </RowBetween>
-        <RowFixed>
-          <Plus size="16" color={theme.text2} />
-        </RowFixed>
-        <RowBetween align="flex-end">
-          <Text fontSize={24} fontWeight={500}>
-            {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
-          </Text>
-          <RowFixed gap="4px">
-            <CurrencyLogo currency={currencyB} size={'24px'} />
-            <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
-              {currencyB?.getSymbol(chainId)}
+          <RowBetween align="flex-end">
+            <Text fontSize={24} fontWeight={500} color="#FFF">
+              {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
             </Text>
-          </RowFixed>
-        </RowBetween>
-
-        <TYPE.italic fontSize={12} color={theme.text2} textAlign="left" padding={'12px 0 0 0'}>
+            <RowFixed gap="4px">
+              <CurrencyLogo currency={currencyB} size={'24px'} />
+              <Text fontSize={24} fontWeight={500}  color="#FFF" style={{ marginLeft: '10px' }}>
+                {currencyB?.getSymbol(chainId)}
+              </Text>
+            </RowFixed>
+          </RowBetween>
+        </div>
+        <TYPE.white fontSize={16} color={'rgba(255, 255, 255, 0.6)'} textAlign="left" padding={'12px 16px'}>
           {`Output is estimated. If the price changes by more than ${allowedSlippage /
             100}% your transaction will revert.`}
-        </TYPE.italic>
+        </TYPE.white>
       </AutoColumn>
     )
   }
 
   function modalBottom() {
     return (
-      <>
+      <div style={{background:'#2C3035', borderTop:'1px solid rgba(255, 255, 255, 0.2)', padding: ' 20px'}}>
         <RowBetween>
           <Text color={theme.text2} fontWeight={500} fontSize={16}>
             {currencyA?.getSymbol(chainId) + '/' + currencyB?.getSymbol(chainId)} Lp Burned
           </Text>
           <RowFixed>
             <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} margin={true} />
-            <Text fontWeight={500} fontSize={16}>
+            <Text fontWeight={500} fontSize={16} color={theme.text8}>
               {parsedAmounts[Field.LIQUIDITY]?.toSignificant(6)}
             </Text>
           </RowFixed>
@@ -416,26 +417,26 @@ export default function RemoveLiquidity({
               <Text color={theme.text2} fontWeight={500} fontSize={16}>
                 Price
               </Text>
-              <Text fontWeight={500} fontSize={16} color={theme.text1}>
+              <Text fontWeight={500} fontSize={16} color={theme.text8}>
                 1 {currencyA?.getSymbol(chainId)} = {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'}{' '}
                 {currencyB?.getSymbol(chainId)}
               </Text>
             </RowBetween>
             <RowBetween>
               <div />
-              <Text fontWeight={500} fontSize={16} color={theme.text1}>
+              <Text fontWeight={500} fontSize={16} color={theme.text8}>
                 1 {currencyB?.getSymbol(chainId)} = {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'}{' '}
                 {currencyA?.getSymbol(chainId)}
               </Text>
             </RowBetween>
           </>
         )}
-        <ButtonPrimary disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
+        <ButtonPrimary style={{ margin: '20px 0 0 0' }} disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
           <Text fontWeight={500} fontSize={20}>
             Confirm
           </Text>
         </ButtonPrimary>
-      </>
+      </div>
     )
   }
 
