@@ -29,7 +29,7 @@ const LoadingMessage = styled.div<{ error?: boolean }>`
   margin-bottom: 20px;
   color: ${({ theme, error }) => (error ? theme.red1 : 'inherit')};
   border: 1px solid ${({ theme, error }) => (error ? theme.red1 : theme.text4)};
-
+  overflow: hidden;
   & > * {
     padding: 1rem;
   }
@@ -44,23 +44,26 @@ const ErrorGroup = styled.div`
 const ErrorButton = styled.div`
   border-radius: 8px;
   font-size: 12px;
-  color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.bg4};
+  color: #FFF;
+  background: linear-gradient(138deg, #ED4962 0%, #F98F81 100%);
   margin-left: 1rem;
   padding: 0.5rem;
-  font-weight: 600;
+  font-weight: bold;
   user-select: none;
 
   &:hover {
     cursor: pointer;
-    background-color: ${({ theme }) => darken(0.1, theme.text4)};
+    background-color: darken(0.1, linear-gradient(138deg, #ED4962 0%, #F98F81 100%))};
   }
 `
 
 const LoadingWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  background: #fff;
+  color: #FF526C;
+  width: 100%;
 `
 
 export default function PendingView({

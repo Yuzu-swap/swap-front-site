@@ -11,7 +11,7 @@ import Column, { AutoColumn } from '../../components/Column'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
-import { AutoRow, RowBetween } from '../../components/Row'
+import { AutoRow, RowBetween, SplitRow} from '../../components/Row'
 import AdvancedSwapDetailsSection from '../../components/swap/AdvancedSwapDetailsSection'
 import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
@@ -303,10 +303,12 @@ export default function Swap() {
         onConfirm={handleConfirmTokenWarning}
       />
       <SwapPoolTabs active={'swap'} />
-      <Sloganer/>
+      <div id="page-homepage">
+        <Sloganer/>
+      </div>
       <AppBody>
         {/* <SwapHeader /> */}
-        <Wrapper id="swap-page">
+        <Wrapper id="swap-page" style={{background: '#2C3035', borderRadius: '8px 8px 0 0', border:'1px solid rgba(255, 255, 255, 0.2)'}}>
           <ConfirmSwapModal
             isOpen={showConfirm}
             trade={trade}
@@ -321,7 +323,7 @@ export default function Swap() {
             onDismiss={handleConfirmDismiss}
           />
           {/* <AutoColumn gap={isExpertMode ? 'md' : 'none'} style={{ paddingBottom: '1rem' }}> */}
-          <AutoColumn gap={isExpertMode ? 'md' : '28px'}>
+          <AutoColumn gap={isExpertMode ? 'md' : '15px'}>
             <CurrencyInputPanel
               label={independentField === Field.OUTPUT && !showWrap && trade ?  t('from') + ' (estimated)' : t('from')}
               value={formattedAmounts[Field.INPUT]}
@@ -332,7 +334,7 @@ export default function Swap() {
               onCurrencySelect={handleInputSelect}
               otherCurrency={currencies[Field.OUTPUT]}
               id="swap-currency-input"
-              containerBackground={'#F5F5F5'}
+              containerBackground={'#2C3035'}
             />
             {isExpertMode && !showWrap && (
               <AutoColumn justify="space-between">
@@ -358,7 +360,7 @@ export default function Swap() {
             {!isExpertMode && (
               <div style={{ position: 'relative', zIndex: 2 }}>
                 <div
-                  style={{ position: 'absolute', width: '100%', cursor: 'pointer', marginTop: '-10px' }}
+                  style={{ position: 'absolute', width: '100%', cursor: 'pointer' , color:'rgba(255, 255, 255, 0.6)'}}
                   onClick={() => {
                     setApprovalSubmitted(false) // reset 2 step UI for approvals
                     onSwitchTokens()
@@ -390,7 +392,7 @@ export default function Swap() {
               onCurrencySelect={handleOutputSelect}
               otherCurrency={currencies[Field.INPUT]}
               id="swap-currency-output"
-              containerBackground={'#F5F5F5'}
+              containerBackground={'#2C3035'}
             />
 
             {recipient !== null && !showWrap ? (
@@ -420,10 +422,10 @@ export default function Swap() {
                   (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
               </ButtonPrimary>
             ) : noRoute && userHasSpecifiedInputOutput ? (
-              <GreyCard style={{ textAlign: 'center' }}>
+              <ButtonPrimary disabled={true}>
                 <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
                 {singleHopOnly && <TYPE.main mb="4px">Try enabling multi-hop trades.</TYPE.main>}
-              </GreyCard>
+              </ButtonPrimary>
             ) : showApproveFlow ? (
               <RowBetween>
                 <ButtonConfirmed
@@ -511,6 +513,8 @@ export default function Swap() {
               <DefaultVersionLink />
             ) : null}
           </BottomGrouping>
+        </Wrapper>
+        <Wrapper  style={{background: '#2C3035', borderRadius: '0 0 8px 8px ', borderLeft:'1px solid rgba(255, 255, 255, 0.2)',  borderRight:'1px solid rgba(255, 255, 255, 0.2)', borderBottom:'1px solid rgba(255, 255, 255, 0.2)'}}>
           <AutoColumn>
             {showWrap ? null : (
               <Card padding={showWrap ? '.25rem 1rem 0 1rem' : '0px'} borderRadius={'20px'}>

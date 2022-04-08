@@ -25,6 +25,8 @@ export interface Colors {
   bg5: Color
   bg6: Color
   bg7: Color //input bg
+  bg8: Color
+  bg9: Color
 
 
   modalBG: Color
@@ -52,6 +54,8 @@ export interface Colors {
   yellow1: Color
   yellow2: Color
   blue1: Color
+
+  black1: Color
 
   borderRadius: string
 }

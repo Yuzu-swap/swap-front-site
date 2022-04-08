@@ -77,48 +77,47 @@ export function TradingItem({pool,index,statics,totalEffect}:{ pool: TradePool,s
   
   return (
     <div className="s-trading-item">
-      <div className="s-trading-item-percent">
-      </div> 
-      <div className="s-trading-item-trans">
-      <Link to={''} onClick={linkTo}>
-        <CurrencyLogo currency={token0WithLogo} />
-        <img src={ Trans } alt="" className="s-trading-trans" />
-        <CurrencyLogo currency={token1WithLogo}  /><br/>
-        <div className="s-trading-item-h">
-        { getTokenPair(pool.token0,pool.token1) }
+      <div className="s-trading-item-con">
+        <div className="s-trading-item-trans">
+          <Link to={''} onClick={linkTo}>
+            <CurrencyLogo currency={token0WithLogo} />
+            <img src={ Trans } alt="" className="s-trading-trans" />
+            <CurrencyLogo currency={token1WithLogo}  /><br/>
+            <div className="s-trading-item-h">
+            { getTokenPair(pool.token0,pool.token1) }
+            </div>
+            <h2></h2>
+          </Link>
         </div>
-        <h2></h2>
-      </Link>
+        <div className="s-trading-item-details">
+          {/*
+          <div className="s-trading-item-detail">
+            <label>{t('dayReturn')}<QuestionHelper text={t('dayReturnTip')}/>：</label>
+            <em>{fixFloat(dayReturn, 4)}%</em>
+          </div>
+          <div className="s-trading-item-detail">
+            <label>{t('yearReturn')}<QuestionHelper text={t('yearReturnTip')}/>：</label>
+            <em>{fixFloat(yearReturn, 4)}%</em>
+          </div>*/
+          }
+          <div className="s-trading-item-detail">
+            <label>{t('productionperblock')}:</label>
+            <em>{fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU</em>
+          </div>
+          <div className="s-trading-item-detail">
+            <label>{t('totalTradeVolume')}<QuestionHelper text={t('totalTradeVolumeTip')} />：</label>
+            <em>${transToThousandth(fixFloat(totalTradeVolume, 3))}</em>
+          </div>
+          <div className="s-trading-item-detail">
+            <label>{t('myCurrentTradeVolume')}<QuestionHelper text={t('myCurrentTradeVolumeTip')} />：</label>
+            <em>{fixFloat(myCurrentTradeVolume * myRatio, 4)} USDT</em>
+          </div>
+          <div className="s-trading-item-detail">
+            <label>{t('myCurrentReward')}<QuestionHelper text={t('myCurrentRewardTip')} />：</label>
+            <em>{fixFloat(myCurrentReward, 4)} YUZU</em>
+          </div>
+        </div>
       </div>
-      <div className="s-trading-item-details">
-        {/*
-        <div className="s-trading-item-detail">
-          <label>{t('dayReturn')}<QuestionHelper text={t('dayReturnTip')}/>：</label>
-          <em>{fixFloat(dayReturn, 4)}%</em>
-        </div>
-        <div className="s-trading-item-detail">
-          <label>{t('yearReturn')}<QuestionHelper text={t('yearReturnTip')}/>：</label>
-          <em>{fixFloat(yearReturn, 4)}%</em>
-        </div>*/
-        }
-        <div className="s-trading-item-detail">
-          <label>{t('productionperblock')}:</label>
-          <em>{fixFloat(prodPerBlock * UserRatioOfReward, 2)} YUZU</em>
-        </div>
-        <div className="s-trading-item-detail">
-          <label>{t('totalTradeVolume')}<QuestionHelper text={t('totalTradeVolumeTip')} />：</label>
-          <em>${transToThousandth(fixFloat(totalTradeVolume, 3))}</em>
-        </div>
-        <div className="s-trading-item-detail">
-          <label>{t('myCurrentTradeVolume')}<QuestionHelper text={t('myCurrentTradeVolumeTip')} />：</label>
-          <em>{fixFloat(myCurrentTradeVolume * myRatio, 4)} USDT</em>
-        </div>
-        <div className="s-trading-item-detail">
-          <label>{t('myCurrentReward')}<QuestionHelper text={t('myCurrentRewardTip')} />：</label>
-          <em>{fixFloat(myCurrentReward, 4)} YUZU</em>
-        </div>
-      </div>
-      
     </div>
   )
 }

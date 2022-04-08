@@ -39,9 +39,10 @@ export default function BoradRoom() {
 
   return (
     <>
-      <Sloganer/>
+      <div id="page-homepage">
+        <Sloganer/>
+      </div>
       <div id="page-boardroom">
-        
         {maintainFlag ? 
         <h1 className="s-banner-coming">YuzuSwap is updating the smart contract, the update will be done in a couple of hours.</h1>
         :

@@ -20,6 +20,13 @@ import '../../assets/o.css';
 export default function Header() {
   const { t } = useTranslation();
   return (
-    <div className="s-banner">{t('slogan')}</div>
+    <div className="s-banner" id="page-homepage">
+      <span className="s-banner-title">
+        YUZUSWAP
+      </span>
+      <span className="s-banner-p">
+        {t('slogan')}
+      </span>
+    </div>
   )
 }

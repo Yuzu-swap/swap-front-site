@@ -15,18 +15,20 @@ import LoadingRings from 'components/Loader/rings'
 import { getExplorerLink } from '../../utils'
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
+import ConfirmImg from '../../assets/newUI/confirm.png'
 
 const Wrapper = styled.div`
   width: 100%;
 `
 const Section = styled(AutoColumn)`
-  padding: 24px;
+  padding: 20px;
 `
 
 const BottomSection = styled(Section)`
   background-color: ${({ theme }) => theme.bg2};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+  padding: 0px;
 `
 
 const ConfirmedIcon = styled(ColumnCenter)`
@@ -40,21 +42,21 @@ function ConfirmationPendingContent({ onDismiss, pendingText }: { onDismiss: () 
       <Section>
         <RowBetween>
           <div />
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon onClick={onDismiss} color ='#FFFFFF'/>
         </RowBetween>
         <div className="s-modal-loading-img">
           <LoadingRings />
         </div>
         <AutoColumn gap="12px" justify={'center'}>
-          <Text fontWeight={500} fontSize={20}>
+          <Text fontWeight={500} fontSize={20} color ='#FFFFFF'>
           {t('waittoconfirm')}
           </Text>
           <AutoColumn gap="12px" justify={'center'}>
-            <Text fontWeight={600} fontSize={14} color="" textAlign="center">
+            <Text fontWeight={600} fontSize={14} color="rgba(255, 255, 255, 0.6)" textAlign="center">
               {pendingText}
             </Text>
           </AutoColumn>
-          <Text fontSize={12} color="#565A69" textAlign="center">
+          <Text fontSize={12} color="rgba(255, 255, 255, 0.4)" textAlign="center">
             Confirm this transaction in your wallet
           </Text>
         </AutoColumn>
@@ -79,18 +81,18 @@ function TransactionSubmittedContent({
       <Section>
         <RowBetween>
           <div />
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon onClick={onDismiss} color={'#FFF'} />
         </RowBetween>
         <ConfirmedIcon>
-          <ArrowUpCircle strokeWidth={0.5} size={90} color={theme.primary1} />
+          <img src={ConfirmImg} width='64px'/>
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
-          <Text fontWeight={500} fontSize={20}>
+          <Text fontWeight={500} fontSize={24} color='#FFF'>
             Transaction Submitted
           </Text>
           {chainId && hash && (
             <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
-              <Text fontWeight={500} fontSize={14} color={theme.primary1}>
+              <Text fontWeight={500} fontSize={20} color={theme.primary1}>
                 View on explorer
               </Text>
             </ExternalLink>
@@ -119,12 +121,12 @@ export function ConfirmationModalContent({
 }) {
   return (
     <Wrapper>
-      <Section>
+      <Section style={{padding: '20px 20px 10px 20px'}}>
         <RowBetween>
-          <Text fontWeight={500} fontSize={20}>
+          <Text fontWeight={500} fontSize={20} color={'rgba(255, 255, 255, 0.6)'}>
             {title}
           </Text>
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon onClick={onDismiss} color={'#FFFFFF'}/>
         </RowBetween>
         {topContent()}
       </Section>

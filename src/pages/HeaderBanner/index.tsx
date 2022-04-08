@@ -22,12 +22,6 @@ export default function NormalHeader() {
         <HeaderWrapper className="s-header-wrapper">
             <Header />
         </HeaderWrapper>
-        <div className="s-banner-bg s-banner-bg-line">
-            
-            <div className="s-banner-bg s-banner-bg-dot "/>
-            <div className="s-banner-bg s-banner-bg-halfcircle "/>
-            <div className="s-banner-bg s-banner-bg-youzi "/>
-        </div> 
     </BannerWrapper>
   )
 }

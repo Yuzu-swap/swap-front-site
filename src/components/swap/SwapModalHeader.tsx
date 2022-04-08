@@ -38,69 +38,73 @@ export default function SwapModalHeader({
   const theme = useContext(ThemeContext)
 
   return (
-    <AutoColumn gap={'md'} style={{ marginTop: '20px' }}>
-      <RowBetween align="flex-end">
-        <RowFixed gap={'0px'}>
-          <CurrencyLogo currency={trade.inputAmount.currency} size={'24px'} style={{ marginRight: '12px' }} />
-          <TruncatedText
-            fontSize={24}
-            fontWeight={500}
-            color={showAcceptChanges && trade.tradeType === TradeType.EXACT_OUTPUT ? theme.primary1 : ''}
-          >
-            {trade.inputAmount.toSignificant(6)}
-          </TruncatedText>
-        </RowFixed>
-        <RowFixed gap={'0px'}>
-          <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
-            {trade.inputAmount.currency.getSymbol(chainId)}
-          </Text>
-        </RowFixed>
-      </RowBetween>
-      <RowFixed>
-        <ArrowDown size="16" color={theme.text2} style={{ marginLeft: '4px', minWidth: '16px' }} />
-      </RowFixed>
-      <RowBetween align="flex-end">
-        <RowFixed gap={'0px'}>
-          <CurrencyLogo currency={trade.outputAmount.currency} size={'24px'} style={{ marginRight: '12px' }} />
-          <TruncatedText
-            fontSize={24}
-            fontWeight={500}
-            color={
-              priceImpactSeverity > 2
-                ? theme.red1
-                : showAcceptChanges && trade.tradeType === TradeType.EXACT_INPUT
-                ? theme.primary1
-                : ''
-            }
-          >
-            {trade.outputAmount.toSignificant(6)}
-          </TruncatedText>
-        </RowFixed>
-        <RowFixed gap={'0px'}>
-          <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
-            {trade.outputAmount.currency.getSymbol(chainId)}
-          </Text>
-        </RowFixed>
-      </RowBetween>
-      {showAcceptChanges ? (
-        <SwapShowAcceptChanges justify="flex-start" gap={'0px'}>
-          <RowBetween>
-            <RowFixed>
-              <AlertTriangle size={20} style={{ marginRight: '8px', minWidth: 24 }} />
-              <TYPE.main color={theme.primary1}> Price Updated</TYPE.main>
+    <AutoColumn gap={'md'} style={{ marginTop: '20px'}}>
+      <div className="s-xyuzu-tab-wrapper">
+        <div style={{background:'#2C3035', borderRadius: 'inherit' , padding:'20px 16px'}}>
+          <RowBetween align="flex-end">
+            <RowFixed gap={'0px'}>
+              <CurrencyLogo currency={trade.inputAmount.currency} size={'24px'} style={{ marginRight: '12px' }} />
+              <TruncatedText
+                fontSize={20}
+                fontWeight={500}
+                color={showAcceptChanges && trade.tradeType === TradeType.EXACT_OUTPUT ? theme.primary1 : '#FFF'}
+              >
+                {trade.inputAmount.toSignificant(6)}
+              </TruncatedText>
             </RowFixed>
-            <ButtonPrimary
-              style={{ padding: '.5rem', width: 'fit-content', fontSize: '0.825rem', borderRadius: '12px' }}
-              onClick={onAcceptChanges}
-            >
-              Accept
-            </ButtonPrimary>
+            <RowFixed gap={'0px'}>
+              <Text fontSize={20} fontWeight={500} style={{ marginLeft: '10px' }} color={'#FFF'}>
+                {trade.inputAmount.currency.getSymbol(chainId)}
+              </Text>
+            </RowFixed>
           </RowBetween>
-        </SwapShowAcceptChanges>
-      ) : null}
+          <RowFixed>
+            <ArrowDown size="16" color={theme.text2} style={{ marginLeft: '4px', minWidth: '16px', marginTop: '12px', marginBottom:'12px'}} />
+          </RowFixed>
+          <RowBetween align="flex-end">
+            <RowFixed gap={'0px'}>
+              <CurrencyLogo currency={trade.outputAmount.currency} size={'24px'} style={{ marginRight: '12px' }} />
+              <TruncatedText
+                fontSize={20}
+                fontWeight={500}
+                color={
+                  priceImpactSeverity > 2
+                    ? theme.red1
+                    : showAcceptChanges && trade.tradeType === TradeType.EXACT_INPUT
+                    ? theme.primary1
+                    : '#FFF'
+                }
+              >
+                {trade.outputAmount.toSignificant(6)}
+              </TruncatedText>
+            </RowFixed>
+            <RowFixed gap={'0px'}>
+              <Text fontSize={20} fontWeight={500} style={{ marginLeft: '10px' }} color={'#FFF'}>
+                {trade.outputAmount.currency.getSymbol(chainId)}
+              </Text>
+            </RowFixed>
+          </RowBetween>
+          {showAcceptChanges ? (
+            <SwapShowAcceptChanges justify="flex-start" gap={'0px'} style={{marginTop: '10px'}}>
+              <RowBetween>
+                <RowFixed>
+                  <AlertTriangle size={20} style={{ marginRight: '8px', minWidth: 24 }} />
+                  <TYPE.main color={theme.primary1}> Price Updated</TYPE.main>
+                </RowFixed>
+                <ButtonPrimary
+                  style={{ padding: '.5rem', width: 'fit-content', fontSize: '0.825rem', borderRadius: '12px' }}
+                  onClick={onAcceptChanges}
+                >
+                  Accept
+                </ButtonPrimary>
+              </RowBetween>
+            </SwapShowAcceptChanges>
+          ) : null}
+        </div>
+      </div>
       <AutoColumn justify="flex-start" gap="sm" style={{ padding: '12px 0 0 0px' }}>
         {trade.tradeType === TradeType.EXACT_INPUT ? (
-          <TYPE.italic textAlign="left" style={{ width: '100%' }}>
+          <TYPE.italic textAlign="left" style={{ width: '100%' , color: 'rgba(255, 255, 255, 0.6)'}}>
             {`Output is estimated. You will receive at least `}
             <b>
               {slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(6)} {trade.outputAmount.currency.getSymbol(chainId)}
@@ -108,7 +112,7 @@ export default function SwapModalHeader({
             {' or the transaction will revert.'}
           </TYPE.italic>
         ) : (
-          <TYPE.italic textAlign="left" style={{ width: '100%' }}>
+          <TYPE.italic textAlign="left" style={{ width: '100%' , color: 'rgba(255, 255, 255, 0.6)' }}>
             {`Input is estimated. You will sell at most `}
             <b>
               {slippageAdjustedAmounts[Field.INPUT]?.toSignificant(6)} {trade.inputAmount.currency.getSymbol(chainId)}

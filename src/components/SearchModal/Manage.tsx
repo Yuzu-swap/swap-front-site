@@ -18,21 +18,21 @@ const Wrapper = styled.div`
 `
 
 const ToggleWrapper = styled(RowBetween)`
-  background-color: ${({ theme }) => theme.bg3};
+  background-color: ${({ theme }) => theme.bg8};
   border-radius: ${({ theme }) => theme.borderRadius};
-  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 `
 
 const ToggleOption = styled.div<{ active?: boolean }>`
-  width: 48%;
+  width: 50%;
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: ${({ theme }) => theme.borderRadius};
   font-weight: 600;
-  background-color: ${({ theme, active }) => (active ? theme.bg1 : theme.bg3)};
-  color: ${({ theme, active }) => (active ? theme.text1 : theme.text2)};
+  background: ${({ theme, active }) => (active ? 'linear-gradient(138deg, #ED4962 0%, #F98F81 100%)' : '#0000')};
+  color: ${({ theme, active }) => (active ? theme.text8 : theme.text2)};
   user-select: none;
 
   :hover {
@@ -61,11 +61,11 @@ export default function Manage({
     <Wrapper>
       <PaddedColumn>
         <RowBetween>
-          <ArrowLeft style={{ cursor: 'pointer' }} onClick={() => setModalView(CurrencyModalView.search)} />
-          <Text fontWeight={500} fontSize={20}>
+          <ArrowLeft color='#FFF' style={{ cursor: 'pointer' }} onClick={() => setModalView(CurrencyModalView.search)} />
+          <Text fontWeight={500} fontSize={20} color='rgba(255, 255, 255, 0.6)'>
             Manage
           </Text>
-          <CloseIcon onClick={onDismiss} />
+          <CloseIcon color='#FFF' onClick={onDismiss} />
         </RowBetween>
       </PaddedColumn>
       <Separator />

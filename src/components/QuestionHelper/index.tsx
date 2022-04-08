@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react'
 import { HelpCircle as Question } from 'react-feather'
 import styled from 'styled-components'
 import Tooltip from '../Tooltip'
+import AddIcon from '../../assets/newUI/addIcon.png'
 
 const QuestionWrapper = styled.div`
   display: flex;
@@ -48,16 +49,12 @@ const AddQuestionWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0.2rem;
-  border: 2px solid ${({ theme }) => theme.black};
   background: none;
   outline: none;
   cursor: default;
-  border-radius: 50%;
   width: 18px;
   height: 18px;
   font-weight: 600;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: ${({ theme }) => theme.black};
 
   :hover,
   :focus {
@@ -114,7 +111,7 @@ export function AddQuestionHelper({ text , onClick}: { text: string , onClick: (
     <span style={{ marginLeft: '10px', marginBottom: auto, marginTop: auto, position: 'relative'}} onClick={onClick}>
       <Tooltip text={text} show={show}>
         <AddQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
-          <QuestionMark>+</QuestionMark>
+          <img src={AddIcon} height={'16px'}/>
         </AddQuestionWrapper>
       </Tooltip>
     </span>
@@ -131,7 +128,7 @@ export function AddQuestionNoCHelper({ text , onClick}: { text: string , onClick
     <span style={{ marginLeft: '10px', marginBottom: auto, marginTop: auto, position: 'absolute'}} onClick={onClick}>
       <Tooltip text={text} show={show}>
         <AddQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
-          <QuestionMark>+</QuestionMark>
+          <img src={AddIcon} height={'16px'}/>
         </AddQuestionWrapper>
       </Tooltip>
     </span>

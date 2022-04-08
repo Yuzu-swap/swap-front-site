@@ -5,6 +5,7 @@ import { darken, lighten } from 'polished'
 import { RowBetween } from '../Row'
 import { ChevronDown } from 'react-feather'
 import { Button as RebassButton, ButtonProps } from 'rebass/styled-components'
+import reatBanner from '../../assets/newUI/reatBanner.png'
 
 const Base = styled(RebassButton)<{
   padding?: string
@@ -45,23 +46,23 @@ const sheen = keyframes`{
 export const ButtonPrimary = styled(Base)`
   /* background-color: ${({ theme }) => theme.primary1}; */
   overflow:hidden;
-  background: linear-gradient(to right, #ED4962 , #ED4962);
+  background: linear-gradient(to right, #ED4962 , #F98F81);
   background-origin: border-box;
   color: white;
   &:focus {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primary1)};
     /*background: ${({ theme }) => darken(0.05, theme.primary1)};*/
-    background: linear-gradient(to right, #ED4962 , #ED4962);
+    background: linear-gradient(to right, #ED4962 , #F98F81);
   }
   &:active {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.primary1)};
     /*background: ${({ theme }) => darken(0.1, theme.primary1)};*/
-    background: linear-gradient(to right, #ED4962 , #ED4962);
+    background: linear-gradient(to right, #ED4962 , #F98F81);
   }
   &:disabled {
     pointer-events: none;
     background: ${({ theme, altDisabledStyle, disabled }) =>
-      altDisabledStyle ? (disabled ? '#D0D0D0' : theme.primary1) : '#D0D0D0'};
+      altDisabledStyle ? (disabled ? '#767676' : theme.primary1) : '#767676'};
     color: ${({ theme, altDisabledStyle, disabled }) =>
       altDisabledStyle ? (disabled ? theme.text8 : 'white') : theme.text8};
     cursor: auto;
@@ -191,6 +192,25 @@ export const ButtonSecondary = styled(Base)`
   }
 `
 
+export const ButtonSecondarySimply = styled(Base)`
+  border: 1px solid ${({ theme }) => theme.primary1};
+  color: ${({ theme }) => theme.primary1};
+  background-color: transparent;
+  font-size: 16px;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  padding: ${({ padding }) => (padding ? padding : '10px')};
+
+  &:focus {
+    opacity:0.8;
+  }
+  &:hover {
+    opacity:0.8;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+`
+
 export const ButtonPink = styled(Base)`
   background-color: ${({ theme }) => theme.primary1};
   color: white;
@@ -235,7 +255,7 @@ export const ButtonUNIGradient = styled(ButtonPrimary)`
 
 export const ButtonOutlined = styled(Base)`
   border: 1px solid ${({ theme }) => theme.bg2};
-  background-color: transparent;
+  background-color: #F5F5F5;
   color: ${({ theme }) => theme.text1};
 
   &:focus {
@@ -305,6 +325,98 @@ const ButtonConfirmedStyle = styled(Base)`
     opacity: 50%;
     cursor: auto;
   }
+`
+
+export const ButtonLRTab = styled(Base)`
+  background-color: #222529;
+  border-radius : 8px;
+  font-weight: 400;
+  opacity: 0.6;
+  color: #FFFFFF;
+  height: 100%;
+  &:disabled {
+    font-weight: bold;
+    opacity: 1;
+    background-color: #2C3035;
+  }
+`
+
+export const ButtonUnderLine = styled(Base)<{active : boolean}>`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: left;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #FF526C;
+  font-size: 18px;
+  width: fit-content;
+  margin: 0 12px 0 0px;
+  font-weight: 400;
+  height: 36px;
+  background: none;
+  border-radius: 0px;
+  
+  &:hover {
+    font-weight: 600;
+  }
+  ${({active})=>(
+    active?
+    `
+      border-bottom: 4px solid #FF526C;
+    `
+    :``
+  )
+
+  } 
+  }
+`
+
+
+export const ButtonXyuzuPercent = styled(Base)`
+
+  width: fit-content;
+  background: #222529;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 28px;
+  color: rgba(255, 255, 255, 0.7);
+
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, '#222529')};
+  }
+  &:disabled{
+
+    color: #ED4962;
+    &:hover {
+      background-color:  #222529;
+    }
+  }
+  
+`
+
+export const ButtonXyuzuCard = styled(Base)`
+  padding : 8px 16px;
+
+  width: fit-content;
+  background: linear-gradient(138deg, #ED4962 0%, #F98F81 100%);
+  border-radius: 6px;
+
+  font-size: 20px;
+  font-weight: bold;
+  color: #FFFFFF;
+  line-height: 24px;
+
+  &:hover {
+    background-color: darken(0.05, linear-gradient(138deg, #ED4962 0%, #F98F81 100%));
+  }
+  &:disabled{
+
+    background: #767676;
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
 `
 
 const ButtonErrorStyle = styled(Base)`

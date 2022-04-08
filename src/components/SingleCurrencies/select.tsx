@@ -143,7 +143,9 @@ export default function SingleCurrencySelected(props: RouteComponentProps<{ pid:
   }
 
   let btn = (
-    <div className="s-boardroom-select s-boardroom-stake-button" onClick={
+    <div className="s-boardroom-select s-boardroom-stake-button"
+      style={{width:'100%'}}
+      onClick={
       async () => {
         if (approval != ApprovalState.APPROVED) {
           await approveCallback(() => {
@@ -227,7 +229,7 @@ export default function SingleCurrencySelected(props: RouteComponentProps<{ pid:
             <div className="s-modal-loading-img">
               <LoadingRings />
             </div>
-            <h2>{t('loading')}</h2>
+            <h2 style={{color:'#FFF'}}>{t('loading')}</h2>
           </div>
           <p className="s-boardroom-available">Deposite {myReward.toString(10)} zooswap LP</p>
         </div>

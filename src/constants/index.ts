@@ -32,6 +32,10 @@ export const PROPOSAL_LENGTH_IN_SECS = AVERAGE_BLOCK_TIME_IN_SECS * PROPOSAL_LEN
 export const GOVERNANCE_ADDRESS = '0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F'
 export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
 
+export const XYUZU_LIST : ChainTokenMap = {
+  [ChainId.OASISETH_TEST] : new Token(ChainId.OASISETH_TEST, '0xd2101c6d3182e4C3BbcAB79257fDdD02D0a714bb', 18, 'XYUZU', 'XYUZU'),
+  [ChainId.OASISETH_MAIN] : new Token(ChainId.OASISETH_MAIN, '0xf5493ea940d12cE8594f81BaB2bB7d4ed81d49e8', 18, 'XYUZU', 'XYUZU')
+}
 // SUSHI
 export const SUSHI: ChainTokenMap = {
   [ChainId.MAINNET]: new Token(
@@ -398,3 +402,5 @@ export const APIHost = process.env.REACT_APP_APIHOST
 export const UserRatioOfReward : number = 0.7
 
 export const BLACKHOLE_ADDRESS : string = '0x00b9dCA177aa3DB6F344A455d9E0511a6Aa7ad8D';
+
+export const blockNumPerS : number = 6;
