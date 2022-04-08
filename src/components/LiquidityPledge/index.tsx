@@ -128,8 +128,7 @@ export function PledgeDown(props: any){
   const cirShow = transToThousandth(fixFloat( cirnum , 0))
 
   const capShow = transToThousandth(fixFloat(cirnum * zooPrice, 0))
-
-  const rewardConfig = new AttenuationReward({ startBlock: 169008, zooPerBlock: JSBI.BigInt("40000000000000000000"), halfAttenuationCycle: 5000000 })
+  const rewardConfig = new AttenuationReward({ startBlock: 57100, zooPerBlock: JSBI.BigInt("50000000000000000000"), halfAttenuationCycle: 5000000 })
   const blockNumber = useBlockNumber()
   const rewardPerBlock = tokenAmountForshow(rewardConfig.getZooRewardBetween(blockNumber ?? 0, (blockNumber??0) + 1).toFixed(0),  yuzuToken?.decimals)
 
