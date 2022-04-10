@@ -66,7 +66,6 @@ html,body{
 .s-mobile #page-tradingMining{ width:100%; }
 .s-mobile #page-tradingMining .s-trading-list{ width:100%; }
 .s-mobile .s-trading-item{ width:100%; }
-.s-mobile .s-tradingmining-text{ font-size: 1.2rem; }
 .s-mobile .s-tradingmining-banner{ margin-left: 0.5rem; }
 
 
@@ -115,4 +114,13 @@ html,body{
 
 .s-mobile .s-xyuzu-cardrc{
 	flex-direction: column;
+	align-items: flex-start;
+}
+
+.s-mobile .s-xyuzu-header-summary{
+	flex-direction: column;
+}
+
+.s-mobile .s-xyuzu-header-summary-margin{
+	margin-left: 0px;
 }

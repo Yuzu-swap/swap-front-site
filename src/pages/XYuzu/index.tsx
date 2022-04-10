@@ -93,18 +93,18 @@ export function XYuzu(){
                 Stake xYUZU in <a style={{cursor:'pointer', textDecoration: 'none'}} href={"/#/liquiditymining/select/-1/extselect/"+ xyuzuIndex}>Single Token Staking</a> to mine both YUZU and ROSE at the same time.
                 <QuestionHelper text={t("xyuzuhintQ")}/>
                 </div>
-                <div style={{marginTop:"20px"}}>
+                <div style={{marginTop:"20px"}} className="s-xyuzu-header-summary">
                     <span className="s-xyuzu-header-text2">
-                        YUZU TVL:
+                        YUZU TVL:&nbsp;&nbsp;
                     </span>
                     <span className="s-xyuzu-header-number">
-                        &nbsp;&nbsp;${transToThousandth(fixFloat(parseFloat(yuzuBalances[0]?.toSignificant(6) ?? '0') * zooPrice, 3))}
+                        ${transToThousandth(fixFloat(parseFloat(yuzuBalances[0]?.toSignificant(6) ?? '0') * zooPrice, 3))}
                     </span>
-                    <span className="s-xyuzu-header-text2" style={{marginLeft:"80px"}}>
-                        xYUZU Circulation:
+                    <span className="s-xyuzu-header-text2 s-xyuzu-header-summary-margin">
+                        xYUZU Circulation:&nbsp;&nbsp;
                     </span>
                     <span className="s-xyuzu-header-number">
-                        &nbsp;&nbsp;{circulShow}
+                        {circulShow}
                     </span>
                 </div>
             </div>

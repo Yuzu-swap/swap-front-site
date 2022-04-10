@@ -27,6 +27,12 @@ import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } f
 import { useTranslation } from 'react-i18next'
 import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
 
+import { CloseIcon, CustomLightSpinner } from '../../theme/components'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../state'
+import { clearAllTransactions } from '../../state/transactions/actions'
+import { AutoRow, RowBetween } from '../Row'
+
 enum UnstakeInfo{
     UNSTAKEING,
     WITHDRAW,
@@ -303,7 +309,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                     </CardHeader>   
                     <div className='s-xyuzu-cardrc'>
                         <span  style={{display:'flex'}}>
-                            <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
+                            <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 0px"}} size={'40px'} currency={yuzuToken} />
                             <CardUnit>
                                 <TextNum style={{height : '35px', lineHeight: '35px'}}>
                                     {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
@@ -398,7 +404,7 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                 </CardHeader> 
                 <div className='s-xyuzu-cardrc'>
                     <span  style={{display:'flex'}}>
-                        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
+                        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 0px"}} size={'40px'} currency={yuzuToken} />
                         <CardUnit>
                             <TextNum style={{height : '35px', lineHeight: '35px'}}>
                                 {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
@@ -462,7 +468,7 @@ function CompleteCard({data} :{data : XyuzuOrder}){
                 </CardHeader>
                 <div className='s-xyuzu-cardrc'>
                     <span  style={{display:'flex'}}>
-                        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 10px"}} size={'40px'} currency={yuzuToken} />
+                        <CurrencyLogo style={{display: 'inline-block', verticalAlign: 'middle', margin: "auto 0px"}} size={'40px'} currency={yuzuToken} />
                         <CardUnit>
                             <TextNum style={{height : '35px', lineHeight: '35px'}}>
                                 {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
@@ -568,6 +574,11 @@ export function XUnStake(){
     },[sortedRecentTransactions])
     const hasPendingTransactions = !!pending.length
 
+    const dispatch = useDispatch<AppDispatch>()
+    const clearAllTransactionsCallback = useCallback(() => {
+      if (chainId) dispatch(clearAllTransactions({ chainId }))
+    }, [dispatch, chainId])
+
     return (
         <div>
             <div className="s-xyuzu-header-text1" style={{marginTop:"20px", fontSize:"20px", position: "relative"}}>
@@ -589,6 +600,10 @@ export function XUnStake(){
             <OrderList status={unstakeInfo}/>
             <Modal isOpen={hasPendingTransactions} onDismiss={()=>{}} maxHeight={100}>
                     <div className="s-modal-content">
+                        <RowBetween>
+                            <div />
+                            <CloseIcon onClick={clearAllTransactionsCallback} color ='#FFFFFF'/>
+                        </RowBetween>
                         <div className="s-modal-loading">
                             <div className="s-modal-loading-img">
                                 <LoadingRings/>

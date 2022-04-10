@@ -62,6 +62,7 @@ const HeaderFrame = styled.div`
     padding: 0 1rem;
     width: calc(100%);
     position: relative;
+    border-bottom: none;
   `};
 
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
@@ -137,6 +138,9 @@ const HeaderGap = styled.div`
   border-right: 1px solid rgba(255, 255, 255, 0.2);
   height: 85px;
   width: 0px;
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    border-right: none;
+  `};
 `
 
 const HeaderLinks = styled(Row)`

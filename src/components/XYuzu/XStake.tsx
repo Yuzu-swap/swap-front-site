@@ -22,12 +22,17 @@ import { useCurrencyBalance ,useCurrencyBalances } from '../../state/wallet/hook
 import { XYUZU_LIST, blockNumPerS }  from '../../constants'
 import LoadingRings from 'components/Loader/rings'
 import { useTranslation } from 'react-i18next'
-import fixFloat from 'utils/fixFloat'
+import fixFloat, {fixFloatFloor} from 'utils/fixFloat'
 import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
 import { useXYuzuStakeCallback } from '../../zooswap-hooks/useXYuzuCallback'
 import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
+
+import { CloseIcon, CustomLightSpinner } from '../../theme/components'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../state'
+import { clearAllTransactions } from '../../state/transactions/actions'
 
 type Props = {
     show : boolean;
@@ -243,9 +248,13 @@ export function XStake(){
       const txs = Object.values(allTransactions)
       return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
     }, [allTransactions])
-    const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && tx.summary.includes('Xyuzu Stake')).map(tx => tx.hash)
+    const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && tx.summary.includes('xYUZU Stake')).map(tx => tx.hash)
     const hasPendingTransactions = !!pending.length
 
+    const dispatch = useDispatch<AppDispatch>()
+    const clearAllTransactionsCallback = useCallback(() => {
+      if (chainId) dispatch(clearAllTransactions({ chainId }))
+    }, [dispatch, chainId])
 
 
     // mark when a user has submitted an approval, reset onTokenSelection for input field
@@ -261,7 +270,9 @@ export function XStake(){
 
     const onMax = useCallback(
         ()=>{
-            setInput(yuzuBalances[0]?.toExact() ?? '0.0')
+            setInput(
+                fixFloatFloor(parseFloat(yuzuBalances[0]?.toExact() ?? '0.0'), 6) as string    
+                )
         }
         ,
         [yuzuBalances]
@@ -436,6 +447,10 @@ export function XStake(){
 
                 <Modal isOpen={hasPendingTransactions} onDismiss={()=>{}} maxHeight={100}>
                     <div className="s-modal-content">
+                    <RowBetween>
+                        <div />
+                        <CloseIcon onClick={clearAllTransactionsCallback} color ='#FFFFFF'/>
+                    </RowBetween>
                         <div className="s-modal-loading">
                             <div className="s-modal-loading-img">
                                 <LoadingRings/>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect, MutableRefObject } from 'react'
+import React, { useState, useMemo, useRef, useEffect, useCallback, MutableRefObject } from 'react'
 import { Settings, X } from 'react-feather'
 import styled from 'styled-components'
 import { CardProps, Text } from 'rebass'
@@ -8,6 +8,7 @@ import YuzuSwapLogo from '../../assets/svg/yuzusinglelogo.svg'
 import Sloganer from 'components/Sloganer'
 import LoadingRings from 'components/Loader/rings'
 import BoardroomLP from './lp'
+import { CloseIcon, CustomLightSpinner } from '../../theme/components'
 
 import { AutoColumn } from '../Column'
 import Modal from '../Modal'
@@ -33,10 +34,12 @@ import Decimal from 'decimal.js'
 import CurrencyLogo from 'components/CurrencyLogo'
 import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
 import { useSingleCallResult } from '../../state/multicall/hooks'
-import { useCallback } from 'hoist-non-react-statics/node_modules/@types/react'
 import { configureScope } from '@sentry/minimal'
 import { Contract } from '@ethersproject/contracts'
 import { useWTokenUnWrapCallback } from 'hooks/useWTokenUnWrapCallback'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../state'
+import { clearAllTransactions } from '../../state/transactions/actions'
 //import { useEffect } from 'hoist-non-react-statics/node_modules/@types/react'
 
 const StyledCloseIcon = styled(X)`
@@ -74,7 +77,6 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
   const [poolList, statics] = useMyAllStakePoolList()
   const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
-  console.log("test111111", poolExtList)
 
 
   const winLabals = {
@@ -362,6 +364,12 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
     // };
     // setStatus(data);
   }
+
+  const dispatch = useDispatch<AppDispatch>()
+  const clearAllTransactionsCallback = useCallback(() => {
+    if (chainId) dispatch(clearAllTransactions({ chainId }))
+  }, [dispatch, chainId])
+
   return (
     <>
       <Sloganer />
@@ -491,6 +499,10 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
 
       <Modal isOpen={hasPendingTransactions} onDismiss={onDismiss} maxHeight={100}>
         <div className="s-modal-content">
+          <RowBetween>
+            <div />
+            <CloseIcon onClick={clearAllTransactionsCallback} color ='#FFFFFF'/>
+          </RowBetween>
           <div className="s-modal-loading">
             <div className="s-modal-loading-img">
               <LoadingRings />
