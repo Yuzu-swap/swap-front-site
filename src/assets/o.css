@@ -761,6 +761,9 @@
 	border: 1px solid #0000;
 	background: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)) border-box;
 }
+.s-header-flyout{
+	left: 12px;
+}
 /*.s-top-links::after{
 	content: ' ';
 	display: block;
@@ -2415,4 +2418,8 @@
 
 .s-xyuzu-header-summary-margin{
 	margin-left: 80px;
+}
+
+.s-tradingmining-text{
+	margin: 10px 0px;
 }

@@ -85,11 +85,11 @@ export default function Header({statics,poolList}:{poolList:TradePool[],statics:
   //<Web3Withdrawal onClick={toggleWithdrawalRewardModal}>
   return (
     <div className="s-banner s-tradingmining-banner" >
-      <p><TitleText className="s-tradingmining-text">{t('totalTransactionAmount')}：</TitleText>
-      <TitleNumber>${transToThousandth(statics.totalSwapVolume?.toFixed(3)) }</TitleNumber></p>
+      <span className="s-tradingmining-text"><TitleText >{t('totalTransactionAmount')}：</TitleText>
+      <TitleNumber>${transToThousandth(statics.totalSwapVolume?.toFixed(3)) }</TitleNumber></span>
 
-      <p><TitleText className="s-tradingmining-text">{t('currentIndividualWithdrawableRewards')}：</TitleText>
-      <TitleNumber>{ transToThousandth(tokenAmountForshow(myReward).toFixed(3))} YUZU</TitleNumber></p>
+      <span className="s-tradingmining-text"><TitleText>{t('currentIndividualWithdrawableRewards')}：</TitleText>
+      <TitleNumber>{ transToThousandth(tokenAmountForshow(myReward).toFixed(3))} YUZU</TitleNumber></span>
       <Web3Withdrawal onClick={withdrawAll}>
         <Text color="#FFF" fontSize={24} fontWeight='bold' >{t('withdrawalRewards')}</Text>
       </Web3Withdrawal>

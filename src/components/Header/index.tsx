@@ -386,7 +386,6 @@ const StyledMenu = styled.div`
 const MenuFlyout = styled.span`
   border-radius: ${({ theme }) => theme.borderRadius};
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    top: -8rem !important;
     :after{
       border-color: #fff transparent transparent transparent !important;
       top: 70px !important;
@@ -590,7 +589,7 @@ export default function Header() {
               <img src={Arrow} height={"16px"} style={{margin:"5px 0 0 0"}}/>
             </StyledNOutLink>
             {eopen && (
-                <MenuFlyout className="s-top-links" style={{left: '12px'}}>
+                <MenuFlyout className="s-top-links s-header-flyout">
                   <a className="s-top-link-button"  href='/#/tradingmining'>
                     {t('tradingmining')}
                   </a>
@@ -612,7 +611,7 @@ export default function Header() {
               <img src={Arrow} height={"16px"} style={{margin:"5px 0 0 0"}}/>
             </StyledNOutLink>
             {bopen && (
-                <MenuFlyout className="s-top-links" style={{left: '12px', minWidth: '6rem'}}>
+                <MenuFlyout className="s-top-links s-header-flyout" style={{minWidth: '6rem'}}>
                   <a className="s-top-link-button" onClick={()=>
                     window.open("https://wormholebridge.com/#/transfer")}>
                     Wormhole

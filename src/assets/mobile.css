@@ -48,7 +48,15 @@ html,body{
 .s-mobile .s-header-links:hover div {
 	display: block;
 }
+.s-mobile .s-header-flyout{
+	left: -20px;
+	right: 20px;
+	top: 30px;
+}
 
+.s-mobile .s-header-flyout a{
+	text-align: left;
+}
 
 .s-mobile #page-homepage{ width: 100%; }
 .s-mobile .s-body-wrapper{ width: 100%;  }
@@ -123,4 +131,9 @@ html,body{
 
 .s-mobile .s-xyuzu-header-summary-margin{
 	margin-left: 0px;
+}
+
+.s-mobile .s-tradingmining-text{
+	display: flex;
+	flex-direction: column;
 }
