@@ -512,9 +512,9 @@ export function XStake(){
                             <div className="s-modal-contentin" style={{display: 'flex', padding : '20px'}}>
                                 <img src={LockImg} width={'73px'}/>
                                 <InModalTrans>
-                                    <Line><ModalTextNum> {input} </ModalTextNum><ModalText1>YUZU</ModalText1></Line>
+                                    <Line><ModalTextNum> {fixFloat(Number(input), 6)} </ModalTextNum><ModalText1>YUZU</ModalText1></Line>
                                         <img src={ArrowDownImg} height={'24px'} width={'24px'}/>
-                                    <Line><ModalTextNum> {output} </ModalTextNum> <ModalText1>xYUZU</ModalText1></Line>
+                                    <Line><ModalTextNum> {fixFloat(Number(output), 6)} </ModalTextNum> <ModalText1>xYUZU</ModalText1></Line>
                                 </InModalTrans>
                                 
                             </div>
