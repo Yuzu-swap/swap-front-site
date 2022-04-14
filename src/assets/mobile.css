@@ -108,9 +108,13 @@ html,body{
 
 .s-mobile .s-zap-body{
 	width: 100%;
+	flex-direction: column;
 }
 
-.s-mobile .s-zap-img{
+.s-mobile .s-zap-exchange{
+	width: 100%;
+}
+.s-mobile .s-zap-img img{
 	width: 0px;
 	height: 0px;
 	overflow: hidden;

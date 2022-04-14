@@ -2278,7 +2278,10 @@
 	align-items: center;
 }
 
-.s-zap-img{}
+.s-zap-img img{
+	width: 300px;
+	height: 300px;
+}
 
 .s-zap-exchange{
 	width: 428px;

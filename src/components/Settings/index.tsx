@@ -187,12 +187,12 @@ export default function SettingsTab() {
               {t('interfaceSetting')}
             </Text>
             <RowBetween>
-              {/* <RowFixed>
-                <TYPE.black fontWeight={400} fontSize={14} color={theme.text1}>
-                  Toggle Expert Mode
-                </TYPE.black>
+              <RowFixed>
+                <Text fontWeight={400} fontSize={14} color={theme.text2}>
+                  Expert Mode
+                </Text>
                 <QuestionHelper text="Bypasses confirmation modals and allows high slippage trades. Use at your own risk." />
-              </RowFixed> */}
+              </RowFixed>
               <Toggle
                 id="toggle-expert-mode-button"
                 isActive={expertMode}
