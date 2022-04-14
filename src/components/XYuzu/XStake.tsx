@@ -28,11 +28,18 @@ import { useXYuzuStakeCallback } from '../../zooswap-hooks/useXYuzuCallback'
 import QuestionHelper, {AddQuestionHelper, AddQuestionNoCHelper} from 'components/QuestionHelper'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
+import { useMyAllStakePoolList,useMyAllYuzuParkExtList } from 'data/ZooPark'
 
 import { CloseIcon, CustomLightSpinner } from '../../theme/components'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../state'
 import { clearAllTransactions } from '../../state/transactions/actions'
+import { tokenAmountForshow } from 'utils/ZoosSwap'
+
+import { useSelector } from 'react-redux'
+import { AppState } from 'state'
+import { useBlockNumber } from 'state/application/hooks'
+import { UserRatioOfReward } from '../../constants'
 
 type Props = {
     show : boolean;
@@ -57,6 +64,13 @@ export const ZapTitle = styled.div`
     font-weight: 400;
     color: rgba(255, 255, 255, 0.6);
     line-height: 24px;
+`
+
+const ModalTextNum = styled.span`
+        font-size: 20px;
+        font-weight: bold;
+        color: #FF526C;
+        line-height: 24px;
 `
 
 export const ModalText1 = styled.span`
@@ -305,6 +319,75 @@ export function XStake(){
         [xyuzuConfs]
     )
 
+    const [poolExtList,extStatics] = useMyAllYuzuParkExtList()
+    const [poolList,statics, maintainFlag] = useMyAllStakePoolList()
+    const blockNumber = useBlockNumber() || 0
+    
+    const totalEffect =useMemo(
+        ()=>{
+            let re = 0
+            for(let i = 0; i < poolList.length; i++){
+                re += poolList[i].rewardEffect
+            }
+
+            for(let i = 0; i < poolExtList.length; i++){
+                re += poolExtList[i].rewardEffect
+            }
+            return re
+        },[poolExtList, poolList]
+    )
+
+    const xyuzuPool = useMemo(
+        ()=>{
+            let re = null
+            if(!poolExtList){
+                return re
+            }
+            for(let i = 0; i<poolExtList.length; i++){
+                if(poolExtList[i].token0.address == poolExtList[i].token1.address){
+                    re = poolExtList[i]
+                }
+            }
+            return re
+        },[poolExtList]
+    )
+
+    const prices:any  =  useSelector<AppState>(state=>state.zoo.tokenPrices)
+
+    const zooPrice:any = useSelector<AppState>(state=>state.zoo.price) || 1
+
+    const prodPerBlock:number = useMemo(()=> 
+        {
+            let re = 0
+            if(xyuzuPool)
+            {
+                re =  tokenAmountForshow(xyuzuPool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)) * xyuzuPool.rewardEffect / totalEffect
+            }
+            return re
+        }
+        ,[blockNumber, xyuzuPool]
+    )
+  
+
+    const Apr = useMemo(()=>{
+        let extprice = 0
+        if( xyuzuPool && xyuzuPool.tokenRewards){
+          for(let i = 0; i < xyuzuPool.tokenRewards.length;i++){
+            let num = tokenAmountForshow(xyuzuPool.tokenRewards[i].PerblockReward, xyuzuPool.tokenRewards[i].token.decimals)
+            let tokenExtPrice = prices[xyuzuPool.tokenRewards[i].token.symbol || ""] || 1
+            extprice += num * tokenExtPrice
+          }
+        }
+        let temp = tokenAmountForshow(xyuzuPool?.token1Balance ?? 0 ,  xyuzuToken?.decimals)
+        let re = 
+        parseFloat(output) / (temp + parseFloat(output))
+         * ((prodPerBlock * UserRatioOfReward * zooPrice + extprice )* 10 * 60 * 24 * 365 * 100) / (zooPrice * parseFloat(input))
+        return isNaN(re) ? 0 : re
+      },
+      [blockNumber, prices, xyuzuPool, input, output]
+      )
+
+
     useEffect(()=>{
         setOutput(fixFloat(Number(input) * ((xyuzuConfs &&  xyuzuConfs[daynum].ratio) ?? 0), 6) as string)
     },
@@ -390,6 +473,10 @@ export function XStake(){
                         <ButtonXyuzuPercent disabled={daynum == 3} onClick={()=>{SetDaynum(3)}}>{stakeDays && stakeDays[3]} D</ButtonXyuzuPercent>
                     </Wrapper>
                 </div>
+                <Line style={{marginBottom: '20px'}}>
+                    <ZapTitle>APR:<QuestionHelper text="This number is estimated given the assumption that each block time is 6s."/></ZapTitle>
+                    <ModalTextNum>{fixFloat(Apr, 3)}%</ModalTextNum>
+                </Line>
                 {!account ?<ButtonLight onClick={toggleWalletModal}>{t('connectwallet')}</ButtonLight>
                 : 
                     approval === ApprovalState.NOT_APPROVED || approval === ApprovalState.PENDING?
