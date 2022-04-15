@@ -378,7 +378,7 @@ export function XStake(){
             extprice += num * tokenExtPrice
           }
         }
-        let temp = tokenAmountForshow(xyuzuPool?.token1Balance ?? 0 ,  xyuzuToken?.decimals)
+        let temp = tokenAmountForshow(xyuzuPool?.totalLpInPark ?? 0 ,  xyuzuToken?.decimals)
         let re = 
         parseFloat(output) / (temp + parseFloat(output))
          * ((prodPerBlock * UserRatioOfReward * zooPrice + extprice )* 10 * 60 * 24 * 365 * 100) / (zooPrice * parseFloat(input))

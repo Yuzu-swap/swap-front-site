@@ -74,6 +74,12 @@ const CardWrapper = styled.div`
 const CardUnit = styled.div`
     display: flex;
     flex-direction: column;
+    height: 60px;
+    justify-content: space-between;
+    ${({ theme }) => theme.mediaWidth.upToMedium`
+      justify-content: center;
+      margin-bottom: 20px;
+    `}
 `
 
 const Text1 = styled.span`
@@ -314,7 +320,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                                 <TextNum style={{height : '35px', lineHeight: '35px'}}>
                                     {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
                                 </TextNum>
-                                <span style={{marginTop : '10px'}}>
+                                <span style={{}}>
                                     <Text2 style={{fontSize: '16px'}}>
                                         YUZU
                                     </Text2>
@@ -327,7 +333,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                         <span>
                             <CardUnit>
                                 <TimeCount endAt={data.stakeEnd}/>
-                                <Text1 style={{marginTop : '10px'}}>
+                                <Text1 style={{}}>
                                     Countdown
                                 </Text1>
                             </CardUnit>
@@ -337,7 +343,7 @@ function UnStakeCard( {data} :{data : XyuzuOrder}){
                                 <Text2 style={{height : '35px', lineHeight: '35px'}} >
                                     {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))}
                                 </Text2>
-                                <Text1 style={{marginTop : '10px'}}>
+                                <Text1 style={{}}>
                                     xYUZU needed
                                 </Text1>
                             </CardUnit>
@@ -409,7 +415,7 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                             <TextNum style={{height : '35px', lineHeight: '35px'}}>
                                 {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
                             </TextNum>
-                            <span style={{marginTop : '10px'}}>
+                            <span style={{}}>
                                 <Text2 style={{fontSize: '16px'}}>
                                     YUZU
                                 </Text2>
@@ -427,7 +433,7 @@ function WithDrawCard({data} :{data : XyuzuOrder}){
                                     <img src={CardClock} height={'20px'} style={{position: 'relative', top:'3px'}}/>
                                     <TimeCount endAt={data.unstakeEnd} type={false}/>
                                 </span>
-                                <Text1 style={{marginTop : '10px'}}>
+                                <Text1 style={{}}>
                                     Withdraw Time Left
                                 </Text1>
                             </CardUnit>
@@ -473,7 +479,7 @@ function CompleteCard({data} :{data : XyuzuOrder}){
                             <TextNum style={{height : '35px', lineHeight: '35px'}}>
                                 {transToThousandth(fixFloat(data.amount/ Math.pow(10, 18), 4))}
                             </TextNum>
-                            <span style={{marginTop : '10px'}}>
+                            <span style={{}}>
                                 <Text2 style={{fontSize: '16px'}}>
                                     YUZU
                                 </Text2>
@@ -488,7 +494,7 @@ function CompleteCard({data} :{data : XyuzuOrder}){
                             <TextNum style={{height : '35px', lineHeight: '35px'}}>
                                 {transToThousandth(fixFloat(data.xamount/ Math.pow(10, 18), 4))}
                             </TextNum>
-                            <Text1 style={{marginTop : '10px'}}>
+                            <Text1 style={{}}>
                                 Consumed xYUZU
                             </Text1>
                         </CardUnit>      
