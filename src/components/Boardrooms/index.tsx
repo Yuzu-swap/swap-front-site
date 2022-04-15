@@ -371,7 +371,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
       }
     }
     
-    return ((prodPerBlock * UserRatioOfReward * zooPrice+ extprice )* 10 * 60 * 24 * 365 * 100) / tvl
+    return ((prodPerBlock * UserRatioOfReward * zooPrice + extprice )* 10 * 60 * 24 * 365 * 100) / tvl
   },
   [blockNumber, prices, pool]
   )

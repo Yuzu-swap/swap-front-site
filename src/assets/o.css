@@ -190,7 +190,6 @@
 	max-width: 330px;
 	box-shadow: 0px 16px 24px 0px rgba(43, 43, 43, 0.09);
 	border-radius: 8px;
-	/*border: 1px solid #F36E7F;*/
 	margin: 13px;
 }
 .s-parters img{
@@ -761,6 +760,9 @@
 	border-radius: 6px;
 	border: 1px solid #0000;
 	background: linear-gradient(2deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)) border-box;
+}
+.s-header-flyout{
+	left: 12px;
 }
 /*.s-top-links::after{
 	content: ' ';
@@ -2276,7 +2278,10 @@
 	align-items: center;
 }
 
-.s-zap-img{}
+.s-zap-img img{
+	width: 300px;
+	height: 300px;
+}
 
 .s-zap-exchange{
 	width: 428px;
@@ -2338,6 +2343,11 @@
 	flex-direction: column;
 	width: 100%;
 	align-items: flex-start;
+}
+
+.s-xyuzu-header-summary{
+	display: flex;
+	justify-content: flex-start;
 }
 
 .s-xyuzu-header-banner{
@@ -2403,8 +2413,16 @@
 
 .s-xyuzu-cardrc{
 	display: flex;
-    padding: 20px 10px;
+    padding: 20px 20px;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+}
+
+.s-xyuzu-header-summary-margin{
+	margin-left: 80px;
+}
+
+.s-tradingmining-text{
+	margin: 10px 0px;
 }

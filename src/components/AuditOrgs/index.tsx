@@ -50,10 +50,6 @@ export default function AuditOrgs(props: any) {
       <a href={'https://hackmd.io/@verilog/yuzuswap'} target='_blank'>
         <img src={org1} style={{background: '#FFF'}} />
       </a>
-        {/*
-        <img src={org2} />*/
-        }
-
     </div>
   )
 }

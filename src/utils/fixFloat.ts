@@ -1,6 +1,6 @@
 import Decimal from "decimal.js";
 
-export default function fixFloat(handle: Number, fixto: number, intlen: number = 4): String {
+export default function (handle: Number, fixto: number, intlen: number = 4): String {
     const temp =  handle.toFixed(fixto);
     const i = temp.indexOf(".");
     if( i <= intlen ){

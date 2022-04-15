@@ -28,6 +28,18 @@ import { AutoRow, RowBetween } from '../../components/Row'
 import Loader from '../../components/Loader'
 import  ArrowDownImg  from '../../assets/newUI/arrowDown.png'
 
+import { CloseIcon, CustomLightSpinner } from '../../theme/components'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../state'
+import { clearAllTransactions } from '../../state/transactions/actions'
+
+import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
+import { TransactionDetails } from '../../state/transactions/reducer'
+
+import Modal from '../../components/Modal'
+import LoadingRings from 'components/Loader/rings'
+import {  ModalText1 } from '../../components/XYuzu/XStake'
+
 export function Zap(){
 
     const StyledBalanceMax = styled.button`
@@ -259,6 +271,22 @@ export function Zap(){
         }
     },[approval,inputToken,pair])
 
+    function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
+        return b.addedTime - a.addedTime
+      }
+    const allTransactions = useAllTransactions()
+    const sortedRecentTransactions = useMemo(() => {
+      const txs = Object.values(allTransactions)
+      return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
+    }, [allTransactions])
+    const pending = sortedRecentTransactions.filter(tx => !tx.receipt && tx.summary && tx.summary.includes('zapIn')).map(tx => tx.hash)
+    const hasPendingTransactions = !!pending.length
+
+    const dispatch = useDispatch<AppDispatch>()
+    const clearAllTransactionsCallback = useCallback(() => {
+      if (chainId) dispatch(clearAllTransactions({ chainId }))
+    }, [dispatch, chainId])
+
 
     const {t} = useTranslation();
     return (
@@ -267,7 +295,7 @@ export function Zap(){
                 <h2>ZAP</h2>
                 <p>Convert single tokens to LP tokens directly.</p>
                 <SmallText>Warning: Zap may cause slippage, please use at your own risk.</SmallText>
-                <img style={{width: "300px", height: "300px"}}src={ZapImg}/>
+                <img src={ZapImg}/>
             </div>
             <div className="s-zap-exchange">
                 <ZapTitle>ZAP</ZapTitle>
@@ -395,6 +423,20 @@ export function Zap(){
                     onPoolSelect={handleOutputSelect}
                     selectedPool={pool}
                 />
+                <Modal isOpen={hasPendingTransactions} onDismiss={()=>{}} maxHeight={100}>
+                    <div className="s-modal-content">
+                        <RowBetween>
+                            <div />
+                            <CloseIcon onClick={clearAllTransactionsCallback} color ='#FFFFFF'/>
+                        </RowBetween>
+                        <div className="s-modal-loading">
+                            <div className="s-modal-loading-img">
+                                <LoadingRings/>
+                            </div>
+                            <ModalText1>Loading...</ModalText1>
+                        </div>
+                    </div>
+                </Modal>
 
             </div>
             
