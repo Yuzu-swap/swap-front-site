@@ -141,3 +141,7 @@ html,body{
 	display: flex;
 	flex-direction: column;
 }
+
+.s-mobile .s-xyuzu-card-unit{
+	justify-content: space-around;
+}

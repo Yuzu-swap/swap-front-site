@@ -2426,3 +2426,8 @@
 .s-tradingmining-text{
 	margin: 10px 0px;
 }
+
+.s-xyuzu-card-unit{
+	height: 50px;
+	justify-content: space-between;
+}
