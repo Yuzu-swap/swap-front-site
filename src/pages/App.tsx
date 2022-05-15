@@ -183,7 +183,7 @@ export default function App() {
               return(<div/>)
             }}/>
           </Switch>
-        
+        <URLWarning/>
       </AppWrapper>
     </Suspense>
   )
