@@ -54,6 +54,8 @@ export default function BoardroomLP({zoopark}:{zoopark :StakePool}  ) {
 )
 
   const jumpUrl = `/add/${zoopark.token0.address}/${zoopark.token1.address}`
+  const isSpecial = zoopark.token0.decimals == 6 && zoopark.token1.decimals == 6 ? 12 : 8
+
   return (
     <div className="s-boardroom-lp">
       <div className="s-trading-item-details">
@@ -76,7 +78,7 @@ export default function BoardroomLP({zoopark}:{zoopark :StakePool}  ) {
           <>
             <div className="s-trading-item-detail">
               <label>{t('myLpBalance')}: </label>
-              <em>{fixFloatFloor(JSBI.toNumber(zoopark.myLpBalance)/1e18, 8)}</em>
+              <em>{fixFloatFloor(JSBI.toNumber(zoopark.myLpBalance)/1e18, isSpecial)}</em>
             </div>
             <div className="s-trading-item-detail">
               <label>{zoopark.token0.symbol} ：</label>

@@ -156,7 +156,9 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
   // 个人未领取奖励
   const myReward = pool ? tokenAmountForshow(pool.myReward) : 0
   // 个人lp 余额
-  const myLpBalance = pool ? fixFloatFloor(JSBI.toNumber(pool.myLpBalance) / 1e18, 8) : ZERO
+
+  const isSpecial = pool && pool.token0.decimals == 6 && pool.token1.decimals == 6 ? 12 : 8
+  const myLpBalance = pool ? fixFloatFloor(JSBI.toNumber(pool.myLpBalance) / 1e18, isSpecial) : ZERO
 
   const myStakedPoolShareRatio =  pool && JSBI.greaterThan(pool.myCurrentLp,ZERO) ?   (new Decimal(pool.myCurrentLp.toString() ).div( new Decimal(pool.totalLp.toString())).toNumber()):0
 
@@ -478,10 +480,10 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
               </h2>
               <div className="s-modal-number">
                 <input type="number" value={pledgeValue} onChange={(e) => { setPledgeValue(e.target.value) }} />
-                <em onClick={() => setPledgeValue(myLpBalance.toString(10))}>MAX</em>
+                <em onClick={() => setPledgeValue(myLpBalance.toString(12))}>MAX</em>
               </div>
             </div>
-            <p className="s-boardroom-available">{myLpBalance.toString(10)} available</p>
+            <p className="s-boardroom-available">{myLpBalance.toString(12)} available</p>
           </div>
           <div className="s-modal-btns">
 
