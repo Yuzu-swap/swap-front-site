@@ -237,7 +237,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     ()=>{
       let num: Number = -1;
       let isIfo : boolean = false;
-      if(pool.tokenRewards){
+      if(pool.tokenRewards && pool.tokenRewards?.length > 0){
         num = pool.tokenRewards[0].RewardEndAt
         if(pool.tokenRewards[0].ifo){
           isIfo = true
