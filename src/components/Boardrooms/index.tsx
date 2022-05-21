@@ -413,7 +413,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         <div className="s-xyuzu-tab-wrapper">
           <RewardShow >
             <img className="s-doubleget-icon" src={DoublegetIcon}/>
-            YUZU&nbsp;+&nbsp;{extSymbolInfo}&nbsp;
+            YUZU&nbsp;{extSymbolInfo?'+':''}&nbsp;{extSymbolInfo}&nbsp;
           </RewardShow>
         </div>
         </div>
@@ -421,6 +421,9 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         <div className="s-doubleget-item-details">
         <div className="s-doubleget-item-detail">
               {
+                pool.tokenRewards && pool.tokenRewards.length == 0?
+                <label>Stablecoin Pair</label> 
+                :
                 xyuzu?
                 <label>Single Token Staking :</label> 
                 :
@@ -440,6 +443,9 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
               }
               
               {
+                pool.tokenRewards && pool.tokenRewards.length == 0?
+                <label></label> 
+                :
                 xyuzu?
                 <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>xYUZU
                 <img 
@@ -544,7 +550,7 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   `
   return (
     <div>
-      <TitleShow str={'DUAL YIELD'}/>
+      <TitleShow str={'FEATURED POOL'}/>
       <div className="s-trading-list">
         {extrooms.map((pool: ZooParkExt, i: number) => {
           return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>

@@ -476,7 +476,7 @@ export default function BoardroomSelected(props: RouteComponentProps<{ pid: stri
                     xyuzu?
                     pool.token0.symbol 
                     :
-                    (pool.token0.symbol + '/' + pool.token1.symbol) + 'LP' : ''} 
+                    (pool.token0.symbol + '/' + pool.token1.symbol) + ' LP' : ''} 
               </h2>
               <div className="s-modal-number">
                 <input type="number" value={pledgeValue} onChange={(e) => { setPledgeValue(e.target.value) }} />
