@@ -132,19 +132,23 @@ export function PledgeDown(props: any){
   const blockNumber = useBlockNumber()
   const rewardPerBlock = tokenAmountForshow(rewardConfig.getZooRewardBetween(blockNumber ?? 0, (blockNumber??0) + 1).toFixed(0),  yuzuToken?.decimals)
 
+  const PinkSpan = styled.span`
+    color:#ED4962;
+  `
+
   return (
     <div className="s-pledge-item">
       <div className="s-pledge-item-in">
         <div className="s-pledge-item-numbers">
           <span>${capShow}</span>
-          <span>{mintShow}&nbsp;YUZU </span>
+          <span>{mintShow}&nbsp;<PinkSpan>YUZU</PinkSpan> </span>
           <span
             style={{ cursor: "pointer"}}
             onClick={()=>{window.open((CHAIN_CONFIG as any)[DefaultChainId].blockExplorerUrl +'address/' +BLACKHOLE_ADDRESS + '/transactions'
                 )}}
-          >{yuzuShow}&nbsp;YUZU </span>
-          <span> {cirShow}&nbsp;YUZU </span>
-          <span> {rewardPerBlock}&nbsp;YUZU </span>
+          >{yuzuShow}&nbsp;<PinkSpan>YUZU</PinkSpan> </span>
+          <span> {cirShow}&nbsp;<PinkSpan>YUZU</PinkSpan> </span>
+          <span> {rewardPerBlock}&nbsp;<PinkSpan>YUZU</PinkSpan> </span>
         </div>
         <div className="s-pledge-item-title">
           <span>Market Cap</span>
