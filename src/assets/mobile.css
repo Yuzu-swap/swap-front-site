@@ -85,22 +85,26 @@ html,body{
 .s-mobile .s-liquidity-title{ font-size: 1.5rem; }
 .s-mobile .s-pledge-item{  }
 .s-mobile .s-pledge-item-title{
-	display: inline-block;
+	display: inline-flex;
+	flex-direction: column;
 	width:40%;
 	vertical-align: top;
 }
 .s-mobile .s-pledge-item-numbers{
-	display: inline-block;
+	display: inline-flex;
+	flex-direction: column;
 	width:58%;
 	vertical-align: top;
 }
+.s-mobile .s-pledge-item-in{
+	display: flex;
+	justify-content: space-between;
+}
 .s-mobile .s-pledge-item-title span,
 .s-mobile .s-pledge-item-numbers span{
-	display: block;
+	display: inline;
 	width:100%;
-}
-.s-mobile .s-pledge-item-title span{
-	line-height: 2.3;
+	line-height: 35px;
 }
 .s-mobile .s-pledge-item-numbers span{
 	text-align: right;
