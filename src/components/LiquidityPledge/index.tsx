@@ -134,6 +134,7 @@ export function PledgeDown(props: any){
 
   const PinkSpan = styled.span`
     color:#ED4962;
+    display : inline;
   `
 
   return (

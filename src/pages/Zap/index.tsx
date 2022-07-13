@@ -187,7 +187,7 @@ export function Zap(){
     const [_,pair] = usePair(pool?.token0,pool?.token1)
     const inputToken  = useMemo(
         ()=>{
-            const bigintAmount = new Decimal(parseFloat(input=='' ? '0' : input) * Math.pow( 10, currency?.decimals ||18 )).toFixed(0)
+            const bigintAmount = new Decimal(input=='' ? '0' : input).mul(Math.pow( 10, currency?.decimals ||18 )).toFixed()
             return (currency instanceof Token)? new TokenAmount(currency, bigintAmount):
             currency ? new CurrencyAmount(currency, bigintAmount) : null
         }
@@ -234,7 +234,7 @@ export function Zap(){
 
     const inputCheck = useMemo(
         ()=>{
-            return parseFloat(input) > parseFloat(relevantTokenBalances[0]?.toExact() || '0') ? false : true
+            return input !='' && new Decimal(input).isZero() && new Decimal(input??'0').lte(relevantTokenBalances[0]?.toExact() || '0')
         },[input]
     )
     
