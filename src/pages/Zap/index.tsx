@@ -234,7 +234,7 @@ export function Zap(){
 
     const inputCheck = useMemo(
         ()=>{
-            return input !='' && new Decimal(input).isZero() && new Decimal(input??'0').lte(relevantTokenBalances[0]?.toExact() || '0')
+            return input !='' && !(new Decimal(input).isZero()) && new Decimal(input??'0').lte(relevantTokenBalances[0]?.toExact() || '0')
         },[input]
     )
     
