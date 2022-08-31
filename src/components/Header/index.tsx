@@ -620,6 +620,10 @@ export default function Header() {
                     window.open("https://cbridge.celer.network/#/transfer")}>
                     CBridge
                   </a>
+                  <a className="s-top-link-button" onClick={()=>
+                    window.open("https://multichain.xyz/")}>
+                    MultiChain
+                  </a>
                 </MenuFlyout>
               )}
           </div>
