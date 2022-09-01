@@ -2431,3 +2431,9 @@
 	height: 50px;
 	justify-content: space-between;
 }
+
+.s-pool-detail{
+	position: absolute;
+	right: 80px;
+	top: 14px;
+}

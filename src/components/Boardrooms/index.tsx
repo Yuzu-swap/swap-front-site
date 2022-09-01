@@ -5,7 +5,7 @@ import QuestionHelper, {LightQuestionHelper}  from '../QuestionHelper'
 import { Box } from 'rebass/styled-components'
 import { Link } from 'react-router-dom'
 
-import { ButtonPrimaryNormal, ButtonSecondary, ButtonPrimary } from '../../components/Button'
+import { ButtonPrimaryNormal, ButtonSecondary, ButtonPrimary, ButtonShowDetail } from '../../components/Button'
 
 import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import FantomLogo from '../../assets/images/fantom-logo.png'
@@ -537,6 +537,22 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   for(let i = 0; i < extrooms.length; i++){
     totalEffect += extrooms[i].rewardEffect
   }
+  const [ ableList, expireList ] = useMemo(
+    ()=>{
+      let ableList : ZooParkExt[] = []
+      let expireList : ZooParkExt[] = []
+      for(let i = 0; i< extrooms.length; i++){
+        if(extrooms[i].rewardEffect == 0){
+          expireList.push(extrooms[i])
+        }
+        else{
+          ableList.push(extrooms[i])
+        }
+      }
+      return [ableList, expireList]
+    },
+    [extrooms]
+  )
   const Titleb = styled.h1`
   text-align : center;
   font-weight: 500;
@@ -548,11 +564,24 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   color: #FFFFFF;
   margin-top: 40px;
   `
+
+  const [showDetail , SetShowDetail] = useState<boolean>(false)
+  const buttonText = useMemo(
+    ()=>{
+      if(showDetail){
+        return 'hide'
+      }
+      else{
+        return 'show detail'
+      }
+    },
+    [showDetail]
+  )
   return (
     <div>
       <TitleShow str={'FEATURED POOL'}/>
       <div className="s-trading-list">
-        {extrooms.map((pool: ZooParkExt, i: number) => {
+        {ableList.map((pool: ZooParkExt, i: number) => {
           return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>
         })}
       </div>
@@ -562,6 +591,22 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
           return <BoardItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (statics && statics.tvls&&statics.tvls[i])||0}/>
         })}
       </div>
+      <div style={{ position: 'relative', width:'100%' }}>
+        <TitleShow str={'EXPIRED POOL'}/>
+        <span className='s-pool-detail'>
+          <ButtonShowDetail onClick={()=>SetShowDetail(!showDetail)}> {buttonText}</ButtonShowDetail>
+        </span>
+      </div>
+      {
+        showDetail?
+        <div className="s-trading-list">
+          {expireList.map((pool, i) => {
+            return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>
+          })}
+        </div>
+        :
+        null
+      }
     </div>
   )
 }
