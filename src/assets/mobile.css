@@ -149,3 +149,12 @@ html,body{
 .s-mobile .s-xyuzu-card-unit{
 	justify-content: space-around;
 }
+
+.s-mobile .s-pool-detail{
+	position: relative;
+    width: 100px;
+    margin: auto;
+    right: unset;
+    top: unset;
+	text-align: center;
+}
