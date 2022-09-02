@@ -146,19 +146,23 @@ export default function TradingList({poolList,statics}:{poolList:TradePool[],sta
     },
     [showDetail]
   )
-  const [ ableList, expireList ] = useMemo(
+  const [ ableList, expireList , ableIndexList, expireIndexList] = useMemo(
     ()=>{
       let ableList : TradePool[] = []
       let expireList : TradePool[] = []
+      let ableIndexList : number[] = []
+      let expireIndexList : number[] = []
       for(let i = 0; i< poolList.length; i++){
         if(poolList[i].rewardEffect == 0){
           expireList.push(poolList[i])
+          expireIndexList.push(i)
         }
         else{
           ableList.push(poolList[i])
+          ableIndexList.push(i)
         }
       }
-      return [ableList, expireList]
+      return [ableList, expireList, ableIndexList, expireIndexList]
     },
     [poolList]
   )
@@ -170,7 +174,7 @@ export default function TradingList({poolList,statics}:{poolList:TradePool[],sta
     <div>
       <div className="s-trading-list">
         {ableList.map((pool, i) => {
-          return <TradingItem index={i} key={i} pool={pool} statics={statics} totalEffect={totalEffect}/>
+          return <TradingItem index={ableIndexList[i]} pool={pool} statics={statics} totalEffect={totalEffect}/>
         })}
         <TradingGroupModal isOpen={showTradingGroupModal} handleCurrencySelect={handleCurrencySelect}/>
       </div>
@@ -184,7 +188,7 @@ export default function TradingList({poolList,statics}:{poolList:TradePool[],sta
         showDetail?
         <div className="s-trading-list">
           {expireList.map((pool, i) => {
-            return <TradingItem index={i} key={i} pool={pool} statics={statics} totalEffect={totalEffect}/>
+            return <TradingItem index={expireIndexList[i]} pool={pool} statics={statics} totalEffect={totalEffect}/>
           })}
         </div>
         :
