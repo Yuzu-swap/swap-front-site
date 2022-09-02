@@ -303,7 +303,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     }
   },[timestamp])
 
-  console.log("boardroom-----ext", pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1).toString(), tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)))
+  //console.log("boardroom-----ext", pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1).toString(), tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)))
 
   const dayReturn = useMemo(()=>{
     const rewardPrice = prices["ZOO"] 
@@ -421,8 +421,11 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         <div className="s-doubleget-item-details">
         <div className="s-doubleget-item-detail">
               {
-                pool.tokenRewards && pool.tokenRewards.length == 0?
+                pool.pid == 5 ?
                 <label>Stablecoin Pair</label> 
+                :
+                pool.tokenRewards && pool.tokenRewards.length == 0?
+                <label> </label> 
                 :
                 xyuzu?
                 <label>Single Token Staking :</label> 
@@ -537,19 +540,23 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   for(let i = 0; i < extrooms.length; i++){
     totalEffect += extrooms[i].rewardEffect
   }
-  const [ ableList, expireList ] = useMemo(
+  const [ ableList, expireList, ableIndexList, expireIndexList ] = useMemo(
     ()=>{
       let ableList : ZooParkExt[] = []
       let expireList : ZooParkExt[] = []
+      let ableIndexList : number[] = []
+      let expireIndexList : number[] = [] 
       for(let i = 0; i< extrooms.length; i++){
         if(extrooms[i].rewardEffect == 0){
           expireList.push(extrooms[i])
+          expireIndexList.push(i)
         }
         else{
           ableList.push(extrooms[i])
+          ableIndexList.push(i)
         }
       }
-      return [ableList, expireList]
+      return [ableList, expireList, ableIndexList, expireIndexList]
     },
     [extrooms]
   )
@@ -582,7 +589,7 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
       <TitleShow str={'FEATURED POOL'}/>
       <div className="s-trading-list">
         {ableList.map((pool: ZooParkExt, i: number) => {
-          return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>
+          return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[ableIndexList[i]])||0}/>
         })}
       </div>
       <TitleShow str={'ALL FARMS'}/>
@@ -601,7 +608,7 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
         showDetail?
         <div className="s-trading-list">
           {expireList.map((pool, i) => {
-            return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>
+            return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[expireIndexList[i]])||0}/>
           })}
         </div>
         :
