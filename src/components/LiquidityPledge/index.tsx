@@ -49,7 +49,7 @@ export function Pledge(props: any){
     let nextBlockTime= 0
     let day,hour,min,second
     if (blockNumber&& blockNumber>0) {
-      nextBlockTime = (PeriodBlock - (blockNumber?? 0- StarBlock )% PeriodBlock)*6
+      nextBlockTime = (PeriodBlock - ((blockNumber??0) - StarBlock )% PeriodBlock)*6
       nextBlockTime -= (timestamp-lastBlockAt)
       day = Math.floor(nextBlockTime/86400)
       hour = Math.floor((nextBlockTime-day*86400)/ 3600)
