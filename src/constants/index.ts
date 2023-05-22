@@ -404,3 +404,5 @@ export const UserRatioOfReward : number = 0.7
 export const BLACKHOLE_ADDRESS : string = '0x00b9dCA177aa3DB6F344A455d9E0511a6Aa7ad8D';
 
 export const blockNumPerS : number = 6;
+
+export const xyuzuExtBlock : number = 8353006

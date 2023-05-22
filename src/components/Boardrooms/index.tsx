@@ -12,7 +12,7 @@ import FantomLogo from '../../assets/images/fantom-logo.png'
 import Trans from '../../assets/newUI/trans.png'
 import DoublegetIcon from '../../assets/images/doubleget2.png'
 import WebLinkJump from '../../assets/images/web-link.png'
-import { DefaultChainId, XYUZU_LIST, ZOO_PARK_ADDRESS } from '../../constants'
+import { DefaultChainId, xyuzuExtBlock, XYUZU_LIST, ZOO_PARK_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
 import { STAKING_REWARDS_INTERFACE } from 'constants/abis/staking-rewards'
 import { useMultipleContractSingleData } from 'state/multicall/hooks'
@@ -233,6 +233,11 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     [blockNumber, pool]
   )
 
+
+  const xyuzu : boolean = useMemo(()=>{
+    return pool.token0.symbol == pool.token1.symbol
+  },[pool])
+
   const [minExtBlock, isIfo] = useMemo(
     ()=>{
       let num: Number = -1;
@@ -243,9 +248,10 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
           isIfo = true
         }
       }
+      if(xyuzu) num = xyuzuExtBlock
       return [num.valueOf(), isIfo]
     },
-    [blockNumber, pool]
+    [blockNumber, pool, xyuzu]
   ) 
 
 
@@ -324,9 +330,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     return  JSBI.toNumber(pool.rewardConfig.getZooRewardBetween(blockNumber??0,(blockNumber??0)+24*3600/4))*pool.rewardEffect/1e18/10000
   },[blockNumber])*/
 
-  const xyuzu : boolean = useMemo(()=>{
-    return pool.token0.symbol == pool.token1.symbol
-  },[pool])
+
 
   const [token0WithLogo,token1WithLogo] =useMemo( ()=>{
     let str =  xyuzu ? XYUZU_LIST[chainId ?? DefaultChainId] :  allTokens[pool.token0.address]
@@ -427,9 +431,9 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
                 pool.tokenRewards && pool.tokenRewards.length == 0?
                 <label> </label> 
                 :
-                xyuzu?
-                <label>Single Token Staking :</label> 
-                :
+                // xyuzu?
+                // <label>Single Token Staking :</label> 
+                // :
                 isIfo ? 
                 <label>Initial Farm Offering :</label> 
                 :
@@ -448,19 +452,19 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
               {
                 pool.tokenRewards && pool.tokenRewards.length == 0?
                 <label></label> 
-                :
-                xyuzu?
-                <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>xYUZU
-                <img 
-                  src={WebLinkJump} 
-                  height={'15px'} 
-                  style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
-                  onClick={()=>{
-                    window.location.href= "#"
-                    window.location.href= "/#/xyuzu"
-                  }}
-                />
-                </strong>
+                // :
+                // xyuzu?
+                // <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>xYUZU
+                // <img 
+                //   src={WebLinkJump} 
+                //   height={'15px'} 
+                //   style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
+                //   onClick={()=>{
+                //     window.location.href= "#"
+                //     window.location.href= "/#/xyuzu"
+                //   }}
+                // />
+                // </strong>
                 :
                 minExtBlock != 0 ?
                 TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)
