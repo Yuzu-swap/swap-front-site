@@ -2337,6 +2337,69 @@
 	line-height: 28px;
 	border-radius: 8px;
 }
+.s-limitorder-tab {
+    display: flex;
+    width: 80%;
+    background-color: #222529;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28px;
+    margin: 8px 0 8px 20px;
+    border-radius: 8px;
+    /*background-clip: content-box;*/
+}
+
+.s-limitorder-fresh-price {
+    background-color: #3B4149;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28px;
+	color: #CCDBE5;
+	padding: 0.5rem 0.5rem 0.5rem 1rem ;
+	border-bottom-left-radius: 8px;
+	border-top-left-radius: 8px;
+	position: relative;
+	display: flex;
+    align-items: center;
+    /*background-clip: content-box;*/
+}
+
+.s-limitorder-fresh-button{
+	position: relative;
+	top: 50%;
+    margin: -20px 0 0 0; 
+	height: 20px;
+	margin: auto;
+	
+}
+
+.s-limitorder-fresh-button:hover{
+	opacity: 0.8;
+}
+
+.s-limitorder-card{
+	display: flex;
+	justify-content: space-between;
+	width: 1200px;
+}
+
+.s-limitorder-dark{
+	background-color: #23272B;
+	border-radius: 10px;
+	padding: 15px;
+}
+
+.s-absolute-mid {
+	position: absolute;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+
+
 
 .s-xyuzu-header{
 	display: flex;

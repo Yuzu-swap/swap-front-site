@@ -406,3 +406,12 @@ export const BLACKHOLE_ADDRESS : string = '0x00b9dCA177aa3DB6F344A455d9E0511a6Aa
 export const blockNumPerS : number = 6;
 
 export const xyuzuExtBlock : number = 8353006
+
+export const LimitOrderList :  {
+  readonly [chainId in ChainId]?: string
+} = {
+  //[ChainId.OASISETH_TEST] : new Token(ChainId.OASISETH_TEST, '0xd2101c6d3182e4C3BbcAB79257fDdD02D0a714bb', 18, 'XYUZU', 'XYUZU'),
+  [ChainId.OASISETH_MAIN] : '0x01Eb7FD0330785E6ADE6a57DAe82D2e778e43f7e'
+}
+
+export const ETHFakeAddress : string  = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';

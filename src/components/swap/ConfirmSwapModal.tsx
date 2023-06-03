@@ -1,4 +1,4 @@
-import { currencyEquals, Trade } from '@liuxingfeiyu/zoo-sdk'
+import { currencyEquals, Fraction, Trade } from '@liuxingfeiyu/zoo-sdk'
 import React, { useCallback, useMemo } from 'react'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
@@ -35,7 +35,9 @@ export default function ConfirmSwapModal({
   swapErrorMessage,
   isOpen,
   attemptingTxn,
-  txHash
+  txHash,
+  isLimitOrder = false,
+  limitOutput = undefined,
 }: {
   isOpen: boolean
   trade: Trade | undefined
@@ -48,6 +50,8 @@ export default function ConfirmSwapModal({
   onConfirm: () => void
   swapErrorMessage: string | undefined
   onDismiss: () => void
+  isLimitOrder ?: boolean
+  limitOutput ?: Fraction | undefined
 }) {
   const { chainId } = useActiveWeb3React()
   const {t} = useTranslation()
@@ -64,6 +68,8 @@ export default function ConfirmSwapModal({
         recipient={recipient}
         showAcceptChanges={showAcceptChanges}
         onAcceptChanges={onAcceptChanges}
+        isLimitOrder = {isLimitOrder}
+        limitOutput = {limitOutput}
       />
     ) : null
   }, [allowedSlippage, onAcceptChanges, recipient, showAcceptChanges, trade])
@@ -76,12 +82,16 @@ export default function ConfirmSwapModal({
         disabledConfirm={showAcceptChanges}
         swapErrorMessage={swapErrorMessage}
         allowedSlippage={allowedSlippage}
+        isLimitOrder = {isLimitOrder}
+        limitOutput = {limitOutput}
       />
     ) : null
   }, [allowedSlippage, onConfirm, showAcceptChanges, swapErrorMessage, trade])
 
   // text to show while loading
-  const pendingText = `Swapping ${trade?.inputAmount?.toSignificant(6)} ${trade?.inputAmount?.currency?.getSymbol(
+  const pendingText = isLimitOrder?
+  'Creating Limit Order'
+  :`Swapping ${trade?.inputAmount?.toSignificant(6)} ${trade?.inputAmount?.currency?.getSymbol(
     chainId
   )} for ${trade?.outputAmount?.toSignificant(6)} ${trade?.outputAmount?.currency?.getSymbol(chainId)}`
 

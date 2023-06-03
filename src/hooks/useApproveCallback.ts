@@ -11,7 +11,7 @@ import { calculateGasMargin, getRouterAddress } from '../utils'
 import { useTokenContract } from './useContract'
 import { useActiveWeb3React } from './index'
 import { Version } from './useToggledVersion'
-import { DefaultChainId } from '../constants'
+import { DefaultChainId, LimitOrderList } from '../constants'
 
 export enum ApprovalState {
   UNKNOWN,
@@ -118,4 +118,13 @@ export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) 
   const v1ExchangeAddress = useV1TradeExchangeAddress(trade)
   const { chainId } = useActiveWeb3React()
   return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : getRouterAddress(chainId))
+}
+
+export function useApproveCallbackFromTradeLO(trade?: Trade, allowedSlippage = 0) {
+  const amountToApprove = useMemo(
+    () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
+    [trade, allowedSlippage]
+  )
+  const { chainId } = useActiveWeb3React()
+  return useApproveCallback(amountToApprove, LimitOrderList[chainId ?? DefaultChainId])
 }

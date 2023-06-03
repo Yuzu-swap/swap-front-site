@@ -1,4 +1,4 @@
-import { CurrencyAmount, JSBI, Token, Trade } from '@liuxingfeiyu/zoo-sdk'
+import { CurrencyAmount, JSBI, Token, Trade, Fraction, Currency, TokenAmount } from '@liuxingfeiyu/zoo-sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -9,9 +9,9 @@ import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed, ButtonLRTab }
 import Card, { GreyCard } from '../../components/Card'
 import Column, { AutoColumn } from '../../components/Column'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
-import CurrencyInputPanel from '../../components/CurrencyInputPanel'
+import CurrencyInputPanel, {CurrencyInputPanelWithPrice} from '../../components/CurrencyInputPanel'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
-import { AutoRow, RowBetween, SplitRow} from '../../components/Row'
+import { AutoRow, RowBetween, RowFixed, SplitRow} from '../../components/Row'
 import AdvancedSwapDetailsSection from '../../components/swap/AdvancedSwapDetailsSection'
 import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
@@ -21,11 +21,11 @@ import TokenWarningModal from '../../components/TokenWarningModal'
 import ProgressSteps from '../../components/ProgressSteps'
 import SwapHeader from '../../components/swap/SwapHeader'
 
-import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { ETHFakeAddress, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency, useAllTokens } from '../../hooks/Tokens'
-import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
+import { ApprovalState, useApproveCallbackFromTrade, useApproveCallbackFromTradeLO } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
 import useToggledVersion, { DEFAULT_VERSION, Version } from '../../hooks/useToggledVersion'
@@ -36,7 +36,8 @@ import {
   useDefaultsFromURLSearch,
   useDerivedSwapInfo,
   useSwapActionHandlers,
-  useSwapState
+  useSwapState,
+  tryParseAmount
 } from '../../state/swap/hooks'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
@@ -50,6 +51,10 @@ import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter
 import { isTradeBetter } from 'utils/trades'
 import Sloganer from '../../components/Sloganer'
 import { useTranslation } from 'react-i18next'
+import LOArrowPng from '../../assets/newUI/limitOrderArrow.png'
+import { SingleOrder } from 'components/LimitOrder'
+import QuestionHelper from 'components/QuestionHelper'
+import { useLimitOrderCreateTaskCallback } from 'zooswap-hooks/useLimitOrderCalback'
 
 type Props = {
   show : boolean;
@@ -68,7 +73,7 @@ const SwitchWrapper : React.FC<Props> = ({show , children})=>(
   
 )
 
-export default function Swap() {
+export default function LimitOrder() {
   const { t } = useTranslation();
   const loadedUrlParams = useDefaultsFromURLSearch()
 
@@ -191,7 +196,7 @@ export default function Swap() {
   const noRoute = !route
 
   // check whether the user has approved the router on the input token
-  const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage)
+  const [approval, approveCallback] = useApproveCallbackFromTradeLO(trade, allowedSlippage)
 
   // check if user has gone through approval process, used to show two step buttons, reset on token change
   const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
@@ -281,14 +286,6 @@ export default function Swap() {
       (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
     !(priceImpactSeverity > 3 && !isExpertMode)
 
-  const handleConfirmDismiss = useCallback(() => {
-    setSwapState({ showConfirm: false, tradeToConfirm, attemptingTxn, swapErrorMessage, txHash })
-    // if there was a tx hash, we want to clear the input
-    if (txHash) {
-      onUserInput(Field.INPUT, '')
-    }
-  }, [attemptingTxn, onUserInput, swapErrorMessage, tradeToConfirm, txHash])
-
   const handleAcceptChanges = useCallback(() => {
     setSwapState({ tradeToConfirm: trade, swapErrorMessage, txHash, attemptingTxn, showConfirm })
   }, [attemptingTxn, showConfirm, swapErrorMessage, trade, txHash])
@@ -311,6 +308,147 @@ export default function Swap() {
 
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
+  const [ifBuy, setIfBuf] = useState<boolean>(false)
+
+  const [price, setPrice] = useState<string>('')
+  const [LOraw , limitOutput]:[ Fraction | undefined, string ] = useMemo(
+    ()=>{
+      if(trade){
+        const priceAmount = tryParseAmount(price , ifBuy? trade.inputAmount.currency : trade.outputAmount.currency )
+        if(!priceAmount){
+          return [undefined ,'']
+        }
+        if(ifBuy){
+          return  [trade.inputAmount.divide(priceAmount) ,trade.inputAmount.divide(priceAmount).toSignificant(6)]
+        }
+        else{
+          return [trade.inputAmount.multiply(priceAmount), trade.inputAmount.multiply(priceAmount).toSignificant(6)]
+        }
+      }
+      return  [undefined ,'']
+    },
+    [trade, ifBuy, price]
+  )
+
+  const limitOrderAble : boolean = useMemo(
+    ()=>{
+      if(trade){
+        const priceAmount = tryParseAmount(price , ifBuy? trade.inputAmount.currency : trade.outputAmount.currency )
+        if(!priceAmount){
+          return false
+        }
+        let realPrice: Fraction  = priceAmount as Fraction
+        const divValue = tryParseAmount('1', trade.inputAmount.currency)?.divide(priceAmount)
+        if(ifBuy){
+          if(divValue){
+            realPrice = divValue
+            if(realPrice.greaterThan(trade.executionPrice)){
+              return true
+            }
+          }
+        }else{
+          if(realPrice.greaterThan(trade.executionPrice)){
+            return true
+          }
+        }
+        
+      }
+      return false
+    },
+    [trade, ifBuy, price]
+  )
+
+  const limitOrderFee : string = useMemo(
+    ()=>{
+      if(limitOutput && trade){
+        return trade.inputAmount.multiply(new Fraction( '2' , '1000')).toSignificant(6)
+      }
+      return ''
+    }
+    ,[trade]
+  )
+
+  const [inTokenAddress, outTokenAddress, inAmount, outAmount ] :[string, string, JSBI, JSBI ] =  useMemo(
+    ()=>{
+      let inTokenAddress : string = ''
+      let outTokenAddress : string = ''
+      let inAmount : JSBI = JSBI.BigInt(0)
+      let outAmount : JSBI = JSBI.BigInt(0)
+
+      if(trade && LOraw){
+        if( trade.inputAmount instanceof TokenAmount){
+          inTokenAddress = (trade.inputAmount as any as TokenAmount).token.address;
+        }else{
+          inTokenAddress = ETHFakeAddress
+        }
+        if(trade.outputAmount instanceof TokenAmount){
+          outTokenAddress = (trade.outputAmount as any as TokenAmount).token.address
+        }else{
+          outTokenAddress = ETHFakeAddress
+        }
+        inAmount = trade.inputAmount.raw;
+        const outAmountCur =  tryParseAmount(limitOutput, trade.outputAmount.currency)
+        outAmount = outAmountCur ? outAmountCur.raw : JSBI.BigInt(0)
+      }
+      return [inTokenAddress, outTokenAddress, inAmount, outAmount]
+    },[trade, price, ifBuy, limitOutput]
+  )
+  
+  const createTask = useLimitOrderCreateTaskCallback(inTokenAddress, outTokenAddress, inAmount, outAmount)
+  
+  const [{isPendingLO, txhashLO, showConfirmLO }, setLOState] = useState<{
+    isPendingLO : boolean,
+    txhashLO: string | undefined,
+    showConfirmLO: boolean
+  }>(
+    {
+      isPendingLO: false,
+      txhashLO: undefined,
+      showConfirmLO: false
+    }
+  )
+
+  const handleCreateTask = useCallback(
+    ()=>{
+      setLOState({isPendingLO: true, txhashLO: undefined, showConfirmLO})
+      createTask().then(
+        (txhash)=>{
+          setLOState(
+            {
+              isPendingLO: false,
+              txhashLO: txhash,
+              showConfirmLO
+            }
+          )
+        }
+      ).catch(
+        (error)=>{
+          setLOState(
+            {
+              isPendingLO: false,
+              txhashLO: undefined,
+              showConfirmLO
+            }
+          )
+        }
+      )
+    },
+    [createTask, trade, price, ifBuy, limitOutput]
+  )
+
+  const handleConfirmDismiss = useCallback(() => {
+    setLOState(
+      {
+        isPendingLO: false,
+        txhashLO: undefined,
+        showConfirmLO: false
+      }
+    )
+
+  }, [createTask, trade, price, ifBuy, limitOutput, isPendingLO, txhashLO])
+
+
+
 
   return (
     <>
@@ -324,105 +462,79 @@ export default function Swap() {
         <Sloganer/>
       </div>
       <AppBody>
-        <div style={{display : 'flex', padding : "20px 0 20px ", height: "90px"}}>
+        <div style={{display : 'flex', padding : "20px 0 20px " , height: "90px"}}>
           <div className="s-xyuzu-tab" >
-              <SwitchWrapper show={true} >
-                  <ButtonLRTab  disabled={true} onClick={()=>{}}>SWAP</ButtonLRTab>
+              <SwitchWrapper show={false} >
+                  <ButtonLRTab  disabled={false} onClick={()=>{window.location.href= "/#/swap"}}>SWAP</ButtonLRTab>
               </SwitchWrapper>
-              <SwitchWrapper show={!true}>
-                  <ButtonLRTab  disabled={!true} onClick={()=>{window.location.href= "/#/limitorder"}}>LIMIT</ButtonLRTab>
+              <SwitchWrapper show={true}>
+                  <ButtonLRTab  disabled={true} onClick={()=>{window.location.href= "/#/limitorder"}}>LIMIT</ButtonLRTab>
               </SwitchWrapper>
           </div>
-          <div style={{width: '80%'}}>
-              
+          <div className='s-limitorder-tab'>
+              <SwitchWrapper show={ ifBuy} >
+                  <ButtonLRTab  disabled={ifBuy} onClick={()=>{setIfBuf(true)}}>BUY</ButtonLRTab>
+              </SwitchWrapper>
+              <SwitchWrapper show={!ifBuy}>
+                  <ButtonLRTab  disabled={!ifBuy} onClick={()=>{setIfBuf(false)}}>SELL</ButtonLRTab>
+              </SwitchWrapper>
           </div>
         </div>
         <Wrapper id="swap-page" style={{background: '#2C3035', borderRadius: '8px 8px 0 0', border:'1px solid rgba(255, 255, 255, 0.2)'}}>
+
           <ConfirmSwapModal
-            isOpen={showConfirm}
+            isOpen={showConfirmLO}
             trade={trade}
             originalTrade={tradeToConfirm}
             onAcceptChanges={handleAcceptChanges}
-            attemptingTxn={attemptingTxn}
-            txHash={txHash}
+            attemptingTxn={isPendingLO}
+            txHash={txhashLO}
             recipient={recipient}
             allowedSlippage={allowedSlippage}
-            onConfirm={handleSwap}
+            onConfirm={handleCreateTask}
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
+            isLimitOrder={true}
+            limitOutput={LOraw}
           />
           {/* <AutoColumn gap={isExpertMode ? 'md' : 'none'} style={{ paddingBottom: '1rem' }}> */}
           <AutoColumn gap={isExpertMode ? 'md' : '15px'}>
-            <CurrencyInputPanel
-              label={independentField === Field.OUTPUT && !showWrap && trade ?  t('from') + ' (estimated)' : t('from')}
-              value={formattedAmounts[Field.INPUT]}
-              showMaxButton={!atMaxAmountInput}
-              currency={currencies[Field.INPUT]}
-              onUserInput={handleTypeInput}
-              onMax={handleMaxInput}
-              onCurrencySelect={handleInputSelect}
-              otherCurrency={currencies[Field.OUTPUT]}
-              id="swap-currency-input"
-              containerBackground={'#2C3035'}
-            />
-            {isExpertMode && !showWrap && (
-              <AutoColumn justify="space-between">
-                <AutoRow justify={isExpertMode ? 'space-between' : 'center'} style={{ padding: '0 1rem' }}>
-                  <ArrowWrapper clickable>
-                    <ArrowDown
-                      size="16"
-                      onClick={() => {
-                        setApprovalSubmitted(false) // reset 2 step UI for approvals
-                        onSwitchTokens()
-                      }}
-                      color={currencies[Field.INPUT] && currencies[Field.OUTPUT] ? theme.primary1 : theme.text2}
-                    />
-                  </ArrowWrapper>
-                  {recipient === null && !showWrap && isExpertMode ? (
-                    <LinkStyledButton id="add-recipient-button" onClick={() => onChangeRecipient('')}>
-                      + Add a send (optional)
-                    </LinkStyledButton>
-                  ) : null}
-                </AutoRow>
-              </AutoColumn>
-            )}
-            {!isExpertMode && (
-              <div style={{ position: 'relative', zIndex: 2 }}>
-                <div
-                  style={{ position: 'absolute', width: '100%', cursor: 'pointer' , color:'rgba(255, 255, 255, 0.6)'}}
-                  onClick={() => {
-                    setApprovalSubmitted(false) // reset 2 step UI for approvals
-                    onSwitchTokens()
-                  }}
-                >
-                  <svg
-                    style={{ height: '1.4rem', width: '100%', margin: '0 auto' }}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-                    />
-                  </svg>
-                </div>
-              </div>
-            )}
-            <CurrencyInputPanel
-              value={formattedAmounts[Field.OUTPUT]}
-              onUserInput={handleTypeOutput}
-              label={independentField === Field.INPUT && !showWrap && trade ? t('to')+' (estimated)' : t('to')}
-              showMaxButton={false}
-              currency={currencies[Field.OUTPUT]}
-              onCurrencySelect={handleOutputSelect}
-              otherCurrency={currencies[Field.INPUT]}
-              id="swap-currency-output"
-              containerBackground={'#2C3035'}
-            />
+            <div className='s-limitorder-dark'>
+              <CurrencyInputPanelWithPrice
+                label={independentField === Field.OUTPUT && !showWrap && trade ?  t('from') + ' (estimated)' : t('from')}
+                value={formattedAmounts[Field.INPUT]}
+                showMaxButton={!atMaxAmountInput}
+                currency={currencies[Field.INPUT]}
+                priceCurrency={currencies[Field.OUTPUT]}
+                onUserInput={handleTypeInput}
+                onPriceInput={val=>setPrice(val)}
+                onMax={handleMaxInput}
+                ifBuy={ifBuy}
+                isInput={true}
+                trade={trade}
+                onCurrencySelect={handleInputSelect}
+                otherCurrency={currencies[Field.OUTPUT]}
+                id="swap-currency-input"
+                containerBackground={'#23272B'}
+              />
+            </div>
+            <div style={{ position: 'relative', zIndex: 2, height: '50px' }}>
+                <img src={LOArrowPng}  className="s-absolute-mid" style={{ height:'30px', transform: ifBuy?'rotate(180deg)':'' }} />
+            </div>
+            <div className='s-limitorder-dark'>
+              <CurrencyInputPanelWithPrice
+                value={limitOutput}
+                onUserInput={()=>{}}
+                label={independentField === Field.INPUT && !showWrap && trade ? t('to')+' (estimated)' : t('to')}
+                showMaxButton={false}
+                currency={currencies[Field.OUTPUT]}
+                onCurrencySelect={handleOutputSelect}
+                otherCurrency={currencies[Field.INPUT]}
+                id="swap-currency-output"
+                containerBackground={'#23272B'}
+                isInput={false}
+              />
+            </div>
 
             {recipient !== null && !showWrap ? (
               <>
@@ -446,15 +558,9 @@ export default function Swap() {
             ) : !account ? (
               <ButtonLight onClick={toggleWalletModal}>{t('connectwallet')}</ButtonLight>
             ) : showWrap ? (
-              <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
-                {wrapInputError ??
-                  (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
-              </ButtonPrimary>
-            ) : noRoute && userHasSpecifiedInputOutput ? (
-              <ButtonPrimary disabled={true}>
-                <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
-                {singleHopOnly && <TYPE.main mb="4px">Try enabling multi-hop trades.</TYPE.main>}
-              </ButtonPrimary>
+              <ButtonError disabled={true} onClick={()=>{}}>
+                Invalid Pair
+              </ButtonError>
             ) : showApproveFlow ? (
               <RowBetween>
                 <ButtonConfirmed
@@ -476,38 +582,6 @@ export default function Swap() {
                 </ButtonConfirmed>
                 <ButtonError
                   onClick={() => {
-                    if (isExpertMode) {
-                      handleSwap()
-                    } else {
-                      setSwapState({
-                        tradeToConfirm: trade,
-                        attemptingTxn: false,
-                        swapErrorMessage: undefined,
-                        showConfirm: true,
-                        txHash: undefined
-                      })
-                    }
-                  }}
-                  width="48%"
-                  id="swap-button"
-                  disabled={
-                    !isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)
-                  }
-                  error={isValid && priceImpactSeverity > 2}
-                >
-                  <Text fontSize={16} fontWeight={500}>
-                    {priceImpactSeverity > 3 && !isExpertMode
-                      ? `Price Impact High`
-                      : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
-                  </Text>
-                </ButtonError>
-              </RowBetween>
-            ) : (
-              <ButtonError
-                onClick={() => {
-                  if (isExpertMode) {
-                    handleSwap()
-                  } else {
                     setSwapState({
                       tradeToConfirm: trade,
                       attemptingTxn: false,
@@ -515,18 +589,52 @@ export default function Swap() {
                       showConfirm: true,
                       txHash: undefined
                     })
+                    setLOState(
+                      {
+                        isPendingLO: false,
+                        txhashLO: undefined,
+                        showConfirmLO: true
+                      }
+                    )
+                  }}
+                  width="48%"
+                  id="swap-button"
+                  disabled={
+                    !isValid || approval !== ApprovalState.APPROVED 
                   }
+                >
+                  <Text fontSize={16} fontWeight={500}>
+                    Create Order
+                  </Text>
+                </ButtonError>
+              </RowBetween>
+            ) : !limitOrderAble ? (
+              <ButtonError disabled={true} onClick={()=>{}}>
+                Price Is Too Low
+              </ButtonError>
+            ):(
+              <ButtonError
+                onClick={() => {
+                    setSwapState({
+                      tradeToConfirm: trade,
+                      attemptingTxn: false,
+                      swapErrorMessage: undefined,
+                      showConfirm: true,
+                      txHash: undefined
+                    })
+                    setLOState(
+                      {
+                        isPendingLO: false,
+                        txhashLO: undefined,
+                        showConfirmLO: true
+                      }
+                    )
                 }}
                 id="swap-button"
-                disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
-                error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
+                disabled={!isValid || !!swapCallbackError}
               >
                 <Text fontSize={20} fontWeight={500}>
-                  {swapInputError
-                    ? swapInputError
-                    : priceImpactSeverity > 3 && !isExpertMode
-                    ? `Price Impact Too High`
-                    : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                  Create Order
                 </Text>
               </ButtonError>
             )}
@@ -547,7 +655,7 @@ export default function Swap() {
           <AutoColumn>
             {showWrap ? null : (
               <Card padding={showWrap ? '.25rem 1rem 0 1rem' : '0px'} borderRadius={'20px'}>
-                <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
+                {/* <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
                   {Boolean(trade) && (
                     <RowBetween align="center">
                       <Text fontWeight={500} fontSize={14} color={theme.text3}>
@@ -560,23 +668,27 @@ export default function Swap() {
                       />
                     </RowBetween>
                   )}
-                  {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
-                    <RowBetween align="center">
-                      <ClickableText fontWeight={500} fontSize={14} color={theme.text2} onClick={toggleSettings}>
-                        Slippage Tolerance
-                      </ClickableText>
-                      <ClickableText fontWeight={500} fontSize={14} color={theme.text2} onClick={toggleSettings}>
-                        {allowedSlippage / 100}%
-                      </ClickableText>
-                    </RowBetween>
-                  )}
+                </AutoColumn> */}
+                <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
+                  <RowBetween align="center">
+                    <Text fontWeight={500} fontSize={14} color={theme.text3}>
+                      LimitOrder Fee
+                      <QuestionHelper text={t('handingTip')} />
+                    </Text>
+                    
+                    <Text fontSize={14} color={theme.text3}>
+                      {limitOrderFee + ' ' +  (trade ? trade.inputAmount.currency.getSymbol(chainId) : '-')}
+                    </Text>
+
+                  </RowBetween>
                 </AutoColumn>
               </Card>
             )}
-            <AdvancedSwapDetailsSection trade={trade} />
+            {/* <AdvancedSwapDetailsSection trade={trade} /> */}
           </AutoColumn>
         </Wrapper>
       </AppBody>
+      <SingleOrder/>
       {!swapIsUnsupported ? null : (
         <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
       )}

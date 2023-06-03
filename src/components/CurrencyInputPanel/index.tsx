@@ -1,5 +1,5 @@
-import { Currency, Pair } from '@liuxingfeiyu/zoo-sdk'
-import React, { useState, useCallback } from 'react'
+import { Currency, Fraction, JSBI, Pair, Percent, Trade } from '@liuxingfeiyu/zoo-sdk'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
@@ -14,6 +14,9 @@ import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
+import LORefreshPng from '../../assets/newUI/limitOrderRefresh.png'
+import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -260,6 +263,250 @@ export default function CurrencyInputPanel({
             </Aligner>
           </CurrencySelect>
         </InputRow>
+      </Container>
+      {!disableCurrencySelect && onCurrencySelect && (
+        <CurrencySearchModal
+          isOpen={modalOpen}
+          onDismiss={handleDismissSearch}
+          onCurrencySelect={onCurrencySelect}
+          selectedCurrency={currency}
+          otherSelectedCurrency={otherCurrency}
+          showCommonBases={showCommonBases}
+        />
+      )}
+    </InputPanel>
+  )
+}
+
+
+const LimitInputRow = styled.div<{ selected: boolean }>`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: center;
+  padding: ${({ selected }) => (selected ? '0.4rem 0.4rem 0.4rem 1rem' : '0.4rem 0.4rem 0.4rem 1rem')};
+  background: #F5F5F5;
+  border-radius: 8px;
+  border: 0px solid transparent;
+`
+
+
+
+interface CurrencyInputPanelWithPriceProps {
+  value: string
+  onUserInput: (value: string) => void
+  onMax?: () => void
+  showMaxButton: boolean
+  label?: string
+  onCurrencySelect?: (currency: Currency) => void
+  currency?: Currency | null
+  priceCurrency?: Currency | null
+  onPriceInput?: (value: string) => void,
+  ifBuy?: boolean | null
+  disableCurrencySelect?: boolean
+  hideBalance?: boolean
+  trade?: Trade | null
+  pair?: Pair | null
+  hideInput?: boolean
+  otherCurrency?: Currency | null
+  id: string
+  showCommonBases?: boolean
+  customBalanceText?: string
+  cornerRadiusBottomNone?: boolean
+  cornerRadiusTopNone?: boolean
+  containerBackground?: string
+  isInput: boolean
+}
+
+export function CurrencyInputPanelWithPrice({
+  value,
+  onUserInput,
+  onPriceInput,
+  onMax,
+  
+  showMaxButton,
+  label = 'Input',
+  onCurrencySelect,
+  currency,
+  ifBuy,
+  priceCurrency,
+  trade,
+  disableCurrencySelect = false,
+  hideBalance = false,
+  pair = null, // used for double token logo
+  hideInput = false,
+  isInput,
+  otherCurrency,
+  id,
+  showCommonBases,
+  customBalanceText,
+  cornerRadiusBottomNone,
+  cornerRadiusTopNone,
+  containerBackground
+}: CurrencyInputPanelWithPriceProps) {
+  const { t } = useTranslation()
+
+  const [modalOpen, setModalOpen] = useState(false)
+  const { account, chainId } = useActiveWeb3React()
+  const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  const theme = useTheme()
+
+  const handleDismissSearch = useCallback(() => {
+    setModalOpen(false)
+  }, [setModalOpen])
+
+  const [price, SetPrice] = useState<string>('')
+
+  const [slippage, _] = useUserSlippageTolerance()
+
+  const realPrice : string = useMemo(
+    ()=>{
+      if(trade){
+        if(ifBuy){
+          return new Fraction(JSBI.BigInt(1),JSBI.BigInt(1)).divide(trade.executionPrice.raw).toSignificant(6)
+        }
+        else{
+          return  trade.executionPrice.toSignificant(6)
+        }
+        //let out = trade.minimumAmountOut(new Percent( JSBI.BigInt(slippage), BIPS_BASE))
+      }
+
+      return ''
+    },[trade, slippage, ifBuy]
+  )
+
+  useEffect(
+    ()=>{
+      SetPrice(realPrice)
+      onPriceInput&&onPriceInput(realPrice)
+    },[ifBuy]
+  )
+
+  
+
+  //const [price, SetPirce]
+
+  return (
+    <InputPanel id={id}>
+      <Container
+        hideInput={hideInput}
+        cornerRadiusBottomNone={cornerRadiusBottomNone}
+        cornerRadiusTopNone={cornerRadiusTopNone}
+        containerBackground={containerBackground}
+      >
+        {!hideInput && (
+          <LabelRow style={{marginBottom:'12px'}}>
+            <RowBetween>
+              <TYPE.body color= 'rgba(255, 255, 255, 0.6)' fontWeight={500} fontSize={16}>
+                {label}
+              </TYPE.body>
+              {account && (
+                <TYPE.body
+                  onClick={onMax}
+                  color='rgba(255, 255, 255, 0.6)'
+                  fontWeight={500}
+                  fontSize={16}
+                  style={{ display: 'inline', cursor: 'pointer' }}
+                >
+                  {!hideBalance && !!currency && selectedCurrencyBalance
+                    ? <span>{(customBalanceText ?? 'Balance:')} &nbsp; <span style={{color:'#FFFFFF'}}> {selectedCurrencyBalance?.toSignificant(6)}</span></span>
+                    : ' -'}
+                </TYPE.body>
+              )}
+            </RowBetween>
+          </LabelRow>
+        )}
+        <LimitInputRow style={hideInput ? { padding: '0', borderRadius: '8px' } : {}} selected={disableCurrencySelect}>
+          {!hideInput && (
+            <>
+              <NumericalInput
+                className="token-amount-input"
+                value={value}
+                onUserInput={val => {
+                  onUserInput(val)
+                }}
+              />
+              {account && currency && showMaxButton && label !== t('to') && (
+                <StyledBalanceMax onClick={onMax}>Max</StyledBalanceMax>
+              )}
+            </>
+          )}
+          <CurrencySelect
+            selected={!!currency}
+            className="open-currency-select-button"
+            onClick={() => {
+              if (!disableCurrencySelect) {
+                setModalOpen(true)
+              }
+            }}
+          >
+            <Aligner>
+              {pair ? (
+                <DoubleCurrencyLogo currency0={pair.token0} currency1={pair.token1} size={24} margin={true} />
+              ) : currency ? (
+                <CurrencyLogo currency={currency} size={'24px'} />
+              ) : null}
+              {pair ? (
+                <StyledTokenName className="pair-name-container">
+                  {pair?.token0.symbol}:{pair?.token1.symbol}
+                </StyledTokenName>
+              ) : (
+                <StyledTokenName className="token-symbol-container" active={Boolean(currency && currency.symbol)}>
+                  {(currency && currency.symbol && currency.symbol.length > 20
+                    ? currency.symbol.slice(0, 4) +
+                      '...' +
+                      currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
+                    : currency?.getSymbol(chainId)) || t('selectToken') || t('selectToken')}
+                </StyledTokenName>
+              )}
+              {!disableCurrencySelect && <StyledDropDown selected={!!currency} />}
+            </Aligner>
+          </CurrencySelect>
+        </LimitInputRow>
+        {
+          isInput &&(
+            <LimitInputRow style={isInput ? { padding: '0', borderBottomLeftRadius: '10px', borderTopLeftRadius:'10px', marginTop: '10px', justifyContent:'space-between' } : {}} selected={false}>
+              <div className='s-limitorder-fresh-price'
+                onClick={
+                  ()=>{
+                    SetPrice(realPrice)
+                    onPriceInput&&onPriceInput(realPrice)
+                  }
+                }
+              >
+                {"price"}&nbsp;
+                <img className='s-limitorder-fresh-button' src={LORefreshPng}/>
+              </div>
+              <NumericalInput
+                style={{ display: 'inline', width: '100%', textAlign: 'right'  }}
+                value={price}
+                onUserInput={val => {
+                  onPriceInput&&onPriceInput(val)
+                  SetPrice(val)
+                }}
+              />
+              {/* <TYPE.body
+                  color='#171717'
+                  fontWeight={500}
+                  fontSize={20}
+                  style={{ display: 'inline', width: '100%', textAlign: 'right'  }}
+                >
+                  { realPrice}
+              </TYPE.body> */}
+              <TYPE.body
+                  color='#171717'
+                  fontWeight={500}
+                  fontSize={20}
+                  style={{ display: 'inline', marginRight: '10px', marginLeft:' 10px', width: 'fit-content', minWidth: 'unset'  }}
+                >
+                { ifBuy?
+                  currency?.getSymbol()
+                  :
+                  priceCurrency && priceCurrency.getSymbol()}
+              </TYPE.body>
+            </LimitInputRow>
+          )  
+        }
+       
+
       </Container>
       {!disableCurrencySelect && onCurrencySelect && (
         <CurrencySearchModal

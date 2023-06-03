@@ -20,6 +20,7 @@ import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import UNISOCKS_ABI from '../constants/abis/unisocks.json'
 import WETH_ABI from '../constants/abis/weth.json'
 import {abi as XYUZU_ABI } from '../constants/abis/YUZUStake.json'
+import {abi as LimitOrder_ABI } from '../constants/abis/LimitOrder.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
@@ -106,6 +107,10 @@ export function useTokenWrapper(address?: string, withSignerIfPossible?: boolean
 
 export function useXYuzuContract(address?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(address, XYUZU_ABI, withSignerIfPossible)
+}
+
+export function useLimitOrderContract(address?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(address, LimitOrder_ABI, withSignerIfPossible)
 }
 
 export function useMulticallContract(): Contract | null {
