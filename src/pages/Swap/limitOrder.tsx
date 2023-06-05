@@ -52,7 +52,7 @@ import { isTradeBetter } from 'utils/trades'
 import Sloganer from '../../components/Sloganer'
 import { useTranslation } from 'react-i18next'
 import LOArrowPng from '../../assets/newUI/limitOrderArrow.png'
-import { SingleOrder } from 'components/LimitOrder'
+import { ShowLimitOrders } from 'components/LimitOrder'
 import QuestionHelper from 'components/QuestionHelper'
 import { useLimitOrderCreateTaskCallback } from 'zooswap-hooks/useLimitOrderCalback'
 
@@ -688,7 +688,7 @@ export default function LimitOrder() {
           </AutoColumn>
         </Wrapper>
       </AppBody>
-      <SingleOrder/>
+      <ShowLimitOrders/>
       {!swapIsUnsupported ? null : (
         <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
       )}

@@ -2381,6 +2381,87 @@
 	display: flex;
 	justify-content: space-between;
 	width: 1200px;
+	margin-top: 10px;
+}
+
+.s-limitorder-title{
+	width: 1200px;
+	padding: 20px;
+	text-align: left;
+	font-size: 28px;
+	font-weight: normal;
+	color: #FFFFFF;
+	line-height: 28px;
+}
+
+.s-limitorder-text{
+	display:table-cell; 
+	vertical-align:middle;  
+	text-align: left; 
+}
+
+.s-limitorder-red-text{
+	display:table-cell; 
+	vertical-align:middle;  
+	text-align: left; 
+	font-size: 24px;
+	font-weight: 400;
+	color: #FF526C;
+}
+
+.s-limitorder-red-other{
+	display:table-cell; 
+	vertical-align:middle;  
+	text-align: left; 
+	font-size: 24px;
+	font-weight: 400;
+	color: #FF526C;
+	width: 100%;
+	/* background-image: url(./images/web-link.png), linear-gradient(#FF526C, #FF526C);
+    background-blend-mode: lighten;
+    background-size: cover; */
+
+}
+
+
+.s-limitorder-red-img{
+	width: 30px;
+	height: 30px;
+	margin-left: 10px;
+	cursor: pointer;
+	/* background-image: url(./images/web-link.png), linear-gradient(#FF526C, #FF526C);
+    background-blend-mode: lighten;
+    background-size: cover; */
+
+}
+
+.s-limitorder-red-cancel-bg{
+	width: 40px;
+	height: 40px;
+	background: #191B25;
+	border-radius: 20px;
+    margin: auto;
+	position: relative;
+	cursor: pointer;
+	/* background-image: url(./images/web-link.png), linear-gradient(#FF526C, #FF526C);
+    background-blend-mode: lighten;
+    background-size: cover; */
+}
+
+.s-limitorder-red-cancel-bg:hover{
+	opacity: 0.8;
+}
+
+.s-limitorder-red-cancel-img{
+	height: 20px;
+	position: absolute;
+    margin: auto;
+	left: 10px;
+	top: 10px;
+}
+
+.s-limitorder-red-img:hover{
+	opacity: 0.8;
 }
 
 .s-limitorder-dark{

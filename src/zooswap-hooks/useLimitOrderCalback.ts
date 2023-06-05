@@ -84,10 +84,10 @@ export function useLimitOrderCancelTaskCallback(
         options.gasLimit = estimatedGas 
   
       return contract
-        .createTask(... args, options )
+        .cancelTask(... args, options )
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: 'Create LimitOrder'}
+            summary: 'Cancel LimitOrder'}
             )
         }).catch((error: Error) => {
           console.debug('Failed to Create LimitOrder', error)
