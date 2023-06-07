@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 import LORefreshPng from '../../assets/newUI/limitOrderRefresh.png'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
-import { BIPS_BASE, DefaultChainId, ETHFakeAddress, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { BIPS_BASE, DefaultChainId, ETHFakeAddress, INITIAL_ALLOWED_SLIPPAGE, limitOrderExpireTime } from '../../constants'
 import { SingleOrder, useLimitOrdersData } from 'data/LimitOrder'
 import { useToken } from 'hooks/Tokens'
 import { tryParseAmount } from 'state/swap/hooks'
@@ -55,7 +55,7 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
     tokenList[1] =  useToken(data.outToken) as any as Currency 
     const [ created, symbol, inputStr, price, total, hash] : string[] = useMemo(
         ()=>{
-            let date = new Date((data.deadline - 60 * 60 * 24 * 90) * 1000)
+            let date = new Date((data.deadline - limitOrderExpireTime) * 1000)
             const created = `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`
             let symbol: string = ''
             let inputStr: string = ''

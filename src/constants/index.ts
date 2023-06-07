@@ -415,3 +415,5 @@ export const LimitOrderList :  {
 }
 
 export const ETHFakeAddress : string  = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+
+export const limitOrderExpireTime = 60 * 60

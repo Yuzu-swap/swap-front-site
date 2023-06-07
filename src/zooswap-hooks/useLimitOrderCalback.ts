@@ -3,7 +3,7 @@ import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, StakePool, Attenuati
 import { useSwapMiningContract, useZooParkExtContract, useZooParkContract, useZooZapExtContract } from './useContract'
 import { useMultipleContractSingleData, useSingleCallResult, useSingleContractMultipleData } from '../state/multicall/hooks'
 import { useActiveWeb3React } from '../hooks/index'
-import { APIHost, DefaultChainId, AllDefaultChainTokens, ZOO_USDT_SWAP_PAIR_ADDRESS, LimitOrderList, ETHFakeAddress } from "../constants/index"
+import { APIHost, DefaultChainId, AllDefaultChainTokens, ZOO_USDT_SWAP_PAIR_ADDRESS, LimitOrderList, ETHFakeAddress, limitOrderExpireTime } from "../constants/index"
 import { usePairContract, useTokenContract , useXYuzuContract, useLimitOrderContract} from 'hooks/useContract'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import ERC20_INTERFACE from 'constants/abis/erc20'
@@ -34,7 +34,7 @@ export function useLimitOrderCreateTaskCallback(
         console.error('LimitOrder Contract is null')
         return undefined
       }
-      const args = [ inTokenAddress, outTokenAddress, inExactNum.toString(), outNum.toString(), 60 * 60]
+      const args = [ inTokenAddress, outTokenAddress, inExactNum.toString(), outNum.toString(), limitOrderExpireTime]
       let options : any = {}
       if(inTokenAddress == ETHFakeAddress){
           options.value = inExactNum.toString()
