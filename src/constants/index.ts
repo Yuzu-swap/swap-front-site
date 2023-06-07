@@ -411,7 +411,7 @@ export const LimitOrderList :  {
   readonly [chainId in ChainId]?: string
 } = {
   //[ChainId.OASISETH_TEST] : new Token(ChainId.OASISETH_TEST, '0xd2101c6d3182e4C3BbcAB79257fDdD02D0a714bb', 18, 'XYUZU', 'XYUZU'),
-  [ChainId.OASISETH_MAIN] : '0x01Eb7FD0330785E6ADE6a57DAe82D2e778e43f7e'
+  [ChainId.OASISETH_MAIN] : '0x0cAe938C38aBf783c080854072c18F899F90311c'
 }
 
 export const ETHFakeAddress : string  = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';

@@ -2467,7 +2467,7 @@
 .s-limitorder-dark{
 	background-color: #23272B;
 	border-radius: 10px;
-	padding: 15px;
+	padding: 0px 15px 15px 15px;
 }
 
 .s-absolute-mid {

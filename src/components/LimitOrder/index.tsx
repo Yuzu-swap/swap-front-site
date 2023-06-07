@@ -24,6 +24,7 @@ import WebLinkPng from '../../assets/images/web-link.png'
 import CancelPng from '../../assets/newUI/limitOrderCancel.png'
 import { CHAIN_CONFIG } from 'components/Header'
 import { useLimitOrderCancelTaskCallback } from 'zooswap-hooks/useLimitOrderCalback'
+import { getTimeStr } from 'utils/fixFloat'
 
 const OLUnit = styled.div`
     display: flex;
@@ -160,6 +161,7 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
                         data.status == 0 ?
                         (
                             <div className='s-limitorder-red-text'>
+                                { data.deadline < parseInt(new Date().getTime()/1000 + '') && 'Expired'}
                                 <div className='s-limitorder-red-cancel-bg'
                                     onClick={()=>cancelTask()}
                                 >

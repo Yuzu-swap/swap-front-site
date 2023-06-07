@@ -34,7 +34,7 @@ export function useLimitOrderCreateTaskCallback(
         console.error('LimitOrder Contract is null')
         return undefined
       }
-      const args = [ inTokenAddress, outTokenAddress, inExactNum.toString(), outNum.toString() ]
+      const args = [ inTokenAddress, outTokenAddress, inExactNum.toString(), outNum.toString(), 60 * 60]
       let options : any = {}
       if(inTokenAddress == ETHFakeAddress){
           options.value = inExactNum.toString()

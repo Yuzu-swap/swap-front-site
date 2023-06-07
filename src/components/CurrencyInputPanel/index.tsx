@@ -17,6 +17,7 @@ import useTheme from '../../hooks/useTheme'
 import LORefreshPng from '../../assets/newUI/limitOrderRefresh.png'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { tryParseAmount } from 'state/swap/hooks'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -380,6 +381,27 @@ export function CurrencyInputPanelWithPrice({
     },[ifBuy]
   )
 
+  const aboveInfo : string = useMemo(
+    ()=>{
+      // if(!isInput){
+      //   let test = 0
+      // }
+      // let outputAmount = tryParseAmount(value, trade?.outputAmount.currency)
+      // if(!isInput && outputAmount && trade){
+      //   if(outputAmount.greaterThan(trade.executionPrice)){
+      //     const bigger =  ((outputAmount as Fraction).subtract(trade.executionPrice)).divide(trade.executionPrice).toFixed(4)
+      //     const floatNum = parseFloat(bigger) * 100;
+      //     if(floatNum != 0){
+      //       return floatNum + '% above market'
+      //     }
+      //   }
+        
+      // }
+      return ''
+    },
+    [value, trade, isInput]
+  )
+
   
 
   //const [price, SetPirce]
@@ -396,7 +418,7 @@ export function CurrencyInputPanelWithPrice({
           <LabelRow style={{marginBottom:'12px'}}>
             <RowBetween>
               <TYPE.body color= 'rgba(255, 255, 255, 0.6)' fontWeight={500} fontSize={16}>
-                {label}
+                {label + aboveInfo}
               </TYPE.body>
               {account && (
                 <TYPE.body

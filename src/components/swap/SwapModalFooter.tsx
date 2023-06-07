@@ -9,6 +9,7 @@ import {
   computeSlippageAdjustedAmounts,
   computeTradePriceBreakdown,
   formatExecutionPrice,
+  formatLimitPrice,
   warningSeverity
 } from '../../utils/prices'
 import { ButtonError } from '../Button'
@@ -62,12 +63,14 @@ export default function SwapModalFooter({
     ,[showInverted]
   )
 
-  const limitOrderFee : string = useMemo(
+  const [limitOrderFee, SwapFee] : [string, string] = useMemo(
     ()=>{
       if(limitOutput){
-        return trade.inputAmount.multiply(new Fraction( '2' , '1000')).toSignificant(6)
+        return [
+          trade.inputAmount.multiply(new Fraction( '2' , '1000')).toSignificant(6),
+          trade.inputAmount.multiply(new Fraction( '3' , '1000')).toSignificant(6)]
       }
-      return ''
+      return ['','']
     }
     ,[isLimitOrder]
   )
@@ -112,7 +115,7 @@ export default function SwapModalFooter({
                 paddingLeft: '10px'
               }}
             >
-              { isLimitOrder? limitPrice : formatExecutionPrice(trade, showInverted, chainId)}
+              { isLimitOrder? limitPrice + formatLimitPrice(trade, showInverted, chainId) : formatExecutionPrice(trade, showInverted, chainId)}
               <StyledBalanceMaxMini onClick={() => setShowInverted(!showInverted)}>
                 <Repeat size={14} />
               </StyledBalanceMaxMini>
@@ -156,17 +159,31 @@ export default function SwapModalFooter({
           }
           {
             isLimitOrder?
-            <RowBetween>
-              <RowFixed>
-                <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
-                  LimitOrder Fee
+            <>
+              <RowBetween>
+                <RowFixed>
+                  <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+                    LimitOrder Fee
+                  </TYPE.black>
+                  <QuestionHelper text={t('handingTip')} />
+                </RowFixed>
+                <TYPE.black fontSize={14} color={'#FFF'}>
+                  {limitOrderFee + ' ' + trade.inputAmount.currency.getSymbol(chainId)}
                 </TYPE.black>
-                <QuestionHelper text={t('handingTip')} />
-              </RowFixed>
-              <TYPE.black fontSize={14} color={'#FFF'}>
-                {limitOrderFee + ' ' + trade.inputAmount.currency.getSymbol(chainId)}
-              </TYPE.black>
-            </RowBetween>
+              </RowBetween>
+              <RowBetween>
+                <RowFixed>
+                  <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+                    Swap Fee
+                  </TYPE.black>
+                  <QuestionHelper text={t('handingTip')} />
+                </RowFixed>
+                <TYPE.black fontSize={14} color={'#FFF'}>
+                  {SwapFee + ' ' + trade.inputAmount.currency.getSymbol(chainId)}
+                </TYPE.black>
+              </RowBetween>
+            </>
+            
             :
             <RowBetween>
               <RowFixed>

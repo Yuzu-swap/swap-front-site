@@ -37,7 +37,7 @@ export function useLimitOrdersData(){
         const queryFunc = async () => {
           if(blockNumber&& blockNumber > 0){
             //const limitOrders = await(await fetch(APIHost + "/getordersbyuser/" + account)).json();
-            const limitOrders = await(await fetch( "http://127.0.0.1:80/api/getordersbyuser/" + account)).json();
+            const limitOrders = await(await fetch( "http://43.154.22.163:8080/api/getordersbyuser/" + account)).json();
             // tododo, 待处理 fix
             if(limitOrders && limitOrders.data){
                 SetData(limitOrders.data)

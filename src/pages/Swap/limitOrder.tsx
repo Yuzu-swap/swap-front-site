@@ -358,12 +358,14 @@ export default function LimitOrder() {
     [trade, ifBuy, price]
   )
 
-  const limitOrderFee : string = useMemo(
+  const [limitOrderFee, SwapFee]: [string,  string] = useMemo(
     ()=>{
       if(limitOutput && trade){
-        return trade.inputAmount.multiply(new Fraction( '2' , '1000')).toSignificant(6)
+        return [trade.inputAmount.multiply(new Fraction( '2' , '1000')).toSignificant(6), 
+                trade.inputAmount.multiply(new Fraction( '3' , '1000')).toSignificant(6)
+                ]
       }
-      return ''
+      return ['','']
     }
     ,[trade]
   )
@@ -501,7 +503,7 @@ export default function LimitOrder() {
           <AutoColumn gap={isExpertMode ? 'md' : '15px'}>
             <div className='s-limitorder-dark'>
               <CurrencyInputPanelWithPrice
-                label={independentField === Field.OUTPUT && !showWrap && trade ?  t('from') + ' (estimated)' : t('from')}
+                label={'You Pay'}
                 value={formattedAmounts[Field.INPUT]}
                 showMaxButton={!atMaxAmountInput}
                 currency={currencies[Field.INPUT]}
@@ -525,7 +527,7 @@ export default function LimitOrder() {
               <CurrencyInputPanelWithPrice
                 value={limitOutput}
                 onUserInput={()=>{}}
-                label={independentField === Field.INPUT && !showWrap && trade ? t('to')+' (estimated)' : t('to')}
+                label={'You Receive'}
                 showMaxButton={false}
                 currency={currencies[Field.OUTPUT]}
                 onCurrencySelect={handleOutputSelect}
@@ -533,6 +535,7 @@ export default function LimitOrder() {
                 id="swap-currency-output"
                 containerBackground={'#23272B'}
                 isInput={false}
+                trade={trade}
               />
             </div>
 
@@ -678,6 +681,17 @@ export default function LimitOrder() {
                     
                     <Text fontSize={14} color={theme.text3}>
                       {limitOrderFee + ' ' +  (trade ? trade.inputAmount.currency.getSymbol(chainId) : '-')}
+                    </Text>
+
+                  </RowBetween>
+                  <RowBetween align="center">
+                    <Text fontWeight={500} fontSize={14} color={theme.text3}>
+                      Swap Fee
+                      <QuestionHelper text={t('handingTip')} />
+                    </Text>
+                    
+                    <Text fontSize={14} color={theme.text3}>
+                      {SwapFee + ' ' +  (trade ? trade.inputAmount.currency.getSymbol(chainId) : '-')}
                     </Text>
 
                   </RowBetween>
