@@ -25,6 +25,7 @@ import CancelPng from '../../assets/newUI/limitOrderCancel.png'
 import { CHAIN_CONFIG } from 'components/Header'
 import { useLimitOrderCancelTaskCallback } from 'zooswap-hooks/useLimitOrderCalback'
 import { getTimeStr } from 'utils/fixFloat'
+import QuestionHelper, { LightQuestionHelper } from 'components/QuestionHelper'
 
 const OLUnit = styled.div`
     display: flex;
@@ -188,9 +189,10 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
 
 export function  ShowLimitOrders( ){
     const datas = useLimitOrdersData()
+    const {t} = useTranslation()
     return(
         <>
-            <div className='s-limitorder-title'> Open Orders </div>
+            <div className='s-limitorder-title'> Open Orders <QuestionHelper text={t('orderTip')} /></div>
             {
                 datas?.map((data)=>{
                     return(

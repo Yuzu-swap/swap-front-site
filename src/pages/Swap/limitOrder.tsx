@@ -676,7 +676,7 @@ export default function LimitOrder() {
                   <RowBetween align="center">
                     <Text fontWeight={500} fontSize={14} color={theme.text3}>
                       LimitOrder Fee
-                      <QuestionHelper text={t('handingTip')} />
+                      <QuestionHelper text={t('limitTip')} />
                     </Text>
                     
                     <Text fontSize={14} color={theme.text3}>
