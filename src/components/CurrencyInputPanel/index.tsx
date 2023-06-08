@@ -389,9 +389,11 @@ export function CurrencyInputPanelWithPrice({
       }
       let outputAmount = tryParseAmount(value, trade?.outputAmount.currency)
       if(!isInput && outputAmount && trade){
-        if(outputAmount.greaterThan(trade.executionPrice)){
-          const outputFraction : Fraction = new Fraction(outputAmount.numerator, outputAmount.denominator)
-          const bigger =  ((outputFraction).subtract(trade.executionPrice as Fraction)).divide(trade.executionPrice as Fraction).toFixed(4)
+        const inputFraction : Fraction = new Fraction(trade.inputAmount.numerator, trade.inputAmount.denominator)
+        const outputFraction : Fraction = new Fraction(outputAmount.numerator, outputAmount.denominator)
+        const priceFraction = outputFraction.divide(inputFraction)
+        if(priceFraction.greaterThan(trade.executionPrice)){
+          const bigger =  ((priceFraction).subtract(trade.executionPrice as Fraction)).divide(trade.executionPrice as Fraction).toFixed(4)
           const floatNum = fixFloat(parseFloat(bigger) * 100, 2);
           if(parseFloat(bigger) != 0){
             return "+" + floatNum + '% above market'
