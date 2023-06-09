@@ -2398,6 +2398,7 @@
 	display:table-cell; 
 	vertical-align:middle;  
 	text-align: left; 
+	font-size: 26px;
 }
 
 .s-limitorder-red-text{
@@ -2428,6 +2429,7 @@
 	width: 30px;
 	height: 30px;
 	margin-left: 10px;
+	margin-top: 5px;
 	cursor: pointer;
 	/* background-image: url(./images/web-link.png), linear-gradient(#FF526C, #FF526C);
     background-blend-mode: lighten;

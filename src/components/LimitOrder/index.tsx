@@ -20,8 +20,8 @@ import { BIPS_BASE, DefaultChainId, ETHFakeAddress, INITIAL_ALLOWED_SLIPPAGE, li
 import { SingleOrder, useLimitOrdersData } from 'data/LimitOrder'
 import { useToken } from 'hooks/Tokens'
 import { tryParseAmount } from 'state/swap/hooks'
-import WebLinkPng from '../../assets/images/web-link.png'
-import CancelPng from '../../assets/newUI/limitOrderCancel.png'
+import WebLinkPng from '../../assets/newUI/limitExport.jpg'
+import CancelPng from '../../assets/newUI/limitCancel.jpg'
 import { CHAIN_CONFIG } from 'components/Header'
 import { useLimitOrderCancelTaskCallback } from 'zooswap-hooks/useLimitOrderCalback'
 import { getTimeStr } from 'utils/fixFloat'
@@ -160,19 +160,20 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
                 <OLUnitDown>
                     {
                         data.status == 0 ?
-                        (
-                            <div className='s-limitorder-red-text'>
-                                { data.deadline < parseInt(new Date().getTime()/1000 + '') && 'Expired'}
-                                <div className='s-limitorder-red-cancel-bg'
-                                    onClick={()=>cancelTask()}
-                                >
-                                    <img className='s-limitorder-red-cancel-img' src={CancelPng} />
+                        (   <>
+                                { data.deadline < parseInt(new Date().getTime()/1000 + '') ?
+                                    <div className='s-limitorder-text'  style={{color : '#FF526C' }} > Expired </div>
+                                    :
+                                    <div className='s-limitorder-text'  style={{color : '#88C5E5' }} > Opening </div>
+                                }
+                                <div className='s-limitorder-red-other'>
+                                    <img className='s-limitorder-red-img' onClick={()=>cancelTask()} src={CancelPng} />
                                 </div>
-                            </div>
+                            </>
                         ):
                         data.status == 1 ?
                         (
-                            <div className='s-limitorder-text'> Success </div>
+                            <div className='s-limitorder-text' style={{color : '#8ABA30' }} > Successed </div>
                         )
                         :
                         (
