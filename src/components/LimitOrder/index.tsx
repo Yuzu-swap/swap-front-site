@@ -36,7 +36,7 @@ const OLUnit = styled.div`
 const OLUnitUp = styled.div`
     background: #1F2125;
     color: #6C7284;
-    font-size: 28px
+    font-size: 20px
     padding: 10px 20px 10px 20px;
 `
 
@@ -193,7 +193,7 @@ export function  ShowLimitOrders( ){
     const {t} = useTranslation()
     return(
         <>
-            <div className='s-limitorder-title'> Open Orders <QuestionHelper text={t('orderTip')} /></div>
+            <div className='s-limitorder-title'> Open Orders <QuestionHelper text={t('orderTip')} size={18} /></div>
             {
                 datas?.map((data)=>{
                     return(

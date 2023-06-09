@@ -2398,14 +2398,14 @@
 	display:table-cell; 
 	vertical-align:middle;  
 	text-align: left; 
-	font-size: 26px;
+	font-size: 20px;
 }
 
 .s-limitorder-red-text{
 	display:table-cell; 
 	vertical-align:middle;  
 	text-align: left; 
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: 400;
 	color: #FF526C;
 }
@@ -2426,8 +2426,8 @@
 
 
 .s-limitorder-red-img{
-	width: 30px;
-	height: 30px;
+	width: 24px;
+	height: 24px;
 	margin-left: 10px;
 	margin-top: 5px;
 	cursor: pointer;
