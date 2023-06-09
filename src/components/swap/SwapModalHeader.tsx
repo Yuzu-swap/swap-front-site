@@ -1,4 +1,4 @@
-import { Trade, TradeType } from '@liuxingfeiyu/zoo-sdk'
+import { Fraction, Trade, TradeType } from '@liuxingfeiyu/zoo-sdk'
 import React, { useContext, useMemo } from 'react'
 import { ArrowDown, AlertTriangle } from 'react-feather'
 import { Text } from 'rebass'
@@ -19,13 +19,17 @@ export default function SwapModalHeader({
   allowedSlippage,
   recipient,
   showAcceptChanges,
-  onAcceptChanges
+  onAcceptChanges,
+  isLimitOrder = false,
+  limitOutput = undefined
 }: {
   trade: Trade
   allowedSlippage: number
   recipient: string | null
   showAcceptChanges: boolean
   onAcceptChanges: () => void
+  isLimitOrder ?: boolean
+  limitOutput ?: Fraction | undefined
 }) {
   const { chainId } = useActiveWeb3React()
   const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
@@ -75,7 +79,7 @@ export default function SwapModalHeader({
                     : '#FFF'
                 }
               >
-                {trade.outputAmount.toSignificant(6)}
+                { (isLimitOrder && limitOutput) ? limitOutput?.toSignificant(6): trade.outputAmount.toSignificant(6)}
               </TruncatedText>
             </RowFixed>
             <RowFixed gap={'0px'}>
@@ -84,7 +88,7 @@ export default function SwapModalHeader({
               </Text>
             </RowFixed>
           </RowBetween>
-          {showAcceptChanges ? (
+          {(showAcceptChanges && !isLimitOrder) ? (
             <SwapShowAcceptChanges justify="flex-start" gap={'0px'} style={{marginTop: '10px'}}>
               <RowBetween>
                 <RowFixed>
@@ -103,7 +107,10 @@ export default function SwapModalHeader({
         </div>
       </div>
       <AutoColumn justify="flex-start" gap="sm" style={{ padding: '12px 0 0 0px' }}>
-        {trade.tradeType === TradeType.EXACT_INPUT ? (
+        {
+        isLimitOrder ? null
+        :
+        trade.tradeType === TradeType.EXACT_INPUT ? (
           <TYPE.italic textAlign="left" style={{ width: '100%' , color: 'rgba(255, 255, 255, 0.6)'}}>
             {`Output is estimated. You will receive at least `}
             <b>
