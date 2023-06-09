@@ -553,7 +553,10 @@ export default function LimitOrder() {
               </>
             ) : null}
           </AutoColumn>
-          <BottomGrouping style={{ paddingBottom: '1rem' }}>
+          <AutoColumn style={{ marginTop:"0.8rem" }}>
+            <Text fontSize={14} color={theme.text3}>{t('limitRiskNotice')}</Text>
+          </AutoColumn>
+          <BottomGrouping style={{marginTop: "0.8rem" }} >
             {swapIsUnsupported ? (
               <ButtonPrimary disabled={true}>
                 <TYPE.main mb="4px">{t('invalidassets')}</TYPE.main>
