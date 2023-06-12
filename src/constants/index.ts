@@ -404,3 +404,16 @@ export const UserRatioOfReward : number = 0.7
 export const BLACKHOLE_ADDRESS : string = '0x00b9dCA177aa3DB6F344A455d9E0511a6Aa7ad8D';
 
 export const blockNumPerS : number = 6;
+
+export const xyuzuExtBlock : number = 8353006
+
+export const LimitOrderList :  {
+  readonly [chainId in ChainId]?: string
+} = {
+  //[ChainId.OASISETH_TEST] : new Token(ChainId.OASISETH_TEST, '0xd2101c6d3182e4C3BbcAB79257fDdD02D0a714bb', 18, 'XYUZU', 'XYUZU'),
+  [ChainId.OASISETH_MAIN] : '0xe785766B608d3eD42181A58dc136dAE51CEfD386'
+}
+
+export const ETHFakeAddress : string  = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+
+export const limitOrderExpireTime = 60 * 60 * 24 * 30 * 3

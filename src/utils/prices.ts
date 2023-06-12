@@ -74,3 +74,17 @@ export function formatExecutionPrice(trade?: Trade, inverted?: boolean, chainId?
         chainId
       )} / ${trade.inputAmount.currency.getSymbol(chainId)}`
 }
+
+
+export function formatLimitPrice(trade?: Trade, inverted?: boolean, chainId?: ChainId): string {
+  if (!trade) {
+    return ''
+  }
+  return inverted
+    ? ` ${trade.inputAmount.currency.getSymbol(
+        chainId
+      )} / ${trade.outputAmount.currency.getSymbol(chainId)}`
+    : ` ${trade.outputAmount.currency.getSymbol(
+        chainId
+      )} / ${trade.inputAmount.currency.getSymbol(chainId)}`
+}

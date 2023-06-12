@@ -5,14 +5,14 @@ import QuestionHelper, {LightQuestionHelper}  from '../QuestionHelper'
 import { Box } from 'rebass/styled-components'
 import { Link } from 'react-router-dom'
 
-import { ButtonPrimaryNormal, ButtonSecondary, ButtonPrimary } from '../../components/Button'
+import { ButtonPrimaryNormal, ButtonSecondary, ButtonPrimary, ButtonShowDetail } from '../../components/Button'
 
 import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import FantomLogo from '../../assets/images/fantom-logo.png'
 import Trans from '../../assets/newUI/trans.png'
 import DoublegetIcon from '../../assets/images/doubleget2.png'
 import WebLinkJump from '../../assets/images/web-link.png'
-import { DefaultChainId, XYUZU_LIST, ZOO_PARK_ADDRESS } from '../../constants'
+import { DefaultChainId, xyuzuExtBlock, XYUZU_LIST, ZOO_PARK_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
 import { STAKING_REWARDS_INTERFACE } from 'constants/abis/staking-rewards'
 import { useMultipleContractSingleData } from 'state/multicall/hooks'
@@ -233,6 +233,11 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     [blockNumber, pool]
   )
 
+
+  const xyuzu : boolean = useMemo(()=>{
+    return pool.token0.symbol == pool.token1.symbol
+  },[pool])
+
   const [minExtBlock, isIfo] = useMemo(
     ()=>{
       let num: Number = -1;
@@ -243,9 +248,10 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
           isIfo = true
         }
       }
+      if(xyuzu) num = xyuzuExtBlock
       return [num.valueOf(), isIfo]
     },
-    [blockNumber, pool]
+    [blockNumber, pool, xyuzu]
   ) 
 
 
@@ -303,7 +309,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     }
   },[timestamp])
 
-  console.log("boardroom-----ext", pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1).toString(), tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)))
+  //console.log("boardroom-----ext", pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1).toString(), tokenAmountForshow(pool.rewardConfig.getZooRewardBetween(blockNumber, blockNumber+1)))
 
   const dayReturn = useMemo(()=>{
     const rewardPrice = prices["ZOO"] 
@@ -324,9 +330,7 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
     return  JSBI.toNumber(pool.rewardConfig.getZooRewardBetween(blockNumber??0,(blockNumber??0)+24*3600/4))*pool.rewardEffect/1e18/10000
   },[blockNumber])*/
 
-  const xyuzu : boolean = useMemo(()=>{
-    return pool.token0.symbol == pool.token1.symbol
-  },[pool])
+
 
   const [token0WithLogo,token1WithLogo] =useMemo( ()=>{
     let str =  xyuzu ? XYUZU_LIST[chainId ?? DefaultChainId] :  allTokens[pool.token0.address]
@@ -421,12 +425,15 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
         <div className="s-doubleget-item-details">
         <div className="s-doubleget-item-detail">
               {
-                pool.tokenRewards && pool.tokenRewards.length == 0?
+                pool.pid == 5 ?
                 <label>Stablecoin Pair</label> 
                 :
-                xyuzu?
-                <label>Single Token Staking :</label> 
+                pool.tokenRewards && pool.tokenRewards.length == 0?
+                <label> </label> 
                 :
+                // xyuzu?
+                // <label>Single Token Staking :</label> 
+                // :
                 isIfo ? 
                 <label>Initial Farm Offering :</label> 
                 :
@@ -445,19 +452,19 @@ export function DoubleGetItem({pool,key,totalEffect,tvl}:{ pool: ZooParkExt ,key
               {
                 pool.tokenRewards && pool.tokenRewards.length == 0?
                 <label></label> 
-                :
-                xyuzu?
-                <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>xYUZU
-                <img 
-                  src={WebLinkJump} 
-                  height={'15px'} 
-                  style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
-                  onClick={()=>{
-                    window.location.href= "#"
-                    window.location.href= "/#/xyuzu"
-                  }}
-                />
-                </strong>
+                // :
+                // xyuzu?
+                // <strong style={{color: "rgb(255, 255, 255, 0.6)"}}>xYUZU
+                // <img 
+                //   src={WebLinkJump} 
+                //   height={'15px'} 
+                //   style={{display:'inline-block', marginBottom:'-3px' ,cursor:'pointer'}}
+                //   onClick={()=>{
+                //     window.location.href= "#"
+                //     window.location.href= "/#/xyuzu"
+                //   }}
+                // />
+                // </strong>
                 :
                 minExtBlock != 0 ?
                 TimeCount(day ?? 0, hour ?? 0, min ?? 0, second ?? 0)
@@ -537,6 +544,26 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   for(let i = 0; i < extrooms.length; i++){
     totalEffect += extrooms[i].rewardEffect
   }
+  const [ ableList, expireList, ableIndexList, expireIndexList ] = useMemo(
+    ()=>{
+      let ableList : ZooParkExt[] = []
+      let expireList : ZooParkExt[] = []
+      let ableIndexList : number[] = []
+      let expireIndexList : number[] = [] 
+      for(let i = 0; i< extrooms.length; i++){
+        if(extrooms[i].rewardEffect == 0){
+          expireList.push(extrooms[i])
+          expireIndexList.push(i)
+        }
+        else{
+          ableList.push(extrooms[i])
+          ableIndexList.push(i)
+        }
+      }
+      return [ableList, expireList, ableIndexList, expireIndexList]
+    },
+    [extrooms]
+  )
   const Titleb = styled.h1`
   text-align : center;
   font-weight: 500;
@@ -548,12 +575,25 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
   color: #FFFFFF;
   margin-top: 40px;
   `
+
+  const [showDetail , SetShowDetail] = useState<boolean>(false)
+  const buttonText = useMemo(
+    ()=>{
+      if(showDetail){
+        return 'hide'
+      }
+      else{
+        return 'show detail'
+      }
+    },
+    [showDetail]
+  )
   return (
     <div>
       <TitleShow str={'FEATURED POOL'}/>
       <div className="s-trading-list">
-        {extrooms.map((pool: ZooParkExt, i: number) => {
-          return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[i])||0}/>
+        {ableList.map((pool: ZooParkExt, i: number) => {
+          return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[ableIndexList[i]])||0}/>
         })}
       </div>
       <TitleShow str={'ALL FARMS'}/>
@@ -562,6 +602,22 @@ export default function Boardroom({rooms,statics, extrooms, extstatics}:{rooms: 
           return <BoardItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (statics && statics.tvls&&statics.tvls[i])||0}/>
         })}
       </div>
+      <div style={{ position: 'relative', width:'100%' }}>
+        <TitleShow str={'EXPIRED POOL'}/>
+        <span className='s-pool-detail'>
+          <ButtonShowDetail onClick={()=>SetShowDetail(!showDetail)}> {buttonText}</ButtonShowDetail>
+        </span>
+      </div>
+      {
+        showDetail?
+        <div className="s-trading-list">
+          {expireList.map((pool, i) => {
+            return <DoubleGetItem key={i} pool={pool} totalEffect={totalEffect} tvl={ (extstatics && extstatics.tvls&&extstatics.tvls[expireIndexList[i]])||0}/>
+          })}
+        </div>
+        :
+        null
+      }
     </div>
   )
 }

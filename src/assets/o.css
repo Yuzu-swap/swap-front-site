@@ -2337,6 +2337,152 @@
 	line-height: 28px;
 	border-radius: 8px;
 }
+.s-limitorder-tab {
+    display: flex;
+    width: 80%;
+    background-color: #222529;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28px;
+    margin: 8px 0 8px 20px;
+    border-radius: 8px;
+    /*background-clip: content-box;*/
+}
+
+.s-limitorder-fresh-price {
+    background-color: #3B4149;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28px;
+	color: #CCDBE5;
+	padding: 0.5rem 0.5rem 0.5rem 1rem ;
+	border-bottom-left-radius: 8px;
+	border-top-left-radius: 8px;
+	position: relative;
+	display: flex;
+    align-items: center;
+    /*background-clip: content-box;*/
+}
+
+.s-limitorder-fresh-button{
+	position: relative;
+	top: 50%;
+    margin: -20px 0 0 0; 
+	height: 20px;
+	margin: auto;
+	
+}
+
+.s-limitorder-fresh-button:hover{
+	opacity: 0.8;
+}
+
+.s-limitorder-card{
+	display: flex;
+	justify-content: space-between;
+	width: 1200px;
+	margin-top: 10px;
+}
+
+.s-limitorder-title{
+	width: 1200px;
+	padding: 20px;
+	text-align: left;
+	font-size: 28px;
+	font-weight: normal;
+	color: #FFFFFF;
+	line-height: 28px;
+}
+
+.s-limitorder-text{
+	display:table-cell; 
+	vertical-align:middle;  
+	text-align: left; 
+	font-size: 20px;
+}
+
+.s-limitorder-red-text{
+	display:table-cell; 
+	vertical-align:middle;  
+	text-align: left; 
+	font-size: 20px;
+	font-weight: 400;
+	color: #FF526C;
+}
+
+.s-limitorder-red-other{
+	display:table-cell; 
+	vertical-align:middle;  
+	text-align: left; 
+	font-size: 24px;
+	font-weight: 400;
+	color: #FF526C;
+	width: 100%;
+	/* background-image: url(./images/web-link.png), linear-gradient(#FF526C, #FF526C);
+    background-blend-mode: lighten;
+    background-size: cover; */
+
+}
+
+
+.s-limitorder-red-img{
+	width: 24px;
+	height: 24px;
+	margin-left: 10px;
+	margin-top: 5px;
+	cursor: pointer;
+	/* background-image: url(./images/web-link.png), linear-gradient(#FF526C, #FF526C);
+    background-blend-mode: lighten;
+    background-size: cover; */
+
+}
+
+.s-limitorder-red-cancel-bg{
+	width: 40px;
+	height: 40px;
+	background: #191B25;
+	border-radius: 20px;
+    margin: auto;
+	position: relative;
+	cursor: pointer;
+	/* background-image: url(./images/web-link.png), linear-gradient(#FF526C, #FF526C);
+    background-blend-mode: lighten;
+    background-size: cover; */
+}
+
+.s-limitorder-red-cancel-bg:hover{
+	opacity: 0.8;
+}
+
+.s-limitorder-red-cancel-img{
+	height: 20px;
+	position: absolute;
+    margin: auto;
+	left: 10px;
+	top: 10px;
+}
+
+.s-limitorder-red-img:hover{
+	opacity: 0.8;
+}
+
+.s-limitorder-dark{
+	background-color: #23272B;
+	border-radius: 10px;
+	padding: 0px 15px 15px 15px;
+}
+
+.s-absolute-mid {
+	position: absolute;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+
+
 
 .s-xyuzu-header{
 	display: flex;
@@ -2430,4 +2576,10 @@
 .s-xyuzu-card-unit{
 	height: 50px;
 	justify-content: space-between;
+}
+
+.s-pool-detail{
+	position: absolute;
+	right: 80px;
+	top: 14px;
 }

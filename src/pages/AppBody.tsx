@@ -6,7 +6,7 @@ export const BodyWrapper = styled.div`
   position: relative;
   max-width: 428px;
   width: 100%;
-  background: ${({ theme }) => transparentize(0, theme.bg1)};
+  background: rgba( 0, 0, 0, 0);
   border-radius: 10px;
   /* padding: 1rem; */
 `

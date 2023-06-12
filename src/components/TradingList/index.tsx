@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState} from 'react'
 import styled from 'styled-components'
 import { CardProps, Text } from 'rebass'
 import QuestionHelper from '../QuestionHelper'
@@ -23,7 +23,8 @@ import { useTranslation } from 'react-i18next'
 import fixFloat , {transToThousandth} from 'utils/fixFloat'
 import { UserRatioOfReward } from '../../constants'
 import { Decimal } from "decimal.js"
-
+import { TitleShow } from 'components/AuditOrgs'
+import { ButtonShowDetail } from 'components/Button'
 
 let targetPool:TradePool;
 export function TradingItem({pool,index,statics,totalEffect}:{ pool: TradePool,statics:any, totalEffect:number ,index:number}){
@@ -133,16 +134,67 @@ export default function TradingList({poolList,statics}:{poolList:TradePool[],sta
   }
 
   let totalEffect = 0;
+  const [showDetail , SetShowDetail] = useState<boolean>(false)
+  const buttonText = useMemo(
+    ()=>{
+      if(showDetail){
+        return 'hide'
+      }
+      else{
+        return 'show detail'
+      }
+    },
+    [showDetail]
+  )
+  const [ ableList, expireList , ableIndexList, expireIndexList] = useMemo(
+    ()=>{
+      let ableList : TradePool[] = []
+      let expireList : TradePool[] = []
+      let ableIndexList : number[] = []
+      let expireIndexList : number[] = []
+      for(let i = 0; i< poolList.length; i++){
+        if(poolList[i].rewardEffect == 0){
+          expireList.push(poolList[i])
+          expireIndexList.push(i)
+        }
+        else{
+          ableList.push(poolList[i])
+          ableIndexList.push(i)
+        }
+      }
+      return [ableList, expireList, ableIndexList, expireIndexList]
+    },
+    [poolList]
+  )
   for(let i = 0; i< poolList.length; i++){
     totalEffect+= poolList[i].rewardEffect
   }
   console.log("tradepool", poolList)
   return (
-    <div className="s-trading-list">
-      {poolList.map((pool, i) => {
-        return <TradingItem index={i} key={i} pool={pool} statics={statics} totalEffect={totalEffect}/>
-      })}
-      <TradingGroupModal isOpen={showTradingGroupModal} handleCurrencySelect={handleCurrencySelect}/>
+    <div>
+      <div className="s-trading-list">
+        {ableList.map((pool, i) => {
+          return <TradingItem index={ableIndexList[i]} pool={pool} statics={statics} totalEffect={totalEffect}/>
+        })}
+        <TradingGroupModal isOpen={showTradingGroupModal} handleCurrencySelect={handleCurrencySelect}/>
+      </div>
+      <div style={{ position: 'relative',  width:'100%' }}>
+        <TitleShow str={'EXPIRED POOL'}/>
+        <div className='s-pool-detail'>
+          <ButtonShowDetail onClick={()=>SetShowDetail(!showDetail)}> {buttonText}</ButtonShowDetail>
+        </div>
+      </div>
+      {
+        showDetail?
+        <div className="s-trading-list">
+          {expireList.map((pool, i) => {
+            return <TradingItem index={expireIndexList[i]} pool={pool} statics={statics} totalEffect={totalEffect}/>
+          })}
+        </div>
+        :
+        null
+      }
+      
     </div>
   )
 }

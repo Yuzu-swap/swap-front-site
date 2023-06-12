@@ -31,6 +31,7 @@ import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
+import LimitOrder from './Swap/limitOrder'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap,RedirectToSwap2 } from './Swap/redirects'
 import Homepage from './Homepage'
 import TradingMining from './TradingMining'
@@ -133,6 +134,7 @@ export default function App() {
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
               {/* Pages */}
               <Route exact strict path="/swap" component={Swap} />
+              <Route exact strict path="/limitorder" component={LimitOrder} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/swap/:inputCurrency/:outputCurrency" component={RedirectToSwap2} />

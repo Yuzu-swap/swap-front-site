@@ -442,6 +442,14 @@ const ButtonErrorStyle = styled(Base)`
     border: 1px solid ${({ theme }) => theme.red1};
   }
 `
+export const ButtonShowDetail = styled.span`
+  color: #ED4962;
+  text-decoration:underline;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => darken(0.05, theme.red1)};
+  }
+`
 
 export function ButtonConfirmed({
   confirmed,
