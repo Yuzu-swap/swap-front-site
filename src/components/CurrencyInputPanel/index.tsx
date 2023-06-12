@@ -19,6 +19,7 @@ import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } 
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { tryParseAmount } from 'state/swap/hooks'
 import fixFloat from 'utils/fixFloat'
+import QuestionHelper from 'components/QuestionHelper'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -392,8 +393,8 @@ export function CurrencyInputPanelWithPrice({
         const inputFraction : Fraction = new Fraction(trade.inputAmount.numerator, trade.inputAmount.denominator)
         const outputFraction : Fraction = new Fraction(outputAmount.numerator, outputAmount.denominator)
         const priceFraction = outputFraction.divide(inputFraction)
-        if(priceFraction.greaterThan(trade.executionPrice)){
-          const bigger =  ((priceFraction).subtract(trade.executionPrice as Fraction)).divide(trade.executionPrice as Fraction).toFixed(4)
+        if(priceFraction.greaterThan(trade.executionPrice.adjusted)){
+          const bigger =  ((priceFraction).subtract(trade.executionPrice.adjusted)).divide(trade.executionPrice.adjusted).toFixed(4)
           const floatNum = fixFloat(parseFloat(bigger) * 100, 2);
           if(parseFloat(bigger) != 0){
             return "+" + floatNum + '% above market'
@@ -423,6 +424,12 @@ export function CurrencyInputPanelWithPrice({
             <RowBetween>
               <TYPE.body color= 'rgba(255, 255, 255, 0.6)' fontWeight={500} fontSize={16}>
                 {label}
+                {
+                  !isInput ?
+                  <QuestionHelper text={t('limitReciveHint')}/>
+                  :
+                  null
+                }
                 <TYPE.body color= '#87F8A5' fontWeight={500} fontSize={14}>
                  {aboveInfo}
                 </TYPE.body>
@@ -502,7 +509,7 @@ export function CurrencyInputPanelWithPrice({
                   }
                 }
               >
-                {"price"}&nbsp;
+                {"price"}<QuestionHelper text={t('limitPriceHint')}/>
                 <img className='s-limitorder-fresh-button' src={LORefreshPng}/>
               </div>
               <NumericalInput

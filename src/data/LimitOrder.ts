@@ -19,6 +19,7 @@ export class SingleOrder  {
     public readonly outToken!: string
     public readonly inNum!: string
     public readonly outNum!: string
+    public readonly outRealNum!: string
     public readonly status!: number
     public readonly deadline!: number
     public readonly createHash!: string
@@ -36,8 +37,8 @@ export function useLimitOrdersData(){
     useEffect(()=>{
         const queryFunc = async () => {
           if(blockNumber&& blockNumber > 0){
-            //const limitOrders = await(await fetch(APIHost + "/getordersbyuser/" + account)).json();
-            const limitOrders = await(await fetch( "http://43.154.22.163:8080/api/getordersbyuser/" + account)).json();
+            const limitOrders = await(await fetch(APIHost + "/getordersbyuser/" + account)).json();
+            //const limitOrders = await(await fetch( "http://43.154.22.163:8080/api/getordersbyuser/" + account)).json();
             // tododo, 待处理 fix
             if(limitOrders && limitOrders.data){
                 SetData(limitOrders.data)
@@ -61,6 +62,7 @@ export function useLimitOrdersData(){
                     outToken: order.outtoken,
                     inNum: order.inexcatnum,
                     outNum: order.outminnum,
+                    outRealNum: order.outrealnum,
                     status: order.status,
                     deadline: order.deadline,
                     createHash: order.createhash,

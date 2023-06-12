@@ -80,10 +80,14 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
                 symbol = inToken.getSymbol() + "/" + outToken.getSymbol()
                 let inTokenAmount =  new CurrencyAmount(inToken, data.inNum)
                 let outTokenAmount = new CurrencyAmount(outToken, data.outNum)
+                let outReal = new CurrencyAmount(outToken, data.outRealNum)
                 if(inTokenAmount && outTokenAmount){
                     inputStr = inTokenAmount.toSignificant(6) + ' ' + inToken.getSymbol()
                     total = outTokenAmount.toSignificant(6) + ' ' + outToken.getSymbol()
                     price = outTokenAmount.divide(inTokenAmount).toSignificant(6) + ' ' + outToken.getSymbol()
+                }
+                if(data.status == 1 && data.outRealNum && outReal){
+                    total = outReal.toSignificant(6) + ' ' + outToken.getSymbol()
                 }
             }
             return [created, symbol, inputStr, price, total, hash]
@@ -132,10 +136,12 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
             </OLUnit>
             <OLUnit>
                 <OLUnitUp>
-                    Total
+                    You Receive
                 </OLUnitUp>
                 <OLUnitDown>
-                    <div className='s-limitorder-text'>{total}</div>
+                    <div className='s-limitorder-text'
+                        style={ data.status == 1 && data.outRealNum ?{ color : '#8ABA30'  }:{}}
+                    >{total}</div>
                 </OLUnitDown>
             </OLUnit>
             <OLUnit>
@@ -193,7 +199,7 @@ export function  ShowLimitOrders( ){
     const {t} = useTranslation()
     return(
         <>
-            <div className='s-limitorder-title'> Open Orders <QuestionHelper text={t('orderTip')} size={18} /></div>
+            <div className='s-limitorder-title'> All Orders <QuestionHelper text={t('orderTip')} size={18} /></div>
             {
                 datas?.map((data)=>{
                     return(
