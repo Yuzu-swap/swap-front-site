@@ -10,7 +10,6 @@ export default function (handle: Number, fixto: number, intlen: number = 4): Str
         return handle.toFixed( fixto - (i - intlen) > 0 ? fixto - (i - intlen) : 0)
     }
 }
-  
 
 export  function fixFloatFloor(handle: Number, fixto: number): String {
     var m = Math.pow(10 , fixto)
@@ -18,6 +17,17 @@ export  function fixFloatFloor(handle: Number, fixto: number): String {
     return re.toFixed(fixto);
 }
 
+
+export function fixSignString(handle: string, fixto: number = 6):string{
+    let arr = handle.split(".");
+    let decimalCount = arr && arr.length >=2 ? arr[1].length: 0;
+    if(decimalCount < fixto){
+        return handle
+    }
+    else{
+        return new Decimal(handle).toFixed(fixto)
+    }
+}
 
 export function stringFix(handle: string, fixto: number): String{
     if(!handle) return "-";
