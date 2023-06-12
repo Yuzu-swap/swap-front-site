@@ -132,7 +132,7 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
             </OLUnit>
             <OLUnit>
                 <OLUnitUp>
-                    Total
+                    You Receive
                 </OLUnitUp>
                 <OLUnitDown>
                     <div className='s-limitorder-text'>{total}</div>
@@ -193,7 +193,7 @@ export function  ShowLimitOrders( ){
     const {t} = useTranslation()
     return(
         <>
-            <div className='s-limitorder-title'> Open Orders <QuestionHelper text={t('orderTip')} size={18} /></div>
+            <div className='s-limitorder-title'> All Orders <QuestionHelper text={t('orderTip')} size={18} /></div>
             {
                 datas?.map((data)=>{
                     return(
