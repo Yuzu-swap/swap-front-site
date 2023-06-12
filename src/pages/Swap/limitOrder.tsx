@@ -55,6 +55,7 @@ import LOArrowPng from '../../assets/newUI/limitOrderArrow.png'
 import { ShowLimitOrders } from 'components/LimitOrder'
 import QuestionHelper from 'components/QuestionHelper'
 import { useLimitOrderCreateTaskCallback } from 'zooswap-hooks/useLimitOrderCalback'
+import { fixSignString, stringFix } from 'utils/fixFloat'
 
 type Props = {
   show : boolean;
@@ -319,10 +320,10 @@ export default function LimitOrder() {
           return [undefined ,'']
         }
         if(ifBuy){
-          return  [trade.inputAmount.divide(priceAmount) ,trade.inputAmount.divide(priceAmount).toSignificant(6)]
+          return  [trade.inputAmount.divide(priceAmount) , fixSignString(trade.inputAmount.divide(priceAmount).toSignificant(6))]
         }
         else{
-          return [trade.inputAmount.multiply(priceAmount), trade.inputAmount.multiply(priceAmount).toSignificant(6)]
+          return [trade.inputAmount.multiply(priceAmount), fixSignString(trade.inputAmount.multiply(priceAmount).toSignificant(6))]
         }
       }
       return  [undefined ,'']

@@ -18,7 +18,7 @@ import LORefreshPng from '../../assets/newUI/limitOrderRefresh.png'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { tryParseAmount } from 'state/swap/hooks'
-import fixFloat from 'utils/fixFloat'
+import fixFloat, { fixSignString, stringFix } from 'utils/fixFloat'
 import QuestionHelper from 'components/QuestionHelper'
 
 const InputRow = styled.div<{ selected: boolean }>`
@@ -364,10 +364,10 @@ export function CurrencyInputPanelWithPrice({
     ()=>{
       if(trade){
         if(ifBuy){
-          return new Fraction(JSBI.BigInt(1),JSBI.BigInt(1)).divide(trade.executionPrice.raw).toSignificant(6)
+          return  fixSignString(new Fraction(JSBI.BigInt(1),JSBI.BigInt(1)).divide(trade.executionPrice.adjusted).toSignificant(6))
         }
         else{
-          return  trade.executionPrice.toSignificant(6)
+          return  fixSignString(trade.executionPrice.toSignificant(6))
         }
         //let out = trade.minimumAmountOut(new Percent( JSBI.BigInt(slippage), BIPS_BASE))
       }

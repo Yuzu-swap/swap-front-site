@@ -24,7 +24,7 @@ import WebLinkPng from '../../assets/newUI/limitExport.jpg'
 import CancelPng from '../../assets/newUI/limitCancel.jpg'
 import { CHAIN_CONFIG } from 'components/Header'
 import { useLimitOrderCancelTaskCallback } from 'zooswap-hooks/useLimitOrderCalback'
-import { getTimeStr } from 'utils/fixFloat'
+import { fixSignString, getTimeStr } from 'utils/fixFloat'
 import QuestionHelper, { LightQuestionHelper } from 'components/QuestionHelper'
 
 const OLUnit = styled.div`
@@ -84,7 +84,7 @@ export function ShowSingleOrder({data}:{data: SingleOrder} ){
                 if(inTokenAmount && outTokenAmount){
                     inputStr = inTokenAmount.toSignificant(6) + ' ' + inToken.getSymbol()
                     total = outTokenAmount.toSignificant(6) + ' ' + outToken.getSymbol()
-                    price = outTokenAmount.divide(inTokenAmount).toSignificant(6) + ' ' + outToken.getSymbol()
+                    price = fixSignString(outTokenAmount.divide(inTokenAmount).toSignificant(6)) + ' ' + outToken.getSymbol()
                 }
                 if(data.status == 1 && data.outRealNum && outReal){
                     total = outReal.toSignificant(6) + ' ' + outToken.getSymbol()
