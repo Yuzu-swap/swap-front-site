@@ -19,6 +19,7 @@ export class SingleOrder  {
     public readonly outToken!: string
     public readonly inNum!: string
     public readonly outNum!: string
+    public readonly outRealNum!: string
     public readonly status!: number
     public readonly deadline!: number
     public readonly createHash!: string
@@ -61,6 +62,7 @@ export function useLimitOrdersData(){
                     outToken: order.outtoken,
                     inNum: order.inexcatnum,
                     outNum: order.outminnum,
+                    outRealNum: order.outrealnum,
                     status: order.status,
                     deadline: order.deadline,
                     createHash: order.createhash,
